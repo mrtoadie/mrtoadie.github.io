@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mein Portfolio | Dev & Life</title>
-    <!-- Externe Monospace Schriftart von Google Fonts -->
+    <title>Portfolio | Dev & Life</title>
+    <!-- External monospace font from Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
-        /* --- CSS Variablen für einfache Anpassung --- */
+        /* ---CSS variables --- */
         :root {
-            --bg-color: #0d1117;         /* Dunkler Hintergrund wie GitHub Dark */
-            --card-bg: #161b22;          /* Etwas hellerer Hintergrund für Blöcke */
-            --text-main: #e6edf3;        /* Helles Weiß/Grau für Text */
-            --text-dim: #8b949e;         /* Abgeblendetes Grau für Beschreibungen */
-            --accent: #58a6ff;           /* Akzentfarbe (Blau) für Highlights */
-            --accent-hover: #79c0ff;     /* Helleres Blau bei Hover */
-            --border: #30363d;           /* Rahmenfarbe */
-            --code-green: #7ee787;       /* Farbe für "Befehle" */
+            --bg-color: #0d1117;         /* Dark background like GitHub Dark */
+            --card-bg: #161b22;          /* background color for blocks */
+            --text-main: #e6edf3;        /* text color */
+            --text-dim: #8b949e;         /* color fordescriptions */
+            --accent: #58a6ff;           /* accent color for highlights */
+            --accent-hover: #79c0ff;     /* hover color */
+            --border: #30363d;           /* border color */
+            --code-green: #7ee787;       /* color for "commands" */
             --font-mono: 'Fira Code', monospace;
         }
 
@@ -79,7 +79,7 @@
         /* --- Hauptinhalt --- */
         main { padding: 2rem; }
 
-        /* Typewriter Effekt für die Überschrift */
+        /* Typewriter effect for the headline */
         h1 {
             font-size: 2rem;
             margin-bottom: 0.5rem;
@@ -97,7 +97,7 @@
 
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* --- Sektionen --- */
+        /* ---Section --- */
         section { margin-bottom: 2.5rem; }
         .section-header {
             display: flex;
@@ -113,7 +113,7 @@
             font-weight: bold;
         }
 
-        /* --- Lebenslauf / Zeitstrahl --- */
+        /* ---CV/Timeline --- */
         .timeline-item {
             border-left: 2px solid var(--border);
             padding-left: 1.5rem;
@@ -134,7 +134,7 @@
         .date { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 0.5rem; }
         .desc { color: var(--text-dim); font-size: 0.95rem; }
 
-        /* --- Projekte Grid --- */
+        /* ---Projects Grid --- */
         .project-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -189,7 +189,7 @@
             font-size: 0.85rem;
         }
 
-        /* Responsive Anpassungen */
+        /* Responsive adjustments */
         @media (max-width: 600px) {
             h1 { font-size: 1.5rem; }
             main { padding: 1.5rem; }
@@ -213,81 +213,80 @@
         <main>
             <!-- Intro Section -->
             <section>
-                <h1>Hallo, ich bin <span style="color:var(--accent)">Dein Name</span></h1>
-                <div class="subtitle cursor">Full Stack Developer & Tech Enthusiast</div>
+                <h1>Hallo, ich bin <span style="color:var(--accent)">MrToadie</span></h1>
+                <div class="subtitle cursor">I'm a cloud engineer && hobby developer && I love open source</div>
                 <p style="color: var(--text-dim);">
-                    Ich baue moderne Webanwendungen mit Fokus auf Performance und User Experience. 
-                    Wenn ich nicht code, analysiere ich Systemarchitekturen oder erkunde neue KI-Tools.
+                    weiß noch keinen text
                 </p>
                 <div style="margin-top: 1rem;">
                     <a href="mailto:deine@email.de">📧 Kontakt aufnehmen</a> &nbsp;|&nbsp; 
-                    <a href="https://github.com/deinname" target="_blank">🔗 GitHub Profil</a>
+                    <a href="https://github.com/mrtoadie" target="_blank">🔗 GitHub Profil</a>
                 </div>
             </section>
 
-            <!-- Experience / Lebenslauf -->
+            <!-- Experience -->
             <section>
                 <div class="section-header">cat experience.md</div>
                 
                 <div class="timeline-item">
-                    <span class="role">Senior Entwickler</span>
-                    <span class="company">Tech Startup GmbH</span>
-                    <span class="date">2023 – Heute</span>
-                    <p class="desc">Entwicklung einer skalierbaren React-Applikation, Teamleitung von 3 Entwicklern, Implementierung von CI/CD Pipelines.</p>
+                    <span class="role">Cloud Engineer</span>
+                    <span class="company">---</span>
+                    <span class="date">2024 – today</span>
+                    <p class="desc">Administration and maintenance of Microsoft Azure /M365.</p>
                 </div>
 
                 <div class="timeline-item">
-                    <span class="role">Junior Web Developer</span>
-                    <span class="company">Digital Agentur AG</span>
+                    <span class="role">---</span>
+                    <span class="company">---</span>
                     <span class="date">2021 – 2023</span>
-                    <p class="desc">Frontend Entwicklung mit Vue.js, Wartung bestehender Laravel-Projekte, Erstellung responsiver Landingpages.</p>
+                    <p class="desc">OnPrem administration and maintenance in the Windows Server environment.</p>
                 </div>
             </section>
 
-            <!-- Projekte -->
+            <!-- Projects -->
             <section>
                 <div class="section-header">ls ./projects</div>
                 <div class="project-grid">
                     
-                    <!-- Projekt 1 -->
+                    <!-- Project 1 -->
                     <div class="project-card">
-                        <div class="project-title">E-Commerce Shop <a href="#" target="_blank" title="Live Demo">↗</a></div>
-                        <p class="desc" style="font-size: 0.9rem;">Vollständiger Online-Shop mit Warenkorb, Zahlungsgateway und Admin-Dashboard.</p>
+                        <div class="project-title">Cert-Checker <a href="#" target="_blank" title="Live Demo">↗</a></div>
+                        <p class="desc" style="font-size: 0.9rem;">Cert-Checker is a privacy-focused tool that monitors SSL/TLS certificates on domains and local files, analyzes expiration dates, and alerts users if any issues are detected.</p>
                         <div class="tech-stack">
-                            <span class="tag">Next.js</span>
-                            <span class="tag">Stripe</span>
-                            <span class="tag">Tailwind</span>
+                            <span class="tag">Go</span>
+                            <span class="tag">Arch User Repository (AUR)</span>
+                            <span class="tag">PKGBUILD</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://github.com/deinname/projekt1" target="_blank"><i class="fab fa-github icon-link"></i></a>
-                            <a href="#" target="_blank"><i class="fas fa-external-link-alt icon-link"></i></a>
+                            <a href="https://github.com/mrtoadie/go-check-cert" target="_blank" alt="GitHub Repository"><i class="fab fa-github icon-link"></i></a>
+                            <a href="https://aur.archlinux.org/packages/cert-checker" target="_blank" alt="AUR Package"><i class="fas fa-external-link-alt icon-link"></i></a>
                         </div>
                     </div>
 
-                    <!-- Projekt 2 -->
+                    <!-- Project 2 -->
                     <div class="project-card">
-                        <div class="project-title">Task Manager CLI <a href="#" target="_blank" title="Live Demo">↗</a></div>
-                        <p class="desc" style="font-size: 0.9rem;">Kommandozeilen-Tool zur Aufgabenverwaltung geschrieben in Go.</p>
+                        <div class="project-title">---</div>
+                        <p class="desc" style="font-size: 0.9rem;">---</p>
                         <div class="tech-stack">
                             <span class="tag">Go</span>
                             <span class="tag">CLI</span>
                             <span class="tag">JSON</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://github.com/deinname/projekt2" target="_blank"><i class="fab fa-github icon-link"></i></a>
+                            <a href="#" target="_blank"><i class="fab fa-github icon-link"></i></a>
                         </div>
                     </div>
 
-                    <!-- Projekt 3 -->
+                    <!-- Project 3 -->
                     <div class="project-card">
-                        <div class="project-title">Portfolio V1 <a href="#" target="_blank" title="Live Demo">↗</a></div>
-                        <p class="desc" style="font-size: 0.9rem;">Meine erste Webseite, gebaut mit reinem HTML & CSS.</p>
+                        <div class="project-title">---</div>
+                        <p class="desc" style="font-size: 0.9rem;">---</p>
                         <div class="tech-stack">
-                            <span class="tag">HTML5</span>
-                            <span class="tag">CSS3</span>
+                            <span class="tag">---</span>
+                            <span class="tag">---</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://github.com/deinname/projekt3" target="_blank"><i class="fab fa-github icon-link"></i></a>
+                            <a href="#" target="_blank"><i class="fab fa-github icon-link"></i></a>
                         </div>
                     </div>
 
@@ -296,14 +295,14 @@
 
             <!-- Skills / Tech Stack -->
             <section>
-                <div class="section-header">npm list --depth=0</div>
+                <div class="section-header">kubectl get pods</div>
                 <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                    <span class="tag" style="background: transparent; border: 1px solid var(--border);">JavaScript (ES6+)</span>
-                    <span class="tag" style="background: transparent; border: 1px solid var(--border);">React / Next.js</span>
-                    <span class="tag" style="background: transparent; border: 1px solid var(--border);">Python</span>
+                    <span class="tag" style="background: transparent; border: 1px solid var(--border);">Linux (Arch Linux && NixOS)</span>
+                    <span class="tag" style="background: transparent; border: 1px solid var(--border);">Go && Bash</span>
+                    <span class="tag" style="background: transparent; border: 1px solid var(--border);">Kubernetes</span>
                     <span class="tag" style="background: transparent; border: 1px solid var(--border);">Docker</span>
                     <span class="tag" style="background: transparent; border: 1px solid var(--border);">Git</span>
-                    <span class="tag" style="background: transparent; border: 1px solid var(--border);">Linux</span>
+                    <span class="tag" style="background: transparent; border: 1px solid var(--border);">Ansible</span>
                 </div>
             </section>
         </main>
@@ -313,7 +312,7 @@
         </footer>
     </div>
 
-    <!-- Font Awesome für Icons (wird im <head> geladen, aber sicherheitshalber hier bestätigt) -->
+    <!-- Font Awesome for icons (loaded in <head>, but confirmed here to be on the safe side) -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </body>
