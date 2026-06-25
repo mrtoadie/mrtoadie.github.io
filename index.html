@@ -112,6 +112,9 @@
             margin-right: 10px;
             font-weight: bold;
         }
+        section:first-of-type a i {
+            margin-right: 6px;
+        }
 
         /* ---CV/Timeline --- */
         .timeline-item {
@@ -219,8 +222,9 @@
                     weiß noch keinen text
                 </p>
                 <div style="margin-top: 1rem;">
-                    <a href="mailto:">📧 Mail</a> &nbsp;|&nbsp; 
-                    <a href="https://github.com/mrtoadie" target="_blank" alt="GitHub Profile">🔗 GitHub Profil</a>
+                    <a href="https://www.linkedin.com/in/mikeilhauer/"><i class="fa-brands fa-linkedin"></i>LinkedIn</a> |
+                    <a href="https://github.com/mrtoadie" target="_blank" alt="GitHub Profile"><i class="fa-brands fa-github"></i>GitHub</a> | 
+                    <a href="https://codeberg.org/mrtoadie" target="_blank" alt="Codeberg Profile"><i class="fa-solid fa-code-merge"></i>Codeberg</a>
                 </div>
             </section>
 
@@ -233,14 +237,36 @@
                     <span class="company">---</span>
                     <span class="date">2024 – today</span>
                     <p class="desc">Administration and maintenance of Microsoft Azure /M365.</p>
+                    <span class="tag">Exchange Online</span>
+                    <span class="tag">Intune</span>
+                    <span class="tag">Azure / Entra</span>
+                    <span class="tag">Azure Virtual Desktop</span>
+                    <span class="tag">PowerShell</span>
                 </div>
 
                 <div class="timeline-item">
-                    <span class="role">---</span>
+                    <span class="role">System / Network Administrator</span>
                     <span class="company">---</span>
-                    <span class="date">2021 – 2023</span>
-                    <p class="desc">OnPrem administration and maintenance in the Windows Server environment.</p>
+                    <span class="date">2010 – 2016</span>
+                    <p class="desc">- Betrieb, Wartung und Weiterentwicklung der IT Infrastruktur</p>
+                    <p class="desc">- First-Level, second & third-level support (yes, that’s right, all support levels)</p>
+                    <p class="desc">- Windows Embedded Development</p>
+                    <span class="tag">Windows Server 2003 - 2012</span>
+                    <span class="tag">Active Directory, DNS, DHCP, etc...</span>
+                    <span class="tag">Exchange Server 2003 - 2010</span>
+                    <span class="tag">Client migration from Windows XP to Windows 10</span>
+                    <span class="tag">Hyper-V & VMware</span>
+                    <span class="tag">Ubuntu & Debian Servers</span>
                 </div>
+
+                <div class="timeline-item">
+                    <span class="role">Training as IT Technician</span>
+                    <span class="company">---</span>
+                    <span class="date">2000 – 2002</span>
+                    <p class="desc"></p>
+                    <span class="tag">Windows NT</span>
+                    <span class="tag">Novell Netware</span>
+                    <span class="tag">Application programming (Turbo Pascal | C)</span>                    
             </section>
 
             <!-- Projects -->
@@ -250,7 +276,7 @@
                     
                     <!-- Project 1 -->
                     <div class="project-card">
-                        <div class="project-title">Cert-Checker</div>
+                        <div class="project-title">cert-checker</div>
                         <p class="desc" style="font-size: 0.9rem;">Cert-Checker is a privacy-focused tool that monitors SSL/TLS certificates on domains and local files, analyzes expiration dates, and alerts users if any issues are detected.</p>
                         <div class="tech-stack">
                             <span class="tag">Go</span>
@@ -265,15 +291,17 @@
 
                     <!-- Project 2 -->
                     <div class="project-card">
-                        <div class="project-title">---</div>
-                        <p class="desc" style="font-size: 0.9rem;">---</p>
+                        <div class="project-title">kvm-configurator</div>
+                        <p class="desc" style="font-size: 0.9rem;">kvm-configurator creates a virtual machines and registers it with qemu.</p>
                         <div class="tech-stack">
                             <span class="tag">Go</span>
                             <span class="tag">CLI</span>
                             <span class="tag">JSON</span>
+                            <span class="tag"><a href="https://aur.archlinux.org/packages/kvm-configurator" target="_blank" title="AUR Package">Arch User Repository (AUR)</a></span>
                         </div>
                         <div class="project-links">
-                            <a href="#" target="_blank" title="GitHub Repository"><i class="fab fa-github icon-link"></i></a>
+                            <a href="https://github.com/mrtoadie/kvm-configurator" target="_blank" title="GitHub Repository"><i class="fab fa-github icon-link"></i></a>
+                            <a href="https://aur.archlinux.org/packages/kvm-configurator" target="_blank" title="AUR Package"><i class="fas fa-external-link-alt icon-link"></i></a>
                         </div>
                     </div>
 
