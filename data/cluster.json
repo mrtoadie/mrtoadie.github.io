@@ -1,0 +1,37 @@
+{
+  "timestamp": "2026-10-24T13:53:03Z",
+  "nodes": [
+  {
+    "name": "winterfell",
+    "role": "control-plane",
+    "status": "True",
+    "version": "v1.36.3+k3s1"
+  },
+  {
+    "name": "worker01",
+    "role": "worker",
+    "status": "True",
+    "version": "v1.36.2+k3s1"
+  },
+  {
+    "name": "worker02",
+    "role": "worker",
+    "status": "True",
+    "version": "v1.36.3+k3s1"
+  },
+  {
+    "name": "worker03",
+    "role": "worker",
+    "status": "True",
+    "version": "v1.36.3+k3s1"
+  }
+],
+  "resource_usage": {"winterfell":{"cpu_millicores":559,"cpu_percent":13%,"mem_mib":5131,"mem_percent":65%},"worker01":{"cpu_millicores":128,"cpu_percent":3%,"mem_mib":365,"mem_percent":40%},"worker02":{"cpu_millicores":126,"cpu_percent":3%,"mem_mib":443,"mem_percent":48%},"worker03":{"cpu_millicores":123,"cpu_percent":3%,"mem_mib":826,"mem_percent":44%}},
+  "pods": {
+    "total": 35,
+    "running": 30,
+    "pending": 0
+  },
+  "api_version": "v1",
+  "source": "winterfell-k3s-cluster"
+}
