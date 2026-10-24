@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-10-24T20:33:48Z",
-  "nodes": [{"name":"winterfell","role":"control-plane","status":"Ready","version":"v1.36.3+k3s1","cpu_percent":null,"mem_percent":null,"disk_percent":39,"temp_c":33.1},{"name":"worker01","role":"worker","status":"Ready","version":"v1.36.2+k3s1","cpu_percent":null,"mem_percent":null,"disk_percent":0,"temp_c":0.0},{"name":"worker02","role":"worker","status":"Ready","version":"v1.36.3+k3s1","cpu_percent":null,"mem_percent":null,"disk_percent":0,"temp_c":0.0},{"name":"worker03","role":"worker","status":"Ready","version":"v1.36.3+k3s1","cpu_percent":null,"mem_percent":null,"disk_percent":0,"temp_c":0.0}],
+  "timestamp": "2026-10-24T20:54:30Z",
+  "nodes": [{"name":"winterfell   True   <none>   v1.36.3+k3s1","role":"worker","status":"","version":"","cpu_percent":null,"mem_percent":null,"disk_percent":null,"temp_c":null},{"name":"worker01     True   <none>   v1.36.2+k3s1","role":"worker","status":"","version":"","cpu_percent":null,"mem_percent":null,"disk_percent":null,"temp_c":null},{"name":"worker02     True   <none>   v1.36.3+k3s1","role":"worker","status":"","version":"","cpu_percent":null,"mem_percent":null,"disk_percent":null,"temp_c":null},{"name":"worker03     True   <none>   v1.36.3+k3s1","role":"worker","status":"","version":"","cpu_percent":null,"mem_percent":null,"disk_percent":null,"temp_c":null}],
   "pods": { "total": 42, "running": 38, "pending": 0 },
   "namespaces": 11,
   "deployments": 18,
