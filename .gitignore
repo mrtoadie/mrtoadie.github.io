@@ -1,0 +1,40 @@
+# Sensible Dateien
+*.pem
+*.key
+*token*
+.secrets*
+.env*
+
+# Logs
+*.log
+logs/
+metrics.log
+collect.log
+
+# Temporäre Dateien
+*.tmp
+/tmp/cluster.json
+.cache/
+tmp/
+
+# Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sh
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Local Configs
+config-local.yaml
+config.local.yml
+
+# Testing
+test-data/
+fixtures/
+__pycache__/
+node_modules/
