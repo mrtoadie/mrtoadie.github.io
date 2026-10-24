@@ -4,13 +4,9 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Homelab · MrToadie</title>
-        <!-- External monospace font from Google Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600&display=swap"
-            rel="stylesheet"
-        />
+        <!-- Optional: selbst gehostete Fira Code. Ohne diese Datei greift der
+             System-Mono-Stack aus --mono, es gibt keine externen Requests mehr. -->
+        <!-- <link rel="stylesheet" href="assets/fira-code.css" /> -->
         <style>
             *,
             *::before,
@@ -446,6 +442,30 @@
                 color: var(--faint);
             }
 
+            /* ---------- Footer icons (inline SVG, no icon font) ---------- */
+            .footer-icons {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                vertical-align: -0.15em;
+                margin-left: 0.3rem;
+            }
+            .ficon {
+                width: 13px;
+                height: 13px;
+                flex: none;
+                fill: none;
+                stroke: currentColor;
+                stroke-width: 1.4;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+                color: var(--faint);
+                transition: color 0.15s ease;
+            }
+            .ficon:hover {
+                color: var(--accent);
+            }
+
             /* ---------- Misc ---------- */
             .demo-note {
                 display: none;
@@ -488,7 +508,7 @@
         </style>
     </head>
     <body>
-        <!-- Inline icon sprite (keeps the page dependency-free, no Font Awesome CDN) -->
+        <!-- Inline icon sprite: ersetzt Font Awesome vollstaendig, keine externen Requests -->
         <svg class="icon-defs" aria-hidden="true" focusable="false">
             <symbol id="i-crown" viewBox="0 0 16 16">
                 <path
@@ -519,6 +539,38 @@
             <symbol id="i-alert" viewBox="0 0 16 16">
                 <path d="M8 3.2l5.6 9.6H2.4zM8 6.6v3.1M8 11.4h.01" />
             </symbol>
+
+            <!-- Footer-Symbole: Ersatz fuer fa-linux / fa-music / fa-guitar / fa-mug-hot -->
+            <symbol id="i-linux" viewBox="0 0 16 16">
+                <path
+                    d="M8 1.8c-1.5 0-2.5 1.1-2.5 2.6 0 .8-.2 1.4-.7 2.1-.9 1.2-1.6 2.4-1.6 3.6 0 1.4 1.1 2.3 2.5 2.5.6.1 1 .3 1.4.7.3.3.6.5.9.5s.6-.2.9-.5c.4-.4.8-.6 1.4-.7 1.4-.2 2.5-1.1 2.5-2.5 0-1.2-.7-2.4-1.6-3.6-.5-.7-.7-1.3-.7-2.1 0-1.5-1-2.6-2.5-2.6z"
+                />
+                <circle cx="6.9" cy="4.3" r=".45" />
+                <circle cx="9.1" cy="4.3" r=".45" />
+                <path d="M7.3 6.2h1.4L8 7.1z" />
+            </symbol>
+            <symbol id="i-music" viewBox="0 0 16 16">
+                <circle cx="4.6" cy="12.2" r="1.7" />
+                <circle cx="11.4" cy="10.6" r="1.7" />
+                <path d="M6.3 12.2V3.6l6.8-1.5v8.5" />
+            </symbol>
+            <symbol id="i-guitar" viewBox="0 0 16 16">
+                <path d="M9.4 6.6 13.6 2.4" />
+                <path d="M12.6 1.4l2 2" />
+                <ellipse
+                    cx="6"
+                    cy="10.2"
+                    rx="3.1"
+                    ry="2.4"
+                    transform="rotate(-45 6 10.2)"
+                />
+                <circle cx="6.4" cy="9.8" r=".85" />
+            </symbol>
+            <symbol id="i-coffee" viewBox="0 0 16 16">
+                <path d="M3 6.4h8.6v4.2a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3z" />
+                <path d="M11.6 7.4h1.1a1.9 1.9 0 0 1 0 3.8h-1.1" />
+                <path d="M5.6 2.4v1.7M8.4 2.4v1.7" />
+            </symbol>
         </svg>
 
         <div class="container">
@@ -538,7 +590,7 @@
                 <nav class="top">
                     <a href="index.html">/home/</a>
                     <a href="homelab.html" class="active">/homelab</a>
-                    <a href="homelab.html" class="active">/resume</a>
+                    <a href="resume.html">/resume</a>
                 </nav>
 
                 <h1>
@@ -590,11 +642,21 @@
 
             <footer>
                 <p>
-                    © 2026 MrToadie. Built with
-                    <i class="fa-brands fa-linux"></i> |
-                    <i class="fa-solid fa-music"></i> |
-                    <i class="fa-solid fa-guitar"></i> |
-                    <i class="fa-solid fa-mug-hot"></i>
+                    © 2026 MrToadie · built with
+                    <span class="footer-icons">
+                        <svg class="ficon" role="img" aria-label="Linux">
+                            <use href="#i-linux"></use>
+                        </svg>
+                        <svg class="ficon" role="img" aria-label="Musik">
+                            <use href="#i-music"></use>
+                        </svg>
+                        <svg class="ficon" role="img" aria-label="Gitarre">
+                            <use href="#i-guitar"></use>
+                        </svg>
+                        <svg class="ficon" role="img" aria-label="Kaffee">
+                            <use href="#i-coffee"></use>
+                        </svg>
+                    </span>
                 </p>
             </footer>
         </div>
@@ -611,17 +673,36 @@
          role: "control-plane" | "worker",
          status: "True" | "False",
          version: "v1.36.3+k3s1",
-         specs: ["Raspberry Pi 4 · 8 GB RAM", "USB-SSD (XFS)"]   // optional
+         specs: ["Raspberry Pi 4 · 8 GB RAM", "USB-SSD (XFS)"],  // optional, gewinnt
+         arch: "arm64", os: "linux"                              // optional, abgeleitet
        }],
        resource_usage: { "winterfell": { cpu_percent: 14, mem_percent: 41 } },
        pods: { total: 47, running: 45, pending: 2 },
        namespaces: 12,
        deployments: 18
      }
-     "version" is rendered as the first spec line, "specs" entries follow below it. */
+
+     Spec-Zeilen kommen aus drei Quellen, in dieser Reihenfolge:
+       1. node.specs aus dem Feed (falls vorhanden und nicht leer)
+       2. SPEC_FALLBACK unten, per Node-Namen
+       3. node.arch / node.os aus dem Feed (als eine Zeile)
+     Damit bleiben die Hardware-Angaben auch dann sichtbar, wenn der
+     Collector kein specs-Feld mitschreibt. */
 
                 var SOURCE = "data/cluster.json";
                 var REFRESH_MS = 5 * 60 * 1000;
+
+                /* Statische Hardware-Angaben pro Node. Diese Werte liefert die
+       Kubernetes-API nicht (Gehaeuse, Datentraeger, RAM-Ausbau), deshalb
+       stehen sie hier. Sobald der Feed ein specs-Array mitbringt, wird
+       dieser Eintrag ignoriert. */
+                var SPEC_FALLBACK = {
+                    winterfell: ["Raspberry Pi 4 · 8 GB RAM", "USB-SSD (XFS)"],
+                    worker01: ["Raspberry Pi 4 · 1 GB RAM"],
+                    worker02: ["Raspberry Pi 4 · 1 GB RAM"],
+                    worker03: ["Raspberry Pi 4 · 2 GB RAM"],
+                    "*": [],
+                };
 
                 /* Preview-only fallback when the JSON feed is unreachable. */
                 var DEMO = {
@@ -753,14 +834,36 @@
                     return "tag";
                 }
 
-                function specLine(iconId, text) {
+                function specLine(iconId, text, isStatic) {
                     return (
-                        '<div class="node-spec">' +
+                        '<div class="node-spec"' +
+                        (isStatic
+                            ? ' title="statischer Wert aus der Seitenkonfiguration"'
+                            : "") +
+                        ">" +
                         icon(iconId) +
                         "<span>" +
                         esc(text) +
                         "</span></div>"
                     );
+                }
+
+                /* Liefert die Spec-Zeilen eines Nodes samt Herkunft. */
+                function resolveSpecs(n) {
+                    if (Array.isArray(n.specs) && n.specs.length) {
+                        return { lines: n.specs, isStatic: false };
+                    }
+                    var fb = SPEC_FALLBACK[n.name] || SPEC_FALLBACK["*"];
+                    if (Array.isArray(fb) && fb.length) {
+                        return { lines: fb, isStatic: true };
+                    }
+                    if (n.arch || n.os) {
+                        return {
+                            lines: [[n.arch, n.os].filter(Boolean).join(" · ")],
+                            isStatic: false,
+                        };
+                    }
+                    return { lines: [], isStatic: false };
                 }
 
                 function nodeCard(n, usage) {
@@ -773,11 +876,13 @@
                     );
                     var isReady = n.status === "True";
                     var isCp = /control/i.test(n.role || "");
-                    var specs = Array.isArray(n.specs) ? n.specs : [];
+                    var resolved = resolveSpecs(n);
 
-                    var specHtml = n.version ? specLine("tag", n.version) : "";
-                    specs.forEach(function (s) {
-                        specHtml += specLine(specIcon(s), s);
+                    var specHtml = n.version
+                        ? specLine("tag", n.version, false)
+                        : "";
+                    resolved.lines.forEach(function (s) {
+                        specHtml += specLine(specIcon(s), s, resolved.isStatic);
                     });
 
                     return (
