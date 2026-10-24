@@ -12,15 +12,19 @@
   --card:#161b22;
   --card-alt:#21262d;
   --surface:#1c2128;
+  --track:#262c36;
   --text:#e6edf3;
   --dim:#8b949e;
   --faint:#6e7681;
   --accent:#58a6ff;
   --accent-hover:#79c0ff;
   --border:#30363d;
-  --green:#7ee787;
-  --amber:#d29922;
-  --red:#f85149;
+
+  /* Ocean Blue gauge palette */
+  --ok:#4ecdc4;
+  --warn:#58a6ff;
+  --crit:#f778ba;
+
   --purple:#a371f7;
   --mono:ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace;
 }
@@ -42,7 +46,7 @@ a{color:var(--accent);text-decoration:none;transition:color .15s ease}
 a:hover{color:var(--accent-hover)}
 
 .container{
-  max-width:920px;
+  max-width:980px;
   margin:0 auto;
   background:var(--card);
   border:1px solid var(--border);
@@ -106,15 +110,15 @@ section:last-child{margin-bottom:0}
   margin-bottom:1.35rem;
   border-bottom:1px solid var(--border);
 }
-.section-header::before{content:'$';color:var(--green);font-weight:600}
+.section-header::before{content:'$';color:var(--ok);font-weight:600}
 .section-header .right{margin-left:auto;font-size:.7rem;color:var(--faint)}
 
 /* ---------- Stat tiles ---------- */
 .stats{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(128px,1fr));
   gap:.85rem;
-  margin-bottom:1.5rem;
+  margin-bottom:1.75rem;
 }
 .stat{
   background:var(--surface);
@@ -123,24 +127,24 @@ section:last-child{margin-bottom:0}
   padding:.9rem 1rem;
 }
 .stat .k{
-  font-size:.66rem;
+  font-size:.63rem;
   text-transform:uppercase;
   letter-spacing:.09em;
   color:var(--faint);
   margin-bottom:.3rem;
 }
 .stat .v{
-  font-size:1.5rem;
+  font-size:1.45rem;
   font-weight:600;
   line-height:1.15;
   font-variant-numeric:tabular-nums;
 }
-.stat .v small{font-size:.85rem;color:var(--dim);font-weight:400}
+.stat .v small{font-size:.82rem;color:var(--dim);font-weight:400}
 
 /* ---------- Node cards ---------- */
 .nodes{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(215px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(238px,1fr));
   gap:1rem;
 }
 
@@ -161,8 +165,8 @@ section:last-child{margin-bottom:0}
   background:var(--faint);
   opacity:.45;
 }
-.node.ready::before{background:var(--green);opacity:.9}
-.node.notready::before{background:var(--red);opacity:.9}
+.node.ready::before{background:var(--ok);opacity:.9}
+.node.notready::before{background:var(--crit);opacity:.9}
 .node:hover{
   transform:translateY(-3px);
   border-color:var(--accent);
@@ -172,13 +176,13 @@ section:last-child{margin-bottom:0}
 .node-head{display:flex;align-items:center;gap:.5rem;margin-bottom:.1rem}
 .node-head h3{font-size:1rem;font-weight:600;letter-spacing:-.01em}
 
-.led{width:7px;height:7px;border-radius:50%;flex:none;background:var(--green)}
+.led{width:7px;height:7px;border-radius:50%;flex:none;background:var(--ok)}
 .node.ready .led{animation:pulse 2.2s ease-out infinite}
-.node.notready .led{background:var(--red)}
+.node.notready .led{background:var(--crit)}
 @keyframes pulse{
-  0%{box-shadow:0 0 0 0 rgba(126,231,135,.55)}
-  70%{box-shadow:0 0 0 7px rgba(126,231,135,0)}
-  100%{box-shadow:0 0 0 0 rgba(126,231,135,0)}
+  0%{box-shadow:0 0 0 0 rgba(78,205,196,.55)}
+  70%{box-shadow:0 0 0 7px rgba(78,205,196,0)}
+  100%{box-shadow:0 0 0 0 rgba(78,205,196,0)}
 }
 
 .badge{
@@ -206,7 +210,7 @@ section:last-child{margin-bottom:0}
   display:grid;
   place-items:center;
   margin-bottom:.35rem;
-  background:conic-gradient(var(--ring) calc(var(--pct) * 1%), #262c36 0);
+  background:conic-gradient(var(--ring) calc(var(--pct) * 1%), var(--track) 0);
 }
 .gauge span{
   grid-area:1/1;
@@ -216,14 +220,14 @@ section:last-child{margin-bottom:0}
   background:var(--surface);
   display:grid;
   place-items:center;
-  font-size:.73rem;
+  font-size:.72rem;
   font-variant-numeric:tabular-nums;
   color:var(--text);
 }
-.gauge.ok{--ring:var(--green)}
-.gauge.warn{--ring:var(--amber)}
-.gauge.crit{--ring:var(--red)}
-.gauge.na{background:#262c36}
+.gauge.ok{--ring:var(--ok)}
+.gauge.warn{--ring:var(--warn)}
+.gauge.crit{--ring:var(--crit)}
+.gauge.na{background:var(--track)}
 .gauge.na span{color:var(--faint)}
 .gauge-wrap small{
   font-size:.6rem;
@@ -232,12 +236,32 @@ section:last-child{margin-bottom:0}
   color:var(--faint);
 }
 
+/* ---------- Disk bar ---------- */
+.disk{margin-top:1.05rem;padding-top:.85rem;border-top:1px dashed var(--border)}
+.disk-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.4rem}
+.disk-top .mk{
+  font-size:.57rem;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:var(--faint);
+}
+.disk-top .mv{font-size:.8rem;font-variant-numeric:tabular-nums;color:var(--dim)}
+.disk-bar{height:4px;border-radius:3px;background:var(--track);overflow:hidden}
+.disk-bar i{display:block;height:100%;border-radius:3px;background:var(--ok)}
+.disk-bar i.warn{background:var(--warn)}
+.disk-bar i.crit{background:var(--crit)}
+
+.mv.ok{color:var(--ok)}
+.mv.warn{color:var(--warn)}
+.mv.crit{color:var(--crit)}
+.mv.na{color:var(--faint)}
+
 /* ---------- Misc ---------- */
 .demo-note{
   display:none;
   margin-top:1.25rem;
   font-size:.71rem;
-  color:var(--amber);
+  color:#d29922;
   background:rgba(210,153,34,.08);
   border:1px solid rgba(210,153,34,.3);
   border-radius:8px;
@@ -257,7 +281,7 @@ footer{
 @media (max-width:640px){
   main{padding:1.5rem}
   h1{font-size:1.45rem}
-  .stat .v{font-size:1.3rem}
+  .stat .v{font-size:1.25rem}
 }
 </style>
 </head>
@@ -296,11 +320,8 @@ footer{
       </div>
 
       <div class="stats" id="stats">
-  <div class="stat"><div class="k">Nodes ready</div><div class="v loading">lade…</div></div>
-  <div class="stat"><div class="k">Pods running</div><div class="v">—</div></div>
-  <div class="stat"><div class="k">Namespaces</div><div class="v">—</div></div>
-  <div class="stat"><div class="k">Deployments</div><div class="v">—</div></div>
-</div>
+        <div class="stat"><div class="k">Status</div><div class="v loading">lade…</div></div>
+      </div>
 
       <div class="nodes" id="node-metrics">
         <p class="loading">Cluster-Daten werden geladen…</p>
@@ -327,51 +348,64 @@ footer{
   var SOURCE = 'data/cluster.json';
   var REFRESH_MS = 5 * 60 * 1000;
 
-  /* Nur für die Vorschau, wenn keine JSON erreichbar ist. */
+  /* Fallback für die Vorschau, wenn keine JSON erreichbar ist. */
   var DEMO = {
-  timestamp: new Date().toISOString(),
-  nodes: [
-    { name: 'winterfell', role: 'control-plane', status: 'True', version: 'v1.36.3+k3s1' },
-    { name: 'worker01',   role: 'worker',        status: 'True', version: 'v1.36.3+k3s1' },
-    { name: 'worker02',   role: 'worker',        status: 'True', version: 'v1.36.3+k3s1' },
-    { name: 'worker03',   role: 'worker',        status: 'True', version: 'v1.36.3+k3s1' }
-  ],
-  resource_usage: {
-    winterfell: { cpu_percent: 14, mem_percent: 41 },
-    worker01:   { cpu_percent: 9,  mem_percent: 33 },
-    worker02:   { cpu_percent: 22, mem_percent: 58 },
-    worker03:   { cpu_percent: 76, mem_percent: 26 }
-  },
-  pods: { total: 47, running: 45, pending: 2 },
-  namespaces: 12,
-  deployments: 18
-};
+    timestamp: new Date().toISOString(),
+    nodes: [
+      { name:'winterfell', role:'control-plane', status:'True', version:'v1.36.3+k3s1',
+        cpu_percent:19, mem_percent:47, disk_percent:62, temp_c:51.4 },
+      { name:'worker01', role:'worker', status:'True', version:'v1.36.2+k3s1',
+        cpu_percent:2, mem_percent:45, disk_percent:71, temp_c:58.9 },
+      { name:'worker02', role:'worker', status:'True', version:'v1.36.3+k3s1',
+        cpu_percent:2, mem_percent:50, disk_percent:88, temp_c:63.2 },
+      { name:'worker03', role:'worker', status:'True', version:'v1.36.3+k3s1',
+        cpu_percent:2, mem_percent:46, disk_percent:44, temp_c:47.1 }
+    ],
+    pods: { total: 42, running: 42, pending: 0 },
+    namespaces: 11,
+    deployments: 18,
+    services: 34,
+    ingresses: 7
+  };
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
     });
   }
 
   function num(v) {
-    if (v === undefined || v === null) return null;
+    if (v === undefined || v === null || v === '') return null;
     var n = parseFloat(String(v).replace('%', ''));
     return isNaN(n) ? null : n;
   }
 
+  /* ---- Schwellwerte ------------------------------------------------- */
   function ringClass(p) {
     if (p === null) return 'na';
     if (p >= 85) return 'crit';
     if (p >= 65) return 'warn';
     return 'ok';
   }
+  function diskClass(p) {
+    if (p === null) return 'na';
+    if (p >= 85) return 'crit';
+    if (p >= 70) return 'warn';
+    return 'ok';
+  }
+  function tempClass(t) {
+    if (t === null) return 'na';
+    if (t >= 75) return 'crit';
+    if (t >= 60) return 'warn';
+    return 'ok';
+  }
 
-  function gauge(p, label) {
-    var c = ringClass(p);
-    var txt = p === null ? '–' : p.toFixed(0) + '%';
-    var pct = p === null ? 0 : Math.max(0, Math.min(100, p));
+  /* ---- Bausteine ---------------------------------------------------- */
+  function gauge(val, label, suffix, cls) {
+    var txt = val === null ? '–' : val.toFixed(0) + suffix;
+    var pct = val === null ? 0 : Math.max(0, Math.min(100, val));
     return '<div class="gauge-wrap">' +
-             '<div class="gauge ' + c + '" style="--pct:' + pct + '"><span>' + txt + '</span></div>' +
+             '<div class="gauge ' + cls + '" style="--pct:' + pct + '"><span>' + txt + '</span></div>' +
              '<small>' + label + '</small>' +
            '</div>';
   }
@@ -386,29 +420,41 @@ footer{
     return d.toLocaleDateString('de-DE');
   }
 
+  function val(v) {
+    return (v === undefined || v === null) ? '–' : v;
+  }
+
+  /* ---- Render ------------------------------------------------------- */
   function render(d, isDemo) {
     var nodes = Array.isArray(d.nodes) ? d.nodes : [];
     var pods = d.pods || {};
-    var usage = d.resource_usage || {};
+    var legacy = d.resource_usage || {};
     var ready = nodes.filter(function (n) { return n.status === 'True'; }).length;
 
     document.getElementById('stats').innerHTML =
       '<div class="stat"><div class="k">Nodes ready</div>' +
         '<div class="v">' + ready + '<small> / ' + nodes.length + '</small></div></div>' +
       '<div class="stat"><div class="k">Pods running</div>' +
-        '<div class="v">' + (pods.running != null ? pods.running : '–') +
-        '<small> / ' + (pods.total != null ? pods.total : '–') + '</small></div></div>' +
+        '<div class="v">' + val(pods.running) + '<small> / ' + val(pods.total) + '</small></div></div>' +
       '<div class="stat"><div class="k">Namespaces</div>' +
-        '<div class="v">' + (d.namespaces != null ? d.namespaces : '–') + '</div></div>' +
+        '<div class="v">' + val(d.namespaces) + '</div></div>' +
       '<div class="stat"><div class="k">Deployments</div>' +
-        '<div class="v">' + (d.deployments != null ? d.deployments : '–') + '</div></div>';
+        '<div class="v">' + val(d.deployments) + '</div></div>' +
+      '<div class="stat"><div class="k">Services</div>' +
+        '<div class="v">' + val(d.services) + '</div></div>' +
+      '<div class="stat"><div class="k">Ingresses</div>' +
+        '<div class="v">' + val(d.ingresses) + '</div></div>';
 
     document.getElementById('node-metrics').innerHTML = nodes.map(function (n) {
-      var u = usage[n.name] || {};
-      var cpu = num(u.cpu_percent !== undefined ? u.cpu_percent : u.cpu);
-      var mem = num(u.mem_percent !== undefined ? u.mem_percent : u.mem);
+      var u = legacy[n.name] || {};
+      var cpu  = num(n.cpu_percent !== undefined ? n.cpu_percent : u.cpu_percent);
+      var mem  = num(n.mem_percent !== undefined ? n.mem_percent : u.mem_percent);
+      var disk = num(n.disk_percent);
+      var temp = num(n.temp_c);
+
       var isReady = n.status === 'True';
       var isCp = n.role === 'control-plane';
+      var dc = diskClass(disk);
 
       return '<article class="node ' + (isReady ? 'ready' : 'notready') + '">' +
                '<div class="node-head">' +
@@ -419,7 +465,20 @@ footer{
                '</div>' +
                '<div class="node-ver">' + esc(n.version || '') + ' · ' +
                  (isReady ? 'Ready' : 'NotReady') + '</div>' +
-               '<div class="gauges">' + gauge(cpu, 'CPU') + gauge(mem, 'RAM') + '</div>' +
+               '<div class="gauges">' +
+                 gauge(cpu, 'CPU', '%', ringClass(cpu)) +
+                 gauge(mem, 'RAM', '%', ringClass(mem)) +
+                 gauge(temp, 'Temp', '°', tempClass(temp)) +
+               '</div>' +
+               '<div class="disk">' +
+                 '<div class="disk-top">' +
+                   '<span class="mk">Disk /</span>' +
+                   '<span class="mv ' + dc + '">' +
+                     (disk === null ? '–' : disk.toFixed(0) + '%') + '</span>' +
+                 '</div>' +
+                 '<div class="disk-bar"><i class="' + dc + '" style="width:' +
+                   (disk === null ? 0 : Math.max(0, Math.min(100, disk))) + '%"></i></div>' +
+               '</div>' +
              '</article>';
     }).join('');
 
