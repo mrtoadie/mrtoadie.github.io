@@ -1,0 +1,24 @@
+<!-- homelab.html -->
+<div class="section-header">kubectl top nodes</div>
+<div id="node-metrics">Lade...</div>
+
+<script>
+fetch('data/nodes.json')
+    .then(r => r.json())
+    .then(data => {
+        let html = '<div class="project-grid">';
+        data.nodes.forEach(node => {
+            html += `
+                <div class="project-card">
+                    <div class="project-title">${node.name}</div>
+                    <div class="desc">${node.role}</div>
+                    <div class="tech-stack">
+                        <span class="tag">CPU: ${node.cpu}%</span>
+                        <span class="tag">RAM: ${node.mem}%</span>
+                    </div>
+                </div>`;
+        });
+        html += '</div>';
+        document.getElementById('node-metrics').innerHTML = html;
+    });
+</script>
