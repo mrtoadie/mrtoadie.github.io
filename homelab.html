@@ -296,8 +296,11 @@ footer{
       </div>
 
       <div class="stats" id="stats">
-        <div class="stat"><div class="k">Status</div><div class="v loading">lade…</div></div>
-      </div>
+  <div class="stat"><div class="k">Nodes ready</div><div class="v loading">lade…</div></div>
+  <div class="stat"><div class="k">Pods running</div><div class="v">—</div></div>
+  <div class="stat"><div class="k">Namespaces</div><div class="v">—</div></div>
+  <div class="stat"><div class="k">Deployments</div><div class="v">—</div></div>
+</div>
 
       <div class="nodes" id="node-metrics">
         <p class="loading">Cluster-Daten werden geladen…</p>
@@ -326,21 +329,23 @@ footer{
 
   /* Nur für die Vorschau, wenn keine JSON erreichbar ist. */
   var DEMO = {
-    timestamp: new Date().toISOString(),
-    nodes: [
-      { name: 'winterfell', role: 'control-plane', status: 'True', version: 'v1.36.3+k3s1' },
-      { name: 'worker01',   role: 'worker',        status: 'True', version: 'v1.36.3+k3s1' },
-      { name: 'worker02',   role: 'worker',        status: 'True', version: 'v1.36.3+k3s1' },
-      { name: 'worker03',   role: 'worker',        status: 'True', version: 'v1.36.3+k3s1' }
-    ],
-    resource_usage: {
-      winterfell: { cpu_percent: 14, mem_percent: 41 },
-      worker01:   { cpu_percent: 9,  mem_percent: 33 },
-      worker02:   { cpu_percent: 22, mem_percent: 58 },
-      worker03:   { cpu_percent: 76, mem_percent: 26 }
-    },
-    pods: { total: 47, running: 45, pending: 2 }
-  };
+  timestamp: new Date().toISOString(),
+  nodes: [
+    { name: 'winterfell', role: 'control-plane', status: 'True', version: 'v1.36.3+k3s1' },
+    { name: 'worker01',   role: 'worker',        status: 'True', version: 'v1.36.3+k3s1' },
+    { name: 'worker02',   role: 'worker',        status: 'True', version: 'v1.36.3+k3s1' },
+    { name: 'worker03',   role: 'worker',        status: 'True', version: 'v1.36.3+k3s1' }
+  ],
+  resource_usage: {
+    winterfell: { cpu_percent: 14, mem_percent: 41 },
+    worker01:   { cpu_percent: 9,  mem_percent: 33 },
+    worker02:   { cpu_percent: 22, mem_percent: 58 },
+    worker03:   { cpu_percent: 76, mem_percent: 26 }
+  },
+  pods: { total: 47, running: 45, pending: 2 },
+  namespaces: 12,
+  deployments: 18
+};
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -393,10 +398,10 @@ footer{
       '<div class="stat"><div class="k">Pods running</div>' +
         '<div class="v">' + (pods.running != null ? pods.running : '–') +
         '<small> / ' + (pods.total != null ? pods.total : '–') + '</small></div></div>' +
-      '<div class="stat"><div class="k">Pending</div>' +
-        '<div class="v">' + (pods.pending != null ? pods.pending : '0') + '</div></div>' +
-      '<div class="stat"><div class="k">Letztes Update</div>' +
-        '<div class="v" style="font-size:1rem">' + esc(ago(d.timestamp)) + '</div></div>';
+      '<div class="stat"><div class="k">Namespaces</div>' +
+        '<div class="v">' + (d.namespaces != null ? d.namespaces : '–') + '</div></div>' +
+      '<div class="stat"><div class="k">Deployments</div>' +
+        '<div class="v">' + (d.deployments != null ? d.deployments : '–') + '</div></div>';
 
     document.getElementById('node-metrics').innerHTML = nodes.map(function (n) {
       var u = usage[n.name] || {};
