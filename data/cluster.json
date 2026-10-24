@@ -1,30 +1,15 @@
 {
-  "timestamp": "2026-10-24T18:03:09Z",
-  "nodes": [
-    {
-      "name": "winterfell",
-      "role": "control-plane",
-      "status": "Ready",
-      "version": "v1.36.3+k3s1",
-      "cpu_percent": 13,
-      "mem_percent": 44,
-      "disk_percent": 39,
-      "temp_c": 34.6,
-      "load1": 0.69,
-      "load5": 1.11,
-      "load15": 1.17,
-      "uptime": "5 hours, 19 minutes"
-    }
-  ],
+  "timestamp": "2026-10-24T18:08:59Z",
+  "collected_on": "winterfell",
+  "nodes": [{"name":"winterfell","role":"control-plane","status":"True","version":"v1.36.3+k3s1"},{"name":"worker01","role":"worker","status":"True","version":"v1.36.2+k3s1"},{"name":"worker02","role":"worker","status":"True","version":"v1.36.3+k3s1"},{"name":"worker03","role":"worker","status":"True","version":"v1.36.3+k3s1"}],
+  "resource_usage": {"winterfell":{"cpu_percent":9,"cpu_millicores":390,"mem_percent":43,"mem_mib":3424,"disk_percent":3936024,"temp_c":null,"load1":19490,"uptime_s":null},"worker01":{"cpu_percent":2,"cpu_millicores":90,"mem_percent":45,"mem_mib":411,"disk_percent":null,"temp_c":null,"load1":null,"uptime_s":null},"worker02":{"cpu_percent":2,"cpu_millicores":106,"mem_percent":43,"mem_mib":397,"disk_percent":null,"temp_c":null,"load1":null,"uptime_s":null},"worker03":{"cpu_percent":2,"cpu_millicores":93,"mem_percent":46,"mem_mib":855,"disk_percent":null,"temp_c":null,"load1":null,"uptime_s":null}},
   "pods": {
     "total": 42,
-    "running": 38,
+    "running": 42,
     "pending": 0
   },
   "namespaces": 11,
   "deployments": 18,
   "services": 34,
-  "ingresses": 6,
-  "pvcs": 11,
   "source": "winterfell-k3s-cluster"
 }
