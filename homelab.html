@@ -18,12 +18,9 @@
   --accent:#58a6ff;
   --accent-hover:#79c0ff;
   --border:#30363d;
-
-  /* Ocean Blue gauge palette */
-  --ok:#4ecdc4;
-  --warn:#58a6ff;
-  --crit:#f778ba;
-
+  --green:#7ee787;
+  --amber:#d29922;
+  --red:#f85149;
   --purple:#a371f7;
   --mono:ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace;
 }
@@ -45,7 +42,7 @@ a{color:var(--accent);text-decoration:none;transition:color .15s ease}
 a:hover{color:var(--accent-hover)}
 
 .container{
-  max-width:980px;
+  max-width:920px;
   margin:0 auto;
   background:var(--card);
   border:1px solid var(--border);
@@ -109,15 +106,15 @@ section:last-child{margin-bottom:0}
   margin-bottom:1.35rem;
   border-bottom:1px solid var(--border);
 }
-.section-header::before{content:'$';color:var(--ok);font-weight:600}
+.section-header::before{content:'$';color:var(--green);font-weight:600}
 .section-header .right{margin-left:auto;font-size:.7rem;color:var(--faint)}
 
 /* ---------- Stat tiles ---------- */
 .stats{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(128px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
   gap:.85rem;
-  margin-bottom:1.75rem;
+  margin-bottom:1.5rem;
 }
 .stat{
   background:var(--surface);
@@ -126,24 +123,24 @@ section:last-child{margin-bottom:0}
   padding:.9rem 1rem;
 }
 .stat .k{
-  font-size:.63rem;
+  font-size:.66rem;
   text-transform:uppercase;
   letter-spacing:.09em;
   color:var(--faint);
   margin-bottom:.3rem;
 }
 .stat .v{
-  font-size:1.45rem;
+  font-size:1.5rem;
   font-weight:600;
   line-height:1.15;
   font-variant-numeric:tabular-nums;
 }
-.stat .v small{font-size:.82rem;color:var(--dim);font-weight:400}
+.stat .v small{font-size:.85rem;color:var(--dim);font-weight:400}
 
 /* ---------- Node cards ---------- */
 .nodes{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(215px,1fr));
   gap:1rem;
 }
 
@@ -164,8 +161,8 @@ section:last-child{margin-bottom:0}
   background:var(--faint);
   opacity:.45;
 }
-.node.ready::before{background:var(--ok);opacity:.9}
-.node.notready::before{background:var(--crit);opacity:.9}
+.node.ready::before{background:var(--green);opacity:.9}
+.node.notready::before{background:var(--red);opacity:.9}
 .node:hover{
   transform:translateY(-3px);
   border-color:var(--accent);
@@ -175,13 +172,13 @@ section:last-child{margin-bottom:0}
 .node-head{display:flex;align-items:center;gap:.5rem;margin-bottom:.1rem}
 .node-head h3{font-size:1rem;font-weight:600;letter-spacing:-.01em}
 
-.led{width:7px;height:7px;border-radius:50%;flex:none;background:var(--ok)}
+.led{width:7px;height:7px;border-radius:50%;flex:none;background:var(--green)}
 .node.ready .led{animation:pulse 2.2s ease-out infinite}
-.node.notready .led{background:var(--crit)}
+.node.notready .led{background:var(--red)}
 @keyframes pulse{
-  0%{box-shadow:0 0 0 0 rgba(78,205,196,.55)}
-  70%{box-shadow:0 0 0 7px rgba(78,205,196,0)}
-  100%{box-shadow:0 0 0 0 rgba(78,205,196,0)}
+  0%{box-shadow:0 0 0 0 rgba(126,231,135,.55)}
+  70%{box-shadow:0 0 0 7px rgba(126,231,135,0)}
+  100%{box-shadow:0 0 0 0 rgba(126,231,135,0)}
 }
 
 .badge{
@@ -223,9 +220,9 @@ section:last-child{margin-bottom:0}
   font-variant-numeric:tabular-nums;
   color:var(--text);
 }
-.gauge.ok{--ring:var(--ok)}
-.gauge.warn{--ring:var(--warn)}
-.gauge.crit{--ring:var(--crit)}
+.gauge.ok{--ring:var(--green)}
+.gauge.warn{--ring:var(--amber)}
+.gauge.crit{--ring:var(--red)}
 .gauge.na{background:#262c36}
 .gauge.na span{color:var(--faint)}
 .gauge-wrap small{
@@ -235,38 +232,12 @@ section:last-child{margin-bottom:0}
   color:var(--faint);
 }
 
-/* ---------- Node meta row ---------- */
-.node-meta{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:.5rem;
-  margin-top:1rem;
-  padding-top:.85rem;
-  border-top:1px dashed var(--border);
-}
-.node-meta .mk{
-  font-size:.57rem;
-  text-transform:uppercase;
-  letter-spacing:.08em;
-  color:var(--faint);
-  margin-bottom:.15rem;
-}
-.node-meta .mv{
-  font-size:.82rem;
-  font-variant-numeric:tabular-nums;
-  color:var(--dim);
-}
-.mv.ok{color:var(--ok)}
-.mv.warn{color:var(--warn)}
-.mv.crit{color:var(--crit)}
-.mv.na{color:var(--faint)}
-
 /* ---------- Misc ---------- */
 .demo-note{
   display:none;
   margin-top:1.25rem;
   font-size:.71rem;
-  color:#d29922;
+  color:var(--amber);
   background:rgba(210,153,34,.08);
   border:1px solid rgba(210,153,34,.3);
   border-radius:8px;
@@ -286,8 +257,7 @@ footer{
 @media (max-width:640px){
   main{padding:1.5rem}
   h1{font-size:1.45rem}
-  .stat .v{font-size:1.25rem}
-  .node-meta{grid-template-columns:repeat(3,1fr)}
+  .stat .v{font-size:1.3rem}
 }
 </style>
 </head>
@@ -326,8 +296,11 @@ footer{
       </div>
 
       <div class="stats" id="stats">
-        <div class="stat"><div class="k">Status</div><div class="v loading">lade…</div></div>
-      </div>
+  <div class="stat"><div class="k">Nodes ready</div><div class="v loading">lade…</div></div>
+  <div class="stat"><div class="k">Pods running</div><div class="v">—</div></div>
+  <div class="stat"><div class="k">Namespaces</div><div class="v">—</div></div>
+  <div class="stat"><div class="k">Deployments</div><div class="v">—</div></div>
+</div>
 
       <div class="nodes" id="node-metrics">
         <p class="loading">Cluster-Daten werden geladen…</p>
@@ -354,65 +327,45 @@ footer{
   var SOURCE = 'data/cluster.json';
   var REFRESH_MS = 5 * 60 * 1000;
 
-  /* Fallback für die Vorschau, wenn keine JSON erreichbar ist. */
+  /* Nur für die Vorschau, wenn keine JSON erreichbar ist. */
   var DEMO = {
-    timestamp: new Date().toISOString(),
-    nodes: [
-      { name:'winterfell', role:'control-plane', status:'True', version:'v1.36.3+k3s1',
-        cpu_percent:19, mem_percent:47, disk_percent:62, temp_c:51.4, load1:0.42, uptime:'12 days' },
-      { name:'worker01', role:'worker', status:'True', version:'v1.36.2+k3s1',
-        cpu_percent:2, mem_percent:45, disk_percent:71, temp_c:58.9, load1:0.11, uptime:'9 days' },
-      { name:'worker02', role:'worker', status:'True', version:'v1.36.3+k3s1',
-        cpu_percent:2, mem_percent:50, disk_percent:88, temp_c:63.2, load1:2.31, uptime:'9 days' },
-      { name:'worker03', role:'worker', status:'True', version:'v1.36.3+k3s1',
-        cpu_percent:2, mem_percent:46, disk_percent:44, temp_c:47.1, load1:0.08, uptime:'3 days' }
-    ],
-    pods: { total: 42, running: 37, pending: 2 },
-    namespaces: 11,
-    deployments: 18,
-    services: 26,
-    ingresses: 7
-  };
+  timestamp: new Date().toISOString(),
+  nodes: [
+    { name: 'winterfell', role: 'control-plane', status: 'True', version: 'v1.36.3+k3s1' },
+    { name: 'worker01',   role: 'worker',        status: 'True', version: 'v1.36.3+k3s1' },
+    { name: 'worker02',   role: 'worker',        status: 'True', version: 'v1.36.3+k3s1' },
+    { name: 'worker03',   role: 'worker',        status: 'True', version: 'v1.36.3+k3s1' }
+  ],
+  resource_usage: {
+    winterfell: { cpu_percent: 14, mem_percent: 41 },
+    worker01:   { cpu_percent: 9,  mem_percent: 33 },
+    worker02:   { cpu_percent: 22, mem_percent: 58 },
+    worker03:   { cpu_percent: 76, mem_percent: 26 }
+  },
+  pods: { total: 47, running: 45, pending: 2 },
+  namespaces: 12,
+  deployments: 18
+};
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
 
   function num(v) {
-    if (v === undefined || v === null || v === '') return null;
+    if (v === undefined || v === null) return null;
     var n = parseFloat(String(v).replace('%', ''));
     return isNaN(n) ? null : n;
   }
 
-  /* ---- Schwellwerte ------------------------------------------------- */
   function ringClass(p) {
     if (p === null) return 'na';
     if (p >= 85) return 'crit';
     if (p >= 65) return 'warn';
     return 'ok';
   }
-  function diskClass(p) {
-    if (p === null) return 'na';
-    if (p >= 85) return 'crit';
-    if (p >= 70) return 'warn';
-    return 'ok';
-  }
-  function tempClass(t) {
-    if (t === null) return 'na';
-    if (t >= 75) return 'crit';
-    if (t >= 60) return 'warn';
-    return 'ok';
-  }
-  function loadClass(l) {
-    if (l === null) return 'na';
-    if (l >= 4) return 'crit';
-    if (l >= 2) return 'warn';
-    return 'ok';
-  }
 
-  /* ---- Bausteine ---------------------------------------------------- */
   function gauge(p, label) {
     var c = ringClass(p);
     var txt = p === null ? '–' : p.toFixed(0) + '%';
@@ -420,13 +373,6 @@ footer{
     return '<div class="gauge-wrap">' +
              '<div class="gauge ' + c + '" style="--pct:' + pct + '"><span>' + txt + '</span></div>' +
              '<small>' + label + '</small>' +
-           '</div>';
-  }
-
-  function metaItem(label, value, cls) {
-    return '<div>' +
-             '<div class="mk">' + label + '</div>' +
-             '<div class="mv ' + cls + '">' + value + '</div>' +
            '</div>';
   }
 
@@ -440,39 +386,27 @@ footer{
     return d.toLocaleDateString('de-DE');
   }
 
-  function val(v) {
-    return (v === undefined || v === null) ? '–' : v;
-  }
-
-  /* ---- Render ------------------------------------------------------- */
   function render(d, isDemo) {
     var nodes = Array.isArray(d.nodes) ? d.nodes : [];
     var pods = d.pods || {};
-    var legacy = d.resource_usage || {};
+    var usage = d.resource_usage || {};
     var ready = nodes.filter(function (n) { return n.status === 'True'; }).length;
 
     document.getElementById('stats').innerHTML =
       '<div class="stat"><div class="k">Nodes ready</div>' +
         '<div class="v">' + ready + '<small> / ' + nodes.length + '</small></div></div>' +
       '<div class="stat"><div class="k">Pods running</div>' +
-        '<div class="v">' + val(pods.running) + '<small> / ' + val(pods.total) + '</small></div></div>' +
+        '<div class="v">' + (pods.running != null ? pods.running : '–') +
+        '<small> / ' + (pods.total != null ? pods.total : '–') + '</small></div></div>' +
       '<div class="stat"><div class="k">Namespaces</div>' +
-        '<div class="v">' + val(d.namespaces) + '</div></div>' +
+        '<div class="v">' + (d.namespaces != null ? d.namespaces : '–') + '</div></div>' +
       '<div class="stat"><div class="k">Deployments</div>' +
-        '<div class="v">' + val(d.deployments) + '</div></div>' +
-      '<div class="stat"><div class="k">Services</div>' +
-        '<div class="v">' + val(d.services) + '</div></div>' +
-      '<div class="stat"><div class="k">Ingresses</div>' +
-        '<div class="v">' + val(d.ingresses) + '</div></div>';
+        '<div class="v">' + (d.deployments != null ? d.deployments : '–') + '</div></div>';
 
     document.getElementById('node-metrics').innerHTML = nodes.map(function (n) {
-      var u = legacy[n.name] || {};
-      var cpu  = num(n.cpu_percent  !== undefined ? n.cpu_percent  : u.cpu_percent);
-      var mem  = num(n.mem_percent  !== undefined ? n.mem_percent  : u.mem_percent);
-      var disk = num(n.disk_percent);
-      var temp = num(n.temp_c);
-      var load = num(n.load1);
-
+      var u = usage[n.name] || {};
+      var cpu = num(u.cpu_percent !== undefined ? u.cpu_percent : u.cpu);
+      var mem = num(u.mem_percent !== undefined ? u.mem_percent : u.mem);
       var isReady = n.status === 'True';
       var isCp = n.role === 'control-plane';
 
@@ -484,14 +418,8 @@ footer{
                    (isCp ? 'control' : 'worker') + '</span>' +
                '</div>' +
                '<div class="node-ver">' + esc(n.version || '') + ' · ' +
-                 (isReady ? 'Ready' : 'NotReady') +
-                 (n.uptime ? ' · up ' + esc(n.uptime) : '') + '</div>' +
+                 (isReady ? 'Ready' : 'NotReady') + '</div>' +
                '<div class="gauges">' + gauge(cpu, 'CPU') + gauge(mem, 'RAM') + '</div>' +
-               '<div class="node-meta">' +
-                 metaItem('Disk', disk === null ? '–' : disk.toFixed(0) + '%', diskClass(disk)) +
-                 metaItem('Temp', temp === null ? '–' : temp.toFixed(1) + '°C', tempClass(temp)) +
-                 metaItem('Load', load === null ? '–' : load.toFixed(2), loadClass(load)) +
-               '</div>' +
              '</article>';
     }).join('');
 
