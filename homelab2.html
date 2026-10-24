@@ -3,22 +3,50 @@
 <div id="node-metrics">Lade...</div>
 
 <script>
-fetch('data/cluster.json')
-    .then(r => r.json())
-    .then(data => {
-        let html = '<div class="project-grid">';
-        data.nodes.forEach(node => {
-            html += `
-                <div class="project-card">
-                    <div class="project-title">${node.name}</div>
-                    <div class="desc">${node.role}</div>
-                    <div class="tech-stack">
-                        <span class="tag">CPU: ${node.cpu}%</span>
-                        <span class="tag">RAM: ${node.mem}%</span>
-                    </div>
-                </div>`;
+document.addEventListener('DOMContentLoaded', () => {
+    fetch('data/cluster.json?t=' + Date.now())  // Cache-Buster
+        .then(r => {
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            return r.json();
+        })
+        .then(data => {
+            let html = '<div class="project-grid">';
+
+            data.nodes.forEach(node => {
+                // CPU/RAM aus resource_usage nachschlagen
+                const usage = data.resource_usage?.[node.name] || {};
+                const cpu = usage.cpu_percent || usage.cpu_millicores || 'N/A';
+                const mem = usage.mem_percent || 'N/A';
+
+                const roleClass = node.role === 'control-plane' ? 'control-plane' : 'worker';
+
+                html += `
+                    <div class="project-card">
+                        <div class="project-title">
+                            ${node.name}
+                            <span class="tag ${roleClass}" style="font-size:0.7rem;padding:2px 6px;">${node.role}</span>
+                        </div>
+                        <div class="desc">${node.version}</div>
+                        <div class="tech-stack">
+                            <span class="tag">${node.status === 'True' ? '✓ Ready' : '✗ NotReady'}</span>
+                            <span class="tag">CPU: ${cpu}${typeof cpu === 'number' && cpu > 0 ? '%' : ''}</span>
+                            <span class="tag">RAM: ${mem}%</span>
+                        </div>
+                    </div>`;
+            });
+
+            html += '</div>';
+            html += `<p class="desc" style="margin-top:1rem;font-size:0.8rem;">
+                Pods: ${data.pods.running}/${data.pods.total} running<br/>
+                Stand: ${new Date(data.timestamp).toLocaleString('de-DE')}
+            </p>`;
+
+            document.getElementById('node-metrics').innerHTML = html;
+        })
+        .catch(err => {
+            document.getElementById('node-metrics').innerHTML =
+                '<p class="desc" style="color:#ff6b6b;">Fehler: ' + err.message + '</p>';
+            console.error('Cluster metrics error:', err);
         });
-        html += '</div>';
-        document.getElementById('node-metrics').innerHTML = html;
-    });
+});
 </script>
