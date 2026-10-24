@@ -1,9 +1,11 @@
 {
-  "timestamp": "2026-10-24T16:10:55Z",
+  "timestamp": "2026-10-24T16:27:25Z",
   "nodes": [{"name":"winterfell","role":"control-plane","status":"True","version":"v1.36.3+k3s1"},{"name":"worker01","role":"worker","status":"True","version":"v1.36.2+k3s1"},{"name":"worker02","role":"worker","status":"True","version":"v1.36.3+k3s1"},{"name":"worker03","role":"worker","status":"True","version":"v1.36.3+k3s1"}],
   "pods": {
-    "total": 33,
-    "running": 28
+    "total": 42,
+    "running": 38
   },
+"namespaces": 11,
+"deployments": 18,
   "source": "winterfell-k3s-cluster"
 }
