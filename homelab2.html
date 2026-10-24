@@ -3,7 +3,7 @@
 <div id="node-metrics">Lade...</div>
 
 <script>
-fetch('data/nodes.json')
+fetch('data/cluster.json')
     .then(r => r.json())
     .then(data => {
         let html = '<div class="project-grid">';
