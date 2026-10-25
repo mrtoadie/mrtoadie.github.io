@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-10-25T17:18:19Z",
-  "collector_error": "Kubernetes API Server (192.168.178.210:6443) nicht erreichbar (TCP)",
+  "timestamp": "2026-10-25T17:22:21Z",
+  "collector_error": null,
   "nodes": [],
   "resource_usage": {},
   "pods": {
