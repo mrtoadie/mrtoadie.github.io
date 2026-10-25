@@ -1,0 +1,1038 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Homelab · MrToadie</title>
+        <!-- Optional: self-hosted Fira Code. Without this file, the system mono stack
+             from --mono will be used, with no external requests. -->
+        <!-- <link rel="stylesheet" href="assets/fira-code.css" /> -->
+        <style>
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            :root {
+                /* GitHub-inspired dark palette */
+                --bg: #0d1117;
+                --card: #161b22;
+                --card-alt: #21262d;
+                --surface: #1c2128;
+                --text: #e6edf3;
+                --dim: #8b949e;
+                --faint: #6e7681;
+                --accent: #58a6ff;
+                --accent-hover: #79c0ff;
+                --border: #30363d;
+                --green: #7ee787;
+                --amber: #d29922;
+                --red: #f85149;
+                --purple: #a371f7;
+                --mono:
+                    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+                    "Liberation Mono", monospace;
+
+                /* Steven Garcia-inspired additions */
+                --gradient-start: rgba(88, 166, 255, 0.15);
+                --gradient-end: rgba(88, 166, 255, 0.02);
+                --shadow-sm: 0 4px 12px -2px rgba(0, 0, 0, 0.3);
+                --shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.5);
+                --radius-lg: 16px;
+                --radius-md: 12px;
+                --radius-sm: 8px;
+            }
+
+            body {
+                background:
+                    radial-gradient(
+                        900px 480px at 50% -12%,
+                        var(--gradient-start),
+                        transparent 70%
+                    ),
+                    linear-gradient(
+                        180deg,
+                        var(--bg) 0%,
+                        #0d1117 100%
+                    );
+                color: var(--text);
+                font-family: var(--mono);
+                font-size: 15px;
+                line-height: 1.6;
+                padding: 2rem 1rem 3rem;
+                min-height: 100vh;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            a {
+                color: var(--accent);
+                text-decoration: none;
+                transition: color 0.15s ease;
+            }
+            a:hover {
+                color: var(--accent-hover);
+            }
+
+            .container {
+                max-width: 920px;
+                margin: 0 auto;
+                background: var(--card);
+                border: 1px solid var(--border);
+                border-radius: var(--radius-lg);
+                overflow: hidden;
+                box-shadow: var(--shadow-md);
+            }
+
+            /* ---------- Terminal header ---------- */
+            header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 1rem;
+                padding: 0.85rem 1.25rem;
+                background: linear-gradient(
+                    180deg,
+                    var(--card-alt) 0%,
+                    rgba(21, 27, 34, 0.9) 100%
+                );
+                border-bottom: 1px solid var(--border);
+            }
+            .term-title {
+                font-size: 0.78rem;
+                color: var(--dim);
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            .term-title .path {
+                color: var(--faint);
+            }
+            .dots {
+                display: flex;
+                gap: 7px;
+            }
+            .dot {
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+            }
+            .red { background: #ff5f56; }
+            .yellow { background: #ffbd2e; }
+            .green { background: #27c93f; }
+
+            main {
+                padding: 2.25rem;
+            }
+
+            /* ---------- Nav ---------- */
+            nav.top {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                margin-bottom: 2.25rem;
+            }
+            nav.top a {
+                font-size: 0.78rem;
+                padding: 0.35rem 0.75rem;
+                border-radius: var(--radius-sm);
+                border: 1px solid var(--border);
+                color: var(--dim);
+                background: rgba(255, 255, 255, 0.02);
+                transition: all 0.2s ease;
+            }
+            nav.top a:hover {
+                border-color: var(--accent);
+                color: var(--accent);
+                background: rgba(88, 166, 255, 0.08);
+            }
+            nav.top a.active {
+                border-color: var(--accent);
+                color: var(--accent);
+                background: rgba(88, 166, 255, 0.15);
+                box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+            }
+
+            /* ---------- Hero Section ---------- */
+            h1 {
+                font-size: 2.2rem;
+                font-weight: 700;
+                letter-spacing: -0.02em;
+                margin-bottom: 0.4rem;
+                line-height: 1.2;
+                background: linear-gradient(
+                    90deg,
+                    var(--text) 0%,
+                    var(--accent) 100%
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            .subtitle {
+                color: var(--accent);
+                font-size: 1.05rem;
+                margin-bottom: 2.5rem;
+                opacity: 0.9;
+            }
+            .cursor::after {
+                content: "▌";
+                animation: blink 1.1s step-end infinite;
+                margin-left: 2px;
+                opacity: 0.75;
+            }
+            @keyframes blink {
+                50% { opacity: 0; }
+            }
+
+            /* Gradient underline accent (Steven Garcia style) */
+            .hero-accent {
+                width: 60px;
+                height: 3px;
+                background: linear-gradient(
+                    90deg,
+                    var(--accent) 0%,
+                    var(--purple) 100%
+                );
+                border-radius: 3px;
+                margin: 0 0 2.5rem 0;
+            }
+
+            section {
+                margin-bottom: 2.75rem;
+            }
+            section:last-child {
+                margin-bottom: 0;
+            }
+
+            .section-header {
+                display: flex;
+                align-items: center;
+                gap: 0.6rem;
+                font-size: 0.82rem;
+                color: var(--dim);
+                padding-bottom: 0.6rem;
+                margin-bottom: 1.35rem;
+                border-bottom: 1px solid var(--border);
+            }
+            .section-header::before {
+                content: "$";
+                color: var(--green);
+                font-weight: 600;
+            }
+            .section-header .right {
+                margin-left: auto;
+                font-size: 0.7rem;
+                color: var(--faint);
+            }
+
+            /* ---------- Stat tiles ---------- */
+            .stats {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+                gap: 0.85rem;
+                margin-bottom: 1.5rem;
+            }
+            .stat {
+                background: linear-gradient(
+                    180deg,
+                    rgba(255, 255, 255, 0.03) 0%,
+                    var(--surface) 100%
+                );
+                border: 1px solid var(--border);
+                border-radius: var(--radius-md);
+                padding: 1rem 1.1rem;
+                transition: transform 0.2s ease, border-color 0.2s ease;
+            }
+            .stat:hover {
+                transform: translateY(-2px);
+                border-color: var(--accent);
+                box-shadow: var(--shadow-sm);
+            }
+            .stat .k {
+                font-size: 0.66rem;
+                text-transform: uppercase;
+                letter-spacing: 0.09em;
+                color: var(--faint);
+                margin-bottom: 0.3rem;
+            }
+            .stat .v {
+                font-size: 1.5rem;
+                font-weight: 600;
+                line-height: 1.15;
+                font-variant-numeric: tabular-nums;
+            }
+            .stat .v small {
+                font-size: 0.85rem;
+                color: var(--dim);
+                font-weight: 400;
+            }
+
+            /* ---------- Node cards ----------
+   Layout borrowed from test1.html (.node-card: role eyebrow / name / spec lines /
+   status pill), extended with the homelab live bits: status LED, left accent bar
+   and the CPU/RAM ring gauges.                                       */
+            .node-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(238px, 1fr));
+                gap: 1rem;
+            }
+
+            .node-card {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                padding: 1.05rem 1.1rem 1.15rem 1.3rem;
+                border: 1px solid var(--border);
+                border-radius: var(--radius-md);
+                background: linear-gradient(
+                    180deg,
+                    rgba(88, 166, 255, 0.065) 0%,
+                    rgba(88, 166, 255, 0.015) 100%
+                );
+                overflow: hidden;
+                transition:
+                    transform 0.18s ease,
+                    border-color 0.18s ease,
+                    box-shadow 0.18s ease;
+            }
+            .node-card::before {
+                content: "";
+                position: absolute;
+                inset: 0 auto 0 0;
+                width: 3px;
+                background: var(--faint);
+                opacity: 0.45;
+            }
+            .node-card.ready::before {
+                background: var(--green);
+                opacity: 0.95;
+            }
+            .node-card.notready::before {
+                background: var(--red);
+                opacity: 0.95;
+            }
+            .node-card:hover {
+                transform: translateY(-4px);
+                border-color: var(--accent);
+                box-shadow: 0 14px 30px -16px rgba(88, 166, 255, 0.6);
+            }
+
+            .node-head {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                margin-bottom: 0.4rem;
+            }
+
+            .node-role {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.42rem;
+                font-size: 0.67rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                color: var(--accent);
+            }
+            .node-card.cp .node-role {
+                color: var(--purple);
+            }
+
+            .node-role svg,
+            .node-spec svg,
+            .node-status svg {
+                width: 12px;
+                height: 12px;
+                flex: none;
+                fill: none;
+                stroke: currentColor;
+                stroke-width: 1.5;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+            }
+            .node-status svg {
+                width: 11px;
+                height: 11px;
+            }
+            .icon-defs {
+                position: absolute;
+                width: 0;
+                height: 0;
+                overflow: hidden;
+            }
+
+            .led {
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                flex: none;
+                background: var(--green);
+            }
+            .node-card.ready .led {
+                animation: pulse 2.2s ease-out infinite;
+            }
+            .node-card.notready .led {
+                background: var(--red);
+            }
+            @keyframes pulse {
+                0% {
+                    box-shadow: 0 0 0 0 rgba(126, 231, 135, 0.55);
+                }
+                70% {
+                    box-shadow: 0 0 0 7px rgba(126, 231, 135, 0);
+                }
+                100% {
+                    box-shadow: 0 0 0 0 rgba(126, 231, 135, 0);
+                }
+            }
+
+            .node-name {
+                font-size: 1.22rem;
+                font-weight: 600;
+                letter-spacing: -0.015em;
+                line-height: 1.25;
+                margin-bottom: 0.45rem;
+                color: var(--text);
+            }
+
+            .node-spec {
+                display: flex;
+                align-items: center;
+                gap: 0.45rem;
+                font-size: 0.81rem;
+                color: var(--dim);
+                margin: 0.15rem 0;
+            }
+            .node-spec svg {
+                color: var(--faint);
+            }
+
+            .node-status {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.35rem;
+                margin-left: auto;
+                padding: 2px 9px;
+                border-radius: 20px;
+                border: 1px solid;
+                font-size: 0.63rem;
+                letter-spacing: 0.07em;
+                text-transform: uppercase;
+                white-space: nowrap;
+            }
+            .node-status.ready {
+                color: var(--green);
+                border-color: rgba(126, 231, 135, 0.35);
+                background: rgba(126, 231, 135, 0.12);
+            }
+            .node-status.notready {
+                color: var(--red);
+                border-color: rgba(248, 81, 73, 0.35);
+                background: rgba(248, 81, 73, 0.12);
+            }
+
+            /* ---------- Ring gauges ---------- */
+            .gauges {
+                display: flex;
+                gap: 1.15rem;
+                margin-top: auto;
+                padding-top: 1.1rem;
+            }
+            .gauge-wrap {
+                text-align: center;
+            }
+            .gauge {
+                width: 62px;
+                height: 62px;
+                border-radius: 50%;
+                display: grid;
+                place-items: center;
+                margin-bottom: 0.35rem;
+                background: conic-gradient(
+                    var(--ring) calc(var(--pct) * 1%),
+                    #262c36 0
+                );
+                box-shadow: var(--shadow-sm);
+            }
+            .gauge span {
+                grid-area: 1/1;
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                background: var(--surface);
+                display: grid;
+                place-items: center;
+                font-size: 0.73rem;
+                font-variant-numeric: tabular-nums;
+                color: var(--text);
+            }
+            .gauge.ok { --ring: var(--green); }
+            .gauge.warn { --ring: var(--amber); }
+            .gauge.crit { --ring: var(--red); }
+            .gauge.na { background: #262c36; }
+            .gauge.na span { color: var(--faint); }
+            .gauge-wrap small {
+                font-size: 0.6rem;
+                text-transform: uppercase;
+                letter-spacing: 0.09em;
+                color: var(--faint);
+            }
+
+            /* ---------- Footer icons (inline SVG, no icon font) ---------- */
+            .footer-icons {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                vertical-align: -0.15em;
+                margin-left: 0.3rem;
+            }
+            .ficon {
+                width: 14px;
+                height: 14px;
+                flex: none;
+                fill: none;
+                stroke: currentColor;
+                stroke-width: 1.4;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+                color: var(--faint);
+                transition: color 0.15s ease, transform 0.15s ease;
+            }
+            .ficon:hover {
+                color: var(--accent);
+                transform: scale(1.15);
+            }
+
+            /* ---------- Misc ---------- */
+            .demo-note {
+                display: none;
+                margin-top: 1.25rem;
+                font-size: 0.71rem;
+                color: var(--amber);
+                background: rgba(210, 153, 34, 0.08);
+                border: 1px solid rgba(210, 153, 34, 0.3);
+                border-radius: var(--radius-sm);
+                padding: 0.6rem 0.85rem;
+            }
+            .loading {
+                color: var(--faint);
+                font-size: 0.85rem;
+            }
+
+            footer {
+                padding: 1.25rem;
+                text-align: center;
+                font-size: 0.74rem;
+                color: var(--faint);
+                border-top: 1px solid var(--border);
+                background: var(--card-alt);
+                position: relative;
+            }
+            /* Decorative gradient top on footer */
+            footer::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 2px;
+                background: linear-gradient(
+                    90deg,
+                    var(--accent) 0%,
+                    var(--purple) 50%,
+                    var(--accent) 100%
+                );
+            }
+
+            @media (max-width: 640px) {
+                main { padding: 1.5rem; }
+                h1 { font-size: 1.6rem; }
+                .stat .v { font-size: 1.3rem; }
+                .node-grid { grid-template-columns: 1fr; }
+                .hero-accent { width: 40px; }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Inline icon sprite: replaces Font Awesome entirely, zero external requests -->
+        <svg class="icon-defs" aria-hidden="true" focusable="false">
+            <symbol id="i-crown" viewBox="0 0 16 16">
+                <path
+                    d="M2 12.6h12M3.2 11.2 2 4.8l3.6 2.4L8 3.6l2.4 3.6L14 4.8l-1.2 6.4z"
+                />
+            </symbol>
+            <symbol id="i-server" viewBox="0 0 16 16">
+                <path
+                    d="M2.5 3.5h11v3.6h-11zM2.5 8.9h11v3.6h-11zM5 5.3h.01M5 10.7h.01"
+                />
+            </symbol>
+            <symbol id="i-cpu" viewBox="0 0 16 16">
+                <path
+                    d="M5.4 5.4h5.2v5.2H5.4zM8 2.4v3M8 10.6v3M2.4 8h3M10.6 8h3M4.6 2.4v1.4M11.4 2.4v1.4M4.6 12.2v1.4M11.4 12.2v1.4"
+                />
+            </symbol>
+            <symbol id="i-disk" viewBox="0 0 16 16">
+                <path
+                    d="M3 5.4c0-1.1 2.24-2 5-2s5 .9 5 2v5.2c0 1.1-2.24 2-5 2s-5-.9-5-2zM3 5.4c0 1.1 2.24 2 5 2s5-.9 5-2"
+                />
+            </symbol>
+            <symbol id="i-tag" viewBox="0 0 16 16">
+                <path d="M2.6 3.4h4.3l6.5 6.5-4.3 4.3-6.5-6.5zM5.3 5.4h.01" />
+            </symbol>
+            <symbol id="i-check" viewBox="0 0 16 16">
+                <path d="M3.2 8.4l3.2 3.2 6.4-7" />
+            </symbol>
+            <symbol id="i-alert" viewBox="0 0 16 16">
+                <path d="M8 3.2l5.6 9.6H2.4zM8 6.6v3.1M8 11.4h.01" />
+            </symbol>
+
+            <!-- Footer symbols: replacements for fa-linux / fa-music / fa-guitar / fa-mug-hot -->
+            <symbol id="i-linux" viewBox="0 0 16 16">
+                <path
+                    d="M8 1.8c-1.5 0-2.5 1.1-2.5 2.6 0 .8-.2 1.4-.7 2.1-.9 1.2-1.6 2.4-1.6 3.6 0 1.4 1.1 2.3 2.5 2.5.6.1 1 .3 1.4.7.3.3.6.5.9.5s.6-.2.9-.5c.4-.4.8-.6 1.4-.7 1.4-.2 2.5-1.1 2.5-2.5 0-1.2-.7-2.4-1.6-3.6-.5-.7-.7-1.3-.7-2.1 0-1.5-1-2.6-2.5-2.6z"
+                />
+                <circle cx="6.9" cy="4.3" r=".45" />
+                <circle cx="9.1" cy="4.3" r=".45" />
+                <path d="M7.3 6.2h1.4L8 7.1z" />
+            </symbol>
+            <symbol id="i-music" viewBox="0 0 16 16">
+                <circle cx="4.6" cy="12.2" r="1.7" />
+                <circle cx="11.4" cy="10.6" r="1.7" />
+                <path d="M6.3 12.2V3.6l6.8-1.5v8.5" />
+            </symbol>
+            <symbol id="i-guitar" viewBox="0 0 16 16">
+                <path d="M9.4 6.6 13.6 2.4" />
+                <path d="M12.6 1.4l2 2" />
+                <ellipse
+                    cx="6"
+                    cy="10.2"
+                    rx="3.1"
+                    ry="2.4"
+                    transform="rotate(-45 6 10.2)"
+                />
+                <circle cx="6.4" cy="9.8" r=".85" />
+            </symbol>
+            <symbol id="i-coffee" viewBox="0 0 16 16">
+                <path d="M3 6.4h8.6v4.2a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3z" />
+                <path d="M11.6 7.4h1.1a1.9 1.9 0 0 1 0 3.8h-1.1" />
+                <path d="M5.6 2.4v1.7M8.4 2.4v1.7" />
+            </symbol>
+        </svg>
+
+        <div class="container">
+            <header>
+                <div class="term-title">
+                    <span>~/homelab</span>
+                    <span class="path">· k3s cluster</span>
+                </div>
+                <div class="dots">
+                    <div class="dot red"></div>
+                    <div class="dot yellow"></div>
+                    <div class="dot green"></div>
+                </div>
+            </header>
+
+            <main>
+                <nav class="top">
+                    <a href="index.html">/home/</a>
+                    <a href="homelab.html" class="active">/homelab</a>
+                    <a href="resume.html">/resume</a>
+                </nav>
+
+                <h1>
+                    Homelab
+                    <span style="color: var(--accent)">Infrastructure</span>
+                </h1>
+                <div class="hero-accent"></div>
+                <div class="subtitle cursor">
+                    k3s on Raspberry Pi · self-hosted, self-broken, self-fixed
+                </div>
+
+                <section>
+                    <div class="section-header">
+                        <span>kubectl get nodes -o wide</span>
+                        <span class="right" id="refresh-info"
+                            >auto-refresh · 5 min · last updated: just now</span
+                        >
+                    </div>
+
+                    <div class="stats" id="stats">
+                        <div class="stat">
+                            <div class="k">Nodes ready</div>
+                            <div class="v loading">loading…</div>
+                        </div>
+                        <div class="stat">
+                            <div class="k">Pods running</div>
+                            <div class="v">—</div>
+                        </div>
+                        <div class="stat">
+                            <div class="k">Namespaces</div>
+                            <div class="v">—</div>
+                        </div>
+                        <div class="stat">
+                            <div class="k">Deployments</div>
+                            <div class="v">—</div>
+                        </div>
+                    </div>
+
+                    <div class="node-grid" id="node-metrics">
+                        <p class="loading">Loading cluster data…</p>
+                    </div>
+
+                    <div class="demo-note" id="demo-note">
+                        Demo data — <code>data/cluster.json</code> was not reachable.
+                        On the live site, the actual cluster values will appear here.
+                    </div>
+                </section>
+            </main>
+
+            <footer>
+                <p>
+                    © 2026 MrToadie · built with
+                    <span class="footer-icons">
+                        <svg class="ficon" role="img" aria-label="Linux">
+                            <use href="#i-linux"></use>
+                        </svg>
+                        <svg class="ficon" role="img" aria-label="Music">
+                            <use href="#i-music"></use>
+                        </svg>
+                        <svg class="ficon" role="img" aria-label="Guitar">
+                            <use href="#i-guitar"></use>
+                        </svg>
+                        <svg class="ficon" role="img" aria-label="Coffee">
+                            <use href="#i-coffee"></use>
+                        </svg>
+                    </span>
+                </p>
+            </footer>
+        </div>
+
+        <script>
+            (function () {
+                "use strict";
+
+                /* Data contract for data/cluster.json:
+     {
+       timestamp: "2026-10-24T08:12:00Z",
+       nodes: [{
+         name: "winterfell",
+         role: "control-plane" | "worker",
+         status: "True" | "False",
+         version: "v1.36.3+k3s1",
+         specs: ["Raspberry Pi 4 · 8 GB RAM", "USB-SSD (XFS)"],  // optional, takes priority
+         arch: "arm64", os: "linux"                              // optional, derived
+       }],
+       resource_usage: { "winterfell": { cpu_percent: 14, mem_percent: 41 } },
+       pods: { total: 47, running: 45, pending: 2 },
+       namespaces: 12,
+       deployments: 18
+     }
+
+     Spec lines come from three sources, in this order:
+       1. node.specs from the feed (if present and not empty)
+       2. SPEC_FALLBACK below, by node name
+       3. node.arch / node.os from the feed (as a single line)
+     This ensures hardware info stays visible even if the collector
+     doesn't write a specs field. */
+
+                var SOURCE = "data/cluster.json";
+                var REFRESH_MS = 5 * 60 * 1000;
+
+                /* Static hardware specs per node. The Kubernetes API doesn't provide
+       these values (chassis, storage, RAM expansion), so they're defined here.
+       Once the feed includes a specs array, this entry is ignored. */
+                var SPEC_FALLBACK = {
+                    winterfell: ["Raspberry Pi 4 · 8 GB RAM", "USB-SSD (XFS)"],
+                    worker01: ["Raspberry Pi 4 · 1 GB RAM"],
+                    worker02: ["Raspberry Pi 4 · 1 GB RAM"],
+                    worker03: ["Raspberry Pi 4 · 2 GB RAM"],
+                    "*": [],
+                };
+
+                /* Preview-only fallback when the JSON feed is unreachable. */
+                var DEMO = {
+                    timestamp: new Date().toISOString(),
+                    nodes: [
+                        {
+                            name: "winterfell",
+                            role: "control-plane",
+                            status: "True",
+                            version: "v1.36.3+k3s1",
+                            specs: [
+                                "Raspberry Pi 4 · 8 GB RAM",
+                                "USB-SSD (XFS)",
+                            ],
+                        },
+                        {
+                            name: "worker01",
+                            role: "worker",
+                            status: "True",
+                            version: "v1.36.3+k3s1",
+                            specs: ["Raspberry Pi 4 · 1 GB RAM"],
+                        },
+                        {
+                            name: "worker02",
+                            role: "worker",
+                            status: "True",
+                            version: "v1.36.3+k3s1",
+                            specs: ["Raspberry Pi 4 · 1 GB RAM"],
+                        },
+                        {
+                            name: "worker03",
+                            role: "worker",
+                            status: "True",
+                            version: "v1.36.3+k3s1",
+                            specs: ["Raspberry Pi 4 · 2 GB RAM"],
+                        },
+                    ],
+                    resource_usage: {
+                        winterfell: { cpu_percent: 14, mem_percent: 41 },
+                        worker01: { cpu_percent: 9, mem_percent: 33 },
+                        worker02: { cpu_percent: 22, mem_percent: 58 },
+                        worker03: { cpu_percent: 76, mem_percent: 26 },
+                    },
+                    pods: { total: 47, running: 45, pending: 2 },
+                    namespaces: 12,
+                    deployments: 18,
+                };
+
+                function esc(s) {
+                    return String(s == null ? "" : s).replace(
+                        /[&<>"']/g,
+                        function (c) {
+                            return {
+                                "&": "&amp;",
+                                "<": "&lt;",
+                                ">": "&gt;",
+                                '"': "&quot;",
+                                "'": "&#39;",
+                            }[c];
+                        },
+                    );
+                }
+
+                function num(v) {
+                    if (v === undefined || v === null) return null;
+                    var n = parseFloat(String(v).replace("%", ""));
+                    return isNaN(n) ? null : n;
+                }
+
+                function ringClass(p) {
+                    if (p === null) return "na";
+                    if (p >= 85) return "crit";
+                    if (p >= 65) return "warn";
+                    return "ok";
+                }
+
+                function gauge(p, label) {
+                    var c = ringClass(p);
+                    var txt = p === null ? "–" : p.toFixed(0) + "%";
+                    var pct = p === null ? 0 : Math.max(0, Math.min(100, p));
+                    return (
+                        '<div class="gauge-wrap">' +
+                        '<div class="gauge ' +
+                        c +
+                        '" style="--pct:' +
+                        pct +
+                        '"><span>' +
+                        txt +
+                        "</span></div>" +
+                        "<small>" +
+                        label +
+                        "</small>" +
+                        "</div>"
+                    );
+                }
+
+                function ago(iso) {
+                    var d = new Date(iso);
+                    if (isNaN(d.getTime())) return "–";
+                    var s = Math.floor((Date.now() - d.getTime()) / 1000);
+                    if (s < 60) return "just now";
+                    if (s < 3600) return Math.floor(s / 60) + " min.";
+                    if (s < 86400) return Math.floor(s / 3600) + " hrs.";
+                    return d.toLocaleDateString("en-US");
+                }
+
+                function icon(id) {
+                    return (
+                        '<svg aria-hidden="true"><use href="#i-' +
+                        id +
+                        '"></use></svg>'
+                    );
+                }
+
+                /* Pick a spec icon by keyword; falls back to the tag icon. */
+                var SPEC_ICONS = [
+                    [/ram|memory/i, "cpu"],
+                    [
+                        /ssd|hdd|usb|nvme|disk|storage/i,
+                        "disk",
+                    ],
+                ];
+
+                function specIcon(text) {
+                    var t = String(text).toLowerCase();
+                    for (var i = 0; i < SPEC_ICONS.length; i++) {
+                        if (SPEC_ICONS[i][0].test(t)) return SPEC_ICONS[i][1];
+                    }
+                    return "tag";
+                }
+
+                function specLine(iconId, text, isStatic) {
+                    return (
+                        '<div class="node-spec"' +
+                        (isStatic
+                            ? ' title="static value from page configuration"'
+                            : "") +
+                        ">" +
+                        icon(iconId) +
+                        "<span>" +
+                        esc(text) +
+                        "</span></div>"
+                    );
+                }
+
+                /* Returns the spec lines of a node along with their source. */
+                function resolveSpecs(n) {
+                    if (Array.isArray(n.specs) && n.specs.length) {
+                        return { lines: n.specs, isStatic: false };
+                    }
+                    var fb = SPEC_FALLBACK[n.name] || SPEC_FALLBACK["*"];
+                    if (Array.isArray(fb) && fb.length) {
+                        return { lines: fb, isStatic: true };
+                    }
+                    if (n.arch || n.os) {
+                        return {
+                            lines: [[n.arch, n.os].filter(Boolean).join(" · ")],
+                            isStatic: false,
+                        };
+                    }
+                    return { lines: [], isStatic: false };
+                }
+
+                function nodeCard(n, usage) {
+                    var u = usage[n.name] || {};
+                    var cpu = num(
+                        u.cpu_percent !== undefined ? u.cpu_percent : u.cpu,
+                    );
+                    var mem = num(
+                        u.mem_percent !== undefined ? u.mem_percent : u.mem,
+                    );
+                    var isReady = n.status === "True";
+                    var isCp = /control/i.test(n.role || "");
+                    var resolved = resolveSpecs(n);
+
+                    var specHtml = n.version
+                        ? specLine("tag", n.version, false)
+                        : "";
+                    resolved.lines.forEach(function (s) {
+                        specHtml += specLine(specIcon(s), s, resolved.isStatic);
+                    });
+
+                    return (
+                        '<article class="node-card ' +
+                        (isReady ? "ready" : "notready") +
+                        (isCp ? " cp" : "") +
+                        '">' +
+                        '<div class="node-head">' +
+                        '<span class="led"></span>' +
+                        '<span class="node-role">' +
+                        icon(isCp ? "crown" : "server") +
+                        (isCp ? "Control Plane" : "Worker Node") +
+                        "</span>" +
+                        '<span class="node-status ' +
+                        (isReady ? "ready" : "notready") +
+                        '">' +
+                        icon(isReady ? "check" : "alert") +
+                        (isReady ? "Ready" : "NotReady") +
+                        "</span>" +
+                        "</div>" +
+                        '<div class="node-name">' +
+                        esc(n.name) +
+                        "</div>" +
+                        specHtml +
+                        '<div class="gauges">' +
+                        gauge(cpu, "CPU") +
+                        gauge(mem, "RAM") +
+                        "</div>" +
+                        "</article>"
+                    );
+                }
+
+                function render(d, isDemo) {
+                    var nodes = Array.isArray(d.nodes) ? d.nodes : [];
+                    var pods = d.pods || {};
+                    var usage = d.resource_usage || {};
+                    var ready = nodes.filter(function (n) {
+                        return n.status === "True";
+                    }).length;
+
+                    document.getElementById("stats").innerHTML =
+                        '<div class="stat"><div class="k">Nodes ready</div>' +
+                        '<div class="v">' +
+                        ready +
+                        "<small> / " +
+                        nodes.length +
+                        "</small></div></div>" +
+                        '<div class="stat"><div class="k">Pods running</div>' +
+                        '<div class="v">' +
+                        (pods.running != null ? pods.running : "–") +
+                        "<small> / " +
+                        (pods.total != null ? pods.total : "–") +
+                        "</small></div></div>" +
+                        '<div class="stat"><div class="k">Namespaces</div>' +
+                        '<div class="v">' +
+                        (d.namespaces != null ? d.namespaces : "–") +
+                        "</div></div>" +
+                        '<div class="stat"><div class="k">Deployments</div>' +
+                        '<div class="v">' +
+                        (d.deployments != null ? d.deployments : "–") +
+                        "</div></div>";
+
+                    document.getElementById("node-metrics").innerHTML =
+                        nodes.length
+                            ? nodes
+                                  .map(function (n) {
+                                      return nodeCard(n, usage);
+                                  })
+                                  .join("")
+                            : '<p class="loading">No node data in feed.</p>';
+
+                    var info = document.getElementById("refresh-info");
+                    if (info)
+                        info.textContent =
+                            "auto-refresh · 5 min · last updated: " + ago(d.timestamp);
+
+                    document.getElementById("demo-note").style.display = isDemo
+                        ? "block"
+                        : "none";
+                }
+
+                function load() {
+                    fetch(SOURCE + "?t=" + Date.now(), { cache: "no-store" })
+                        .then(function (r) {
+                            if (!r.ok) throw new Error("HTTP " + r.status);
+                            return r.json();
+                        })
+                        .then(function (data) {
+                            render(data, false);
+                        })
+                        .catch(function (err) {
+                            console.warn(
+                                "cluster.json not reachable:",
+                                err.message,
+                            );
+                            render(DEMO, true);
+                        });
+                }
+
+                load();
+                setInterval(load, REFRESH_MS);
+            })();
+        </script>
+    </body>
+</html>
