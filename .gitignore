@@ -34,5 +34,5 @@ config-local.yaml
 config.local.yml
 
 # Testing
-
-
+test/
+old/
