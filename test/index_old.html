@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Homelab · MrToadie</title>
+        <link rel="stylesheet" href="assets/css/style.css" />
+        <link rel="icon" href="assets/favico.png" sizes="48x48">
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <div class="term-title">
+                    <span>~/homelab</span>
+                    <span class="path">· k3s cluster</span>
+                </div>
+                <div class="dots">
+                    <div class="dot dotleft"></div>
+                    <div class="dot dotmiddle"></div>
+                    <div class="dot dotright"></div>
+                </div>
+            </header>
+
+            <main>
+                <nav class="top">
+                    <a href="">/home/</a>
+                    <a href="homelab.html" class="active">/homelab</a>
+                    <a href="incidents.html">/incidents</a>
+                </nav>
+
+                <h1>
+                  /homelab
+                </h1>
+                <div class="subtitle cursor">
+                  k3s on Raspberry Pi · self-hosted, self-broken, self-fixed
+                </div>
+                <h2>
+                  <span style="color: var(--accent)">/infrastructure</span>
+                </h2>
+                <section>
+                    <div class="section-header">
+                        <span>kubectl get nodes -o wide</span>
+                        <span class="right" id="refresh-info">auto-refresh · 5 min</span>
+                    </div>
+
+                    <div class="stats" id="stats">
+                        <div class="stat">
+                            <div class="k">Nodes ready</div>
+                            <div class="v loading">lade…</div>
+                        </div>
+                        <div class="stat">
+                            <div class="k">Pods running</div>
+                            <div class="v">—</div>
+                        </div>
+                        <div class="stat">
+                            <div class="k">Namespaces</div>
+                            <div class="v">—</div>
+                        </div>
+                        <div class="stat">
+                            <div class="k">Deployments</div>
+                            <div class="v">—</div>
+                        </div>
+                    </div>
+
+                    <div class="node-grid" id="node-metrics">
+                        <p class="loading">Cluster-Daten werden geladen…</p>
+                    </div>
+
+                    <div class="demo-note" id="demo-note">
+                        Demo-Daten — <code>data/cluster.json</code> war nicht
+                        erreichbar. Auf der Live-Seite erscheinen hier die
+                        echten Cluster-Werte.
+                    </div>
+                </section>
+                <h2>
+                  <span style="color: var(--accent)">/hardware</span>
+                </h2>
+                <section>
+                </section>
+                <h2>
+                  <span style="color: var(--accent)">/software & tools</span>
+                </h2>
+                <section>
+                </section>
+                <section>
+                    <div class="section-header">
+                        <span>Incident History — echte Vorfälle</span>
+                        <span class="right">letzte 12 Monate</span>
+                    </div>
+
+                    <div class="incident-card">
+                        <span class="incident-severity severity-high">high</span>
+                        <div class="incident-title">SD-Karte corruptions auf winterfell</div>
+                        <div class="incident-meta">Januar 2026 · Dauer: 4 Stunden · Impact: control-plane offline</div>
+                        <p>
+                            etcd meldete `database error: snapshot corrupted`. Logs zeigten I/O-Fehler auf `/dev/mmcblk0`.
+                            Node konnte nicht neu starten, etcd-Cluster fiel auf 1 Mitglied (Quorum verloren).
+                        </p>
+                        <ol class="resolution-list">
+                            <li>Neues Image von Raspberry Pi OS Lite auf SD-Karte gebrannt</li>
+                            <li>k3s-Token von backup-node manuell kopiert</li>
+                            <li>Node wieder mit Cluster verbunden, etcd-Replizierung initiiert</li>
+                            <li>Nach Incident: Rootfs auf USB-SSD migriert, etcd auf separates Volume ausgelagert</li>
+                        </ol>
+                    </div>
+
+                    <div class="incident-card">
+                        <span class="incident-severity severity-high">high</span>
+                        <div class="incident-title">Docker Daemon durch TCP-Listener lahmgelegt</div>
+                        <div class="incident-meta">Februar 2026 · Dauer: 2 Stunden · Impact: keine Container-Starts möglich</div>
+                        <p>
+                            Versucht, Docker über TCP zu aktivieren (`-H tcp://0.0.0.0:2375`). Danach `systemctl start docker` fehlgeschlagen
+                            mit `Failed to start Docker Application Container Engine`. Logs zeigten Socket-Conflict mit existiersnder Unix-Socket.
+                        </p>
+                        <ol class="resolution-list">
+                            <li>Docker Service gestoppt</li>
+                            <li>`/etc/docker/daemon.json` auf Leerzeichen überprüft, TCP-Entry entfernt</li>
+                            <li>Service neu gestartet, Funktionstest mit `docker ps`</li>
+                            <li>Später: Nur Unix-Socket, SSH-Tunnel für Remote-Zugriff</li>
+                        </ol>
+                    </div>
+
+                    <div class="incident-card">
+                        <span class="incident-severity severity-medium">medium</span>
+                        <div class="incident-title">Pi Zero unter Blocky instabil</div>
+                        <div class="incident-meta">März 2026 · Dauer: 1 Stunde · Impact: DNS-Auflösung intermitierend fehlgeschlagen</div>
+                        <p>
+                            Blocky (DNS Resolver) lief auf Raspberry Pi Zero 2W, 100% CPU-Last nach 3 Tagen Uptime.
+                            Gerät wurde unresponsive, musste hart neu gestartet werden.
+                        </p>
+                        <ol class="resolution-list">
+                            <li>Blocky auf Desktop (Docker) migriert, Pi Zero nur noch Dynacat</li>
+                            <li>Pi Zero auf statische IP mit manueller DNS-Einträge in Dynacat konfiguriert</li>
+                            <li>Alternative evaluiert: Unbound statt Blocky, weniger Ressourcen-intensiv</li>
+                        </ol>
+                    </div>
+
+                    <div class="incident-card">
+                        <span class="incident-severity severity-medium">medium</span>
+                        <div class="incident-title">Node Rejoin nach k3s-Update — Token Mismatch</div>
+                        <div class="incident-meta">April 2026 · Dauer: 30 Minuten · Impact: worker01 NotReady</div>
+                        <p>
+                            k3s-Update auf control-plane durchgeführt. Nach Neustart meldete worker01 `token mismatch`.
+                            Agent konnte sich nicht authentifizieren, Pod-Scheduling unterbrochen.
+                        </p>
+                        <ol class="resolution-list">
+                            <li>Token von `/var/lib/rancher/k3s/server/node-token` auf control-plane ausgelesen</li>
+                            <li>Auf worker01 in `/etc/rancher/k3s/config.yaml` eingefügt</li>
+                            <li>k3s-agent neu gestartet, Node wieder im Cluster sichtbar</li>
+                            <li>Lösung: Automatisiertes Backup des Tokens auf externer Maschine</li>
+                        </ol>
+                    </div>
+
+                    <div class="incident-card">
+                        <span class="incident-severity severity-low">low</span>
+                        <div class="incident-title">OpenVPN Replay Detection Error</div>
+                        <div class="incident-meta">Mai 2026 · Dauer: 15 Minuten · Impact: Tunnel nicht aufgebaut</div>
+                        <p>
+                            `read UDPv4 [EAGAIN]: Resource temporarily unavailable (code=11)` während Tunnel-Etablierung.
+                            Replay Detection war zu aggressiv eingestellt.
+                        </p>
+                        <ol class="resolution-list">
+                            <li>openvpn.conf: `replay-window 64 15` statt Standard-Werte</li>
+                            <li>Tunnel neu initialisiert, Verbindung stabil</li>
+                        </ol>
+                    </div>
+                </section>
+                <!-- -->
+                <section>
+                    <h2 class="category-heading">Ingress & DNS</h2>
+                    <div class="tool-grid">
+                        <div class="tool-card">
+                            <div class="tool-name">Traefik</div>
+                            <div class="tool-desc">Ingress-Controller für alle internen Dienste (grafana.local, forgejo.local)</div>
+                            <div class="tool-reason">
+                                "k3s bringt Traefik mit, nginx-ingress wäre eine zusätzliche Schicht gewesen."
+                            </div>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-name">Unbound</div>
+                            <div class="tool-desc">Recursive DNS Resolver auf Raspberry Pi Zero</div>
+                            <div class="tool-reason">
+                                "Router erlaubt keine eigenen DNS-Einträge. Unbound löst *.local auf Cluster-IPs."
+                            </div>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-name">Caddy</div>
+                            <div class="tool-desc">Reverse Proxy auf Raspberry Pi Zero</div>
+                            <div class="tool-reason">
+                                "Beschreibung"
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="category-heading">Monitoring & Alerting</h2>
+                    <div class="tool-grid">
+                        <div class="tool-card">
+                            <div class="tool-name">Prometheus + Grafana</div>
+                            <div class="tool-desc">Node Exporter, kube-state-metrics, custom ServiceMonitors</div>
+                            <div class="tool-reason">
+                                "Standard-Stack mit Helm chart kube-prometheus-stack. Eigene Dashboards für Velero-Metriken."
+                            </div>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-name">Dynacat</div>
+                            <div class="tool-desc">Dashboard auf Raspberry Pi Zero (Podman)</div>
+                            <div class="tool-reason">
+                                "Leichtgewichtig, SSH-basiert, zeigt Node-Metriken ohne Kubernetes-API zu benötigen."
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="category-heading">CI/CD & Version Control</h2>
+                    <div class="tool-grid">
+                        <div class="tool-card">
+                            <div class="tool-name">Forgejo</div>
+                            <div class="tool-desc">Git Hosting (Fork von Gitea)</div>
+                            <div class="tool-reason">
+                                "GitHub ist öffentlich. Forgejo lokal für private Repos, kein Internet-Zugriff nötig."
+                            </div>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-name">Ansible</div>
+                            <div class="tool-desc">Configuration Management, Paket-Synchronisierung</div>
+                            <div class="tool-reason">
+                                "Playbooks vergleichen pakete auf workers, installieren fehlende, exportieren Specs als JSON."
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="category-heading">Storage & Backups</h2>
+                    <div class="tool-grid">
+                        <div class="tool-card">
+                            <div class="tool-name">Velero + MinIO</div>
+                            <div class="tool-desc">Kubernetes Backup/Restore auf lokales S3-kompatibles Ziel</div>
+                            <div class="tool-reason">
+                                "Backup von Metadaten + PVs. Restore getestet. MinIO läuft in Docker auf Desktop, nicht im Cluster."
+                            </div>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-name">NFS Subdir Provisioner</div>
+                            <div class="tool-desc">Dynamische PersistentVolumes über NFS</div>
+                            <div class="tool-reason">
+                                "Statt local-path: Daten bleiben erhalten, wenn Pod neu geplant wird. Performance ausreichend für kleine DBs."
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="category-heading">Development & Utilities</h2>
+                    <div class="tool-grid">
+                        <div class="tool-card">
+                            <div class="tool-name">k9s</div>
+                            <div class="tool-desc">Terminal-UI für Kubernetes</div>
+                            <div class="tool-reason">
+                                "Schneller als `kubectl get pods -A`, Filter, Live-Logs, Port-Forwarding."
+                            </div>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-name">FreshRSS</div>
+                            <div class="tool-desc">RSS-Reader (Migration geplant zu k3s)</div>
+                            <div class="tool-reason">
+                                "Aktuell auf separater VM. Docker-Compose einfach zu migrieren, wenn Zeit ist."
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <footer>
+                <p>
+                    © 2026 MrToadie · built with
+                    <span class="footer-icons">
+                        <span
+                            class="ic ic-linux"
+                            role="img"
+                            aria-label="Linux"
+                        ></span>
+                        <span
+                            class="ic ic-music"
+                            role="img"
+                            aria-label="Musik"
+                        ></span>
+                        <span
+                            class="ic ic-guitar"
+                            role="img"
+                            aria-label="Gitarre"
+                        ></span>
+                        <span
+                            class="ic ic-coffee"
+                            role="img"
+                            aria-label="Kaffee"
+                        ></span>
+                    </span>
+                </p>
+            </footer>
+        </div>
+
+        <script src="assets/js/dashboard.js" defer></script>
+    </body>
+</html>

@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Homelab · MrToadie</title>
+        <link rel="stylesheet" href="assets/css/style.css" />
+    </head>
+    <body>
+        <!-- Inline icon sprite: ersetzt Font Awesome vollstaendig, keine externen Requests -->
+        <svg class="icon-defs" aria-hidden="true" focusable="false">
+            <symbol id="i-crown" viewBox="0 0 16 16">
+                <path
+                    d="M2 12.6h12M3.2 11.2 2 4.8l3.6 2.4L8 3.6l2.4 3.6L14 4.8l-1.2 6.4z"
+                />
+            </symbol>
+            <symbol id="i-server" viewBox="0 0 16 16">
+                <path
+                    d="M2.5 3.5h11v3.6h-11zM2.5 8.9h11v3.6h-11zM5 5.3h.01M5 10.7h.01"
+                />
+            </symbol>
+            <symbol id="i-cpu" viewBox="0 0 16 16">
+                <path
+                    d="M5.4 5.4h5.2v5.2H5.4zM8 2.4v3M8 10.6v3M2.4 8h3M10.6 8h3M4.6 2.4v1.4M11.4 2.4v1.4M4.6 12.2v1.4M11.4 12.2v1.4"
+                />
+            </symbol>
+            <symbol id="i-disk" viewBox="0 0 16 16">
+                <path
+                    d="M3 5.4c0-1.1 2.24-2 5-2s5 .9 5 2v5.2c0 1.1-2.24 2-5 2s-5-.9-5-2zM3 5.4c0 1.1 2.24 2 5 2s5-.9 5-2"
+                />
+            </symbol>
+            <symbol id="i-tag" viewBox="0 0 16 16">
+                <path d="M2.6 3.4h4.3l6.5 6.5-4.3 4.3-6.5-6.5zM5.3 5.4h.01" />
+            </symbol>
+            <symbol id="i-check" viewBox="0 0 16 16">
+                <path d="M3.2 8.4l3.2 3.2 6.4-7" />
+            </symbol>
+            <symbol id="i-alert" viewBox="0 0 16 16">
+                <path d="M8 3.2l5.6 9.6H2.4zM8 6.6v3.1M8 11.4h.01" />
+            </symbol>
+
+            <!-- Footer-Symbole: Ersatz fuer fa-linux / fa-music / fa-guitar / fa-mug-hot -->
+            <symbol id="i-linux" viewBox="0 0 16 16">
+                <path
+                    d="M8 1.8c-1.5 0-2.5 1.1-2.5 2.6 0 .8-.2 1.4-.7 2.1-.9 1.2-1.6 2.4-1.6 3.6 0 1.4 1.1 2.3 2.5 2.5.6.1 1 .3 1.4.7.3.3.6.5.9.5s.6-.2.9-.5c.4-.4.8-.6 1.4-.7 1.4-.2 2.5-1.1 2.5-2.5 0-1.2-.7-2.4-1.6-3.6-.5-.7-.7-1.3-.7-2.1 0-1.5-1-2.6-2.5-2.6z"
+                />
+                <circle cx="6.9" cy="4.3" r=".45" />
+                <circle cx="9.1" cy="4.3" r=".45" />
+                <path d="M7.3 6.2h1.4L8 7.1z" />
+            </symbol>
+            <symbol id="i-music" viewBox="0 0 16 16">
+                <circle cx="4.6" cy="12.2" r="1.7" />
+                <circle cx="11.4" cy="10.6" r="1.7" />
+                <path d="M6.3 12.2V3.6l6.8-1.5v8.5" />
+            </symbol>
+            <symbol id="i-guitar" viewBox="0 0 16 16">
+                <path d="M9.4 6.6 13.6 2.4" />
+                <path d="M12.6 1.4l2 2" />
+                <ellipse
+                    cx="6"
+                    cy="10.2"
+                    rx="3.1"
+                    ry="2.4"
+                    transform="rotate(-45 6 10.2)"
+                />
+                <circle cx="6.4" cy="9.8" r=".85" />
+            </symbol>
+            <symbol id="i-coffee" viewBox="0 0 16 16">
+                <path d="M3 6.4h8.6v4.2a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3z" />
+                <path d="M11.6 7.4h1.1a1.9 1.9 0 0 1 0 3.8h-1.1" />
+                <path d="M5.6 2.4v1.7M8.4 2.4v1.7" />
+            </symbol>
+        </svg>
+
+        <div class="container">
+            <header>
+                <div class="term-title">
+                    <span>~/homelab</span>
+                    <span class="path">· k3s cluster</span>
+                </div>
+                <div class="dots">
+                    <div class="dot red"></div>
+                    <div class="dot yellow"></div>
+                    <div class="dot green"></div>
+                </div>
+            </header>
+
+            <main>
+                <nav class="top">
+                    <a href="index.html">/home/</a>
+                    <a href="homelab.html" class="active">/homelab</a>
+                    <a href="resume.html">/resume</a>
+                </nav>
+
+                <h1>
+                    Homelab
+                    <span style="color: var(--accent)">Infrastructure</span>
+                </h1>
+                <div class="subtitle cursor">
+                    k3s on Raspberry Pi · self-hosted, self-broken, self-fixed
+                </div>
+
+                <section>
+                    <div class="section-header">
+                        <span>kubectl get nodes -o wide</span>
+                        <span class="right" id="refresh-info"
+                            >auto-refresh · 5 min</span
+                        >
+                    </div>
+
+                    <div class="stats" id="stats">
+                        <div class="stat">
+                            <div class="k">Nodes ready</div>
+                            <div class="v loading">lade…</div>
+                        </div>
+                        <div class="stat">
+                            <div class="k">Pods running</div>
+                            <div class="v">—</div>
+                        </div>
+                        <div class="stat">
+                            <div class="k">Namespaces</div>
+                            <div class="v">—</div>
+                        </div>
+                        <div class="stat">
+                            <div class="k">Deployments</div>
+                            <div class="v">—</div>
+                        </div>
+                    </div>
+
+                    <div class="node-grid" id="node-metrics">
+                        <p class="loading">Cluster-Daten werden geladen…</p>
+                    </div>
+
+                    <div class="demo-note" id="demo-note">
+                        Demo-Daten — <code>data/cluster.json</code> war nicht
+                        erreichbar. Auf der Live-Seite erscheinen hier die
+                        echten Cluster-Werte.
+                    </div>
+                </section>
+            </main>
+
+            <footer>
+                <p>
+                    © 2026 MrToadie · built with
+                    <span class="footer-icons">
+                        <svg class="ficon" role="img" aria-label="Linux">
+                            <use href="#i-linux"></use>
+                        </svg>
+                        <svg class="ficon" role="img" aria-label="Musik">
+                            <use href="#i-music"></use>
+                        </svg>
+                        <svg class="ficon" role="img" aria-label="Gitarre">
+                            <use href="#i-guitar"></use>
+                        </svg>
+                        <svg class="ficon" role="img" aria-label="Kaffee">
+                            <use href="#i-coffee"></use>
+                        </svg>
+                    </span>
+                </p>
+            </footer>
+        </div>
+
+        <script src="assets/js/dashboard.js" defer></script>
+    </body>
+</html>

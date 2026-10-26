@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Operations · MrToadie Homelab</title>
+        <link rel="stylesheet" href="assets/css/style.css" />
+        <style>
+            .incident-card {
+                background: var(--surface);
+                border: 1px solid var(--border);
+                border-radius: 8px;
+                padding: 1.2rem;
+                margin-bottom: 1.25rem;
+                border-left: 3px solid var(--amber);
+            }
+            .incident-severity {
+                display: inline-block;
+                font-size: 0.65rem;
+                padding: 0.2rem 0.5rem;
+                border-radius: 4px;
+                text-transform: uppercase;
+                margin-bottom: 0.75rem;
+            }
+            .severity-high {
+                background: rgba(248, 81, 73, 0.15);
+                color: var(--red);
+            }
+            .severity-medium {
+                background: rgba(210, 153, 34, 0.15);
+                color: var(--amber);
+            }
+            .severity-low {
+                background: rgba(88, 166, 255, 0.15);
+                color: var(--accent);
+            }
+            .incident-title {
+                font-size: 1.05rem;
+                font-weight: 600;
+                color: var(--text);
+                margin-bottom: 0.5rem;
+            }
+            .incident-meta {
+                font-size: 0.75rem;
+                color: var(--faint);
+                margin-bottom: 0.75rem;
+            }
+            .resolution-list {
+                margin-left: 1.5rem;
+                font-size: 0.9rem;
+                color: var(--dim);
+                margin-top: 0.75rem;
+            }
+            .automation-item {
+                background: var(--card-alt);
+                border: 1px solid var(--border);
+                border-radius: 6px;
+                padding: 1rem;
+                margin-bottom: 0.75rem;
+                font-size: 0.9rem;
+            }
+            .automation-title {
+                font-weight: 600;
+                color: var(--accent);
+                margin-bottom: 0.5rem;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <div class="term-title">
+                    <span>~/homelab</span>
+                    <span class="path">· operations</span>
+                </div>
+                <div class="dots">
+                    <div class="dot red"></div>
+                    <div class="dot yellow"></div>
+                    <div class="dot green"></div>
+                </div>
+            </header>
+
+            <main>
+                <nav class="top">
+                    <a href="index.html">/home/</a>
+                    <a href="homelab.html">/homelab</a>
+                    <a href="hardware.html">/hardware</a>
+                    <a href="software.html">/software & tools</a>
+                    <a href="ops.html" class="active">/operations</a>
+                    <a href="decisions.html">/decisions</a>
+                </nav>
+
+                <h1>
+                    Operations
+                    <span style="color: var(--accent)">Daily Runbook</span>
+                </h1>
+                <div class="subtitle">
+                    Wie das System überwacht wird, was automatisch passiert und wie Incidents abgearbeitet werden
+                </div>
+
+                <section>
+                    <div class="section-header">
+                        <span>Automatisierung</span>
+                    </div>
+
+                    <div class="automation-item">
+                        <div class="automation-title">watch-cluster.sh — Status-Feed mit GitHub-Integration</div>
+                        TCP-Check auf Port 6443 + HTTPS /version gegen Cluster-API. Zustand (erreichbar/nicht erreichbar) wird lokal gespeichert, um wiederholte Pushes bei unverändertem Status zu vermeiden. Pusht cluster.json in das mrtoadie.github.io Repo.
+                    </div>
+
+                    <div class="automation-item">
+                        <div class="automation-title">Velero Backups — täglich 2 AM</div>
+                        CronJob mit `velero backup create --from-schedule=daily --ttl 720h`. Retention Policy löscht Backups älter als 30 Tage. Backup-Speicherung in MinIO-Bucket auf Desktop, nicht im Cluster.
+                    </div>
+
+                    <div class="automation-item">
+                        <div class="automation-title">Ansible — Paket-Synchronisierung</div>
+                        Playbook vergleicht installierte Pakete auf worker01/02/03, installiert fehlende, exportiert Ergebnis als JSON für Dashboard-Anzeige.
+                    </div>
+
+                    <div class="automation-item">
+                        <div class="automation-title">Uptime Kuma — Alerts</div>
+                        HTTP/HTTPS-Checks alle 30 Sekunden. Telegram-Webhook bei Ausfall länger als 2 Minuten. Schwellwert: 3 aufeinanderfolgende Fehlversuche → Benachrichtigung.
+                    </div>
+                </section>
+
+                <section>
+                    <div class="section-header">
+                        <span>Incident History — echte Vorfälle</span>
+                        <span class="right">letzte 12 Monate</span>
+                    </div>
+
+                    <div class="incident-card">
+                        <span class="incident-severity severity-high">high</span>
+                        <div class="incident-title">SD-Karte corruptions auf winterfell</div>
+                        <div class="incident-meta">Januar 2026 · Dauer: 4 Stunden · Impact: control-plane offline</div>
+                        <p>
+                            etcd meldete `database error: snapshot corrupted`. Logs zeigten I/O-Fehler auf `/dev/mmcblk0`. 
+                            Node konnte nicht neu starten, etcd-Cluster fiel auf 1 Mitglied (Quorum verloren).
+                        </p>
+                        <ol class="resolution-list">
+                            <li>Neues Image von Raspberry Pi OS Lite auf SD-Karte gebrannt</li>
+                            <li>k3s-Token von backup-node manuell kopiert</li>
+                            <li>Node wieder mit Cluster verbunden, etcd-Replizierung initiiert</li>
+                            <li>Nach Incident: Rootfs auf USB-SSD migriert, etcd auf separates Volume ausgelagert</li>
+                        </ol>
+                    </div>
+
+                    <div class="incident-card">
+                        <span class="incident-severity severity-high">high</span>
+                        <div class="incident-title">Docker Daemon durch TCP-Listener lahmgelegt</div>
+                        <div class="incident-meta">Februar 2026 · Dauer: 2 Stunden · Impact: keine Container-Starts möglich</div>
+                        <p>
+                            Versucht, Docker über TCP zu aktivieren (`-H tcp://0.0.0.0:2375`). Danach `systemctl start docker` fehlgeschlagen 
+                            mit `Failed to start Docker Application Container Engine`. Logs zeigten Socket-Conflict mit existiersnder Unix-Socket.
+                        </p>
+                        <ol class="resolution-list">
+                            <li>Docker Service gestoppt</li>
+                            <li>`/etc/docker/daemon.json` auf Leerzeichen überprüft, TCP-Entry entfernt</li>
+                            <li>Service neu gestartet, Funktionstest mit `docker ps`</li>
+                            <li>Später: Nur Unix-Socket, SSH-Tunnel für Remote-Zugriff</li>
+                        </ol>
+                    </div>
+
+                    <div class="incident-card">
+                        <span class="incident-severity severity-medium">medium</span>
+                        <div class="incident-title">Pi Zero unter Blocky instabil</div>
+                        <div class="incident-meta">März 2026 · Dauer: 1 Stunde · Impact: DNS-Auflösung intermitierend fehlgeschlagen</div>
+                        <p>
+                            Blocky (DNS Resolver) lief auf Raspberry Pi Zero 2W, 100% CPU-Last nach 3 Tagen Uptime. 
+                            Gerät wurde unresponsive, musste hart neu gestartet werden.
+                        </p>
+                        <ol class="resolution-list">
+                            <li>Blocky auf Desktop (Docker) migriert, Pi Zero nur noch Dynacat</li>
+                            <li>Pi Zero auf statische IP mit manueller DNS-Einträge in Dynacat konfiguriert</li>
+                            <li>Alternative evaluiert: Unbound statt Blocky, weniger Ressourcen-intensiv</li>
+                        </ol>
+                    </div>
+
+                    <div class="incident-card">
+                        <span class="incident-severity severity-medium">medium</span>
+                        <div class="incident-title">Node Rejoin nach k3s-Update — Token Mismatch</div>
+                        <div class="incident-meta">April 2026 · Dauer: 30 Minuten · Impact: worker01 NotReady</div>
+                        <p>
+                            k3s-Update auf control-plane durchgeführt. Nach Neustart meldete worker01 `token mismatch`. 
+                            Agent konnte sich nicht authentifizieren, Pod-Scheduling unterbrochen.
+                        </p>
+                        <ol class="resolution-list">
+                            <li>Token von `/var/lib/rancher/k3s/server/node-token` auf control-plane ausgelesen</li>
+                            <li>Auf worker01 in `/etc/rancher/k3s/config.yaml` eingefügt</li>
+                            <li>k3s-agent neu gestartet, Node wieder im Cluster sichtbar</li>
+                            <li>Lösung: Automatisiertes Backup des Tokens auf externer Maschine</li>
+                        </ol>
+                    </div>
+
+                    <div class="incident-card">
+                        <span class="incident-severity severity-low">low</span>
+                        <div class="incident-title">OpenVPN Replay Detection Error</div>
+                        <div class="incident-meta">Mai 2026 · Dauer: 15 Minuten · Impact: Tunnel nicht aufgebaut</div>
+                        <p>
+                            `read UDPv4 [EAGAIN]: Resource temporarily unavailable (code=11)` während Tunnel-Etablierung. 
+                            Replay Detection war zu aggressiv eingestellt.
+                        </p>
+                        <ol class="resolution-list">
+                            <li>openvpn.conf: `replay-window 64 15` statt Standard-Werte</li>
+                            <li>Tunnel neu initialisiert, Verbindung stabil</li>
+                        </ol>
+                    </div>
+                </section>
+            </main>
+
+            <footer>
+                <p>© 2026 MrToadie · built with <span class="footer-icons"></span></p>
+            </footer>
+        </div>
+
+        <script src="assets/js/dashboard.js" defer></script>
+    </body>
+</html>
