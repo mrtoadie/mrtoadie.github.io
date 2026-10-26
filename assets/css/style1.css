@@ -1,0 +1,703 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --card-alt: #21262d;
+    --surface: #1c2128;
+    --text: #e6edf3;
+    --dim: #8b949e;
+    --faint: #6e7681;
+    --accent: #58a6ff;
+    --accent-hover: #79c0ff;
+    --border: #30363d;
+    --green: #7ee787;
+    --amber: #d29922;
+    --red: #f85149;
+    --purple: #a371f7;
+    --mono:
+        ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+        "Liberation Mono", monospace;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background:
+        radial-gradient(
+            1200px 600px at 50% -12%,
+            rgba(88, 166, 255, 0.075),
+            transparent 70%
+        ),
+        var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2.5rem 1.5rem 3.5rem;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+a:hover {
+    color: var(--accent-hover);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.85);
+}
+
+/* ---------- Icons ----------
+   Local SVG files from assets/icons/, drawn as a CSS mask. That makes them
+   behave like the icon font they replace: colour comes from currentColor,
+   size from width/height. Pull the files with scripts/fetch-icons.sh.
+   Only monochrome icons work here - a colourful icon would be flattened to
+   a solid silhouette. */
+.ic {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    flex: none;
+    vertical-align: -0.125em;
+    background-color: currentColor;
+    -webkit-mask-image: var(--i);
+    mask-image: var(--i);
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+}
+
+.ic-crown {
+    --i: url("../icons/crown.svg");
+}
+.ic-server {
+    --i: url("../icons/server.svg");
+}
+.ic-cpu {
+    --i: url("../icons/cpu.svg");
+}
+.ic-disk {
+    --i: url("../icons/disk.svg");
+}
+.ic-tag {
+    --i: url("../icons/tag.svg");
+}
+.ic-check {
+    --i: url("../icons/check.svg");
+}
+.ic-alert {
+    --i: url("../icons/alert.svg");
+}
+.ic-linux {
+    --i: url("../icons/linux.svg");
+}
+.ic-music {
+    --i: url("../icons/music.svg");
+}
+.ic-guitar {
+    --i: url("../icons/guitar.svg");
+}
+.ic-coffee {
+    --i: url("../icons/coffee.svg");
+}
+
+/* ---------- Terminal header ---------- */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: var(--card-alt);
+    border-bottom: 1px solid var(--border);
+}
+.term-title {
+    font-size: 0.85rem;
+    color: var(--dim);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.term-title .path {
+    color: var(--faint);
+}
+.dots {
+    display: flex;
+    gap: 7px;
+}
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+.dotleft {
+    background: #58a6ff;
+}
+.dotmiddle {
+    background: #79c0ff;
+}
+.dotright {
+    background: #33658a;
+}
+
+main {
+    padding: 2.75rem 2rem;
+}
+
+/* ---------- Nav ---------- */
+nav.top {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 2.5rem;
+}
+nav.top a {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    color: var(--dim);
+    background: rgba(255, 255, 255, 0.02);
+}
+nav.top a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+nav.top a.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(88, 166, 255, 0.1);
+}
+
+h1 {
+    font-size: 2.1rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+}
+.subtitle {
+    color: var(--accent);
+    font-size: 1.05rem;
+    margin-bottom: 2.5rem;
+}
+.cursor::after {
+    content: "▌";
+    animation: blink 1.1s step-end infinite;
+    margin-left: 2px;
+    opacity: 0.75;
+}
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+section {
+    margin-bottom: 3rem;
+}
+section:last-child {
+    margin-bottom: 0;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 0.9rem;
+    color: var(--dim);
+    padding-bottom: 0.7rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+.section-header::before {
+    content: "$";
+    color: var(--green);
+    font-weight: 600;
+}
+.section-header .right {
+    margin-left: auto;
+    font-size: 0.75rem;
+    color: var(--faint);
+}
+
+/* ---------- Stat tiles ---------- */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+}
+.stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.1rem 1.2rem;
+}
+.stat .k {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--faint);
+    margin-bottom: 0.4rem;
+}
+.stat .v {
+    font-size: 1.7rem;
+    font-weight: 600;
+    line-height: 1.15;
+    font-variant-numeric: tabular-nums;
+}
+.stat .v small {
+    font-size: 0.95rem;
+    color: var(--dim);
+    font-weight: 400;
+}
+
+/* ---------- Node cards ----------
+   Role eyebrow / name / spec lines / status pill, plus the homelab live bits:
+   status LED, left accent bar and the CPU/RAM ring gauges. */
+.node-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.2rem;
+}
+
+.node-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem 1.3rem 1.4rem 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: linear-gradient(
+        180deg,
+        rgba(88, 166, 255, 0.055),
+        rgba(88, 166, 255, 0.012)
+    );
+    overflow: hidden;
+    transition:
+        transform 0.18s ease,
+        border-color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+.node-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 3px;
+    background: var(--faint);
+    opacity: 0.45;
+}
+.node-card.ready::before {
+    background: var(--green);
+    opacity: 0.9;
+}
+.node-card.notready::before {
+    background: var(--red);
+    opacity: 0.9;
+}
+.node-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow: 0 14px 30px -16px rgba(88, 166, 255, 0.55);
+}
+
+.node-head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
+}
+
+.node-role {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+}
+.node-card.cp .node-role {
+    color: var(--purple);
+}
+
+/* icon sizing inside the node cards */
+.node-role .ic,
+.node-spec .ic,
+.node-status .ic {
+    width: 13px;
+    height: 13px;
+}
+.node-status .ic {
+    width: 12px;
+    height: 12px;
+}
+
+.led {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex: none;
+    background: var(--green);
+}
+.node-card.ready .led {
+    animation: pulse 2.2s ease-out infinite;
+}
+.node-card.notready .led {
+    background: var(--red);
+}
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(126, 231, 135, 0.55);
+    }
+    70% {
+        box-shadow: 0 0 0 8px rgba(126, 231, 135, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(126, 231, 135, 0);
+    }
+}
+
+.node-name {
+    font-size: 1.35rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+}
+
+.node-spec {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.88rem;
+    color: var(--dim);
+    margin: 0.2rem 0;
+}
+.node-spec .ic {
+    color: var(--faint);
+}
+
+.node-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: auto;
+    padding: 3px 11px;
+    border-radius: 20px;
+    border: 1px solid;
+    font-size: 0.68rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.node-status.ready {
+    color: var(--green);
+    border-color: rgba(126, 231, 135, 0.35);
+    background: rgba(126, 231, 135, 0.12);
+}
+.node-status.notready {
+    color: var(--red);
+    border-color: rgba(248, 81, 73, 0.35);
+    background: rgba(248, 81, 73, 0.12);
+}
+
+/* ---------- Ring gauges ---------- */
+.gauges {
+    display: flex;
+    gap: 1.3rem;
+    margin-top: auto;
+    padding-top: 1.25rem;
+}
+.gauge-wrap {
+    text-align: center;
+}
+.gauge {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    margin-bottom: 0.4rem;
+    background: conic-gradient(
+        var(--ring) calc(var(--pct) * 1%),
+        #262c36 0
+    );
+}
+.gauge span {
+    grid-area: 1/1;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: var(--surface);
+    display: grid;
+    place-items: center;
+    font-size: 0.8rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+}
+.gauge.ok {
+    --ring: var(--green);
+}
+.gauge.warn {
+    --ring: var(--amber);
+}
+.gauge.crit {
+    --ring: var(--red);
+}
+.gauge.na {
+    background: #262c36;
+}
+.gauge.na span {
+    color: var(--faint);
+}
+.gauge-wrap small {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--faint);
+}
+
+/* ---------- Footer icons ---------- */
+.footer-icons {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    vertical-align: -0.15em;
+    margin-left: 0.35rem;
+}
+.footer-icons .ic {
+    width: 14px;
+    height: 14px;
+    color: var(--faint);
+    transition: color 0.15s ease;
+}
+.footer-icons .ic:hover {
+    color: var(--accent);
+}
+
+/* ---------- Misc ---------- */
+.demo-note {
+    display: none;
+    margin-top: 1.5rem;
+    font-size: 0.78rem;
+    color: var(--amber);
+    background: rgba(210, 153, 34, 0.08);
+    border: 1px solid rgba(210, 153, 34, 0.3);
+    border-radius: 8px;
+    padding: 0.7rem 0.95rem;
+}
+.loading {
+    color: var(--faint);
+    font-size: 0.95rem;
+}
+
+/* ---------- Anchor offsets for smooth scroll ---------- */
+h2[id] {
+    scroll-margin-top: 100px;
+    margin-top: 1rem;
+}
+
+.category-heading {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 2rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+/* ---------- Incident cards ---------- */
+.incident-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem;
+    margin-bottom: 1.25rem;
+    border-left: 3px solid var(--amber);
+}
+.incident-severity {
+    display: inline-block;
+    font-size: 0.65rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+}
+.severity-high {
+    background: rgba(248, 81, 73, 0.15);
+    color: var(--red);
+}
+.severity-medium {
+    background: rgba(210, 153, 34, 0.15);
+    color: var(--amber);
+}
+.severity-low {
+    background: rgba(88, 166, 255, 0.15);
+    color: var(--accent);
+}
+.incident-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+}
+.incident-meta {
+    font-size: 0.75rem;
+    color: var(--faint);
+    margin-bottom: 0.75rem;
+}
+.resolution-list {
+    margin-left: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--dim);
+    margin-top: 0.75rem;
+}
+
+/* ---------- Tool cards ---------- */
+.tool-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+.tool-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem;
+}
+.tool-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+}
+.tool-desc {
+    font-size: 0.9rem;
+    color: var(--dim);
+    margin-bottom: 0.75rem;
+}
+.tool-reason {
+    font-size: 0.85rem;
+    color: var(--faint);
+    border-top: 1px solid var(--border);
+    padding-top: 0.75rem;
+    font-style: italic;
+}
+
+/* ---------- Hardware table ---------- */
+.hw-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+}
+.hw-table th,
+.hw-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+.hw-table th {
+    background: var(--surface);
+    font-weight: 600;
+    color: var(--accent);
+}
+.hw-table tr:hover {
+    background: rgba(88, 166, 255, 0.05);
+}
+.hw-note {
+    background: rgba(88, 166, 255, 0.05);
+    border-left: 3px solid var(--accent);
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+    font-size: 0.9rem;
+    color: var(--dim);
+}
+.hw-note strong {
+    color: var(--text);
+}
+.power-meter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--faint);
+    margin-left: 0.5rem;
+}
+.tag {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    background: var(--surface);
+    font-size: 0.7rem;
+    color: var(--dim);
+    border: 1px solid var(--border);
+    margin-right: 0.4rem;
+}
+
+footer {
+    padding: 1.4rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--faint);
+    border-top: 1px solid var(--border);
+    background: var(--card-alt);
+}
+
+@media (max-width: 720px) {
+    body {
+        padding: 2rem 1rem 3rem;
+    }
+    main {
+        padding: 2rem 1.5rem;
+    }
+    h1 {
+        font-size: 1.65rem;
+    }
+    .stat .v {
+        font-size: 1.45rem;
+    }
+    .node-grid {
+        grid-template-columns: 1fr;
+    }
+    .gauges {
+        gap: 1rem;
+    }
+    .gauge {
+        width: 60px;
+        height: 60px;
+    }
+    .gauge span {
+        width: 46px;
+        height: 46px;
+        font-size: 0.7rem;
+    }
+    h2[id] {
+        scroll-margin-top: 80px;
+    }
+}

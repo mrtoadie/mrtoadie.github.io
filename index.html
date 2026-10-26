@@ -1,375 +1,416 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio | Dev & Life</title>
-    <!-- External monospace font from Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600&display=swap" rel="stylesheet">
-    
-    <style>
-        /* ---CSS variables --- */
-        :root {
-            --bg-color: #0d1117;         /* Dark background like GitHub Dark */
-            --card-bg: #161b22;          /* background color for blocks */
-            --text-main: #e6edf3;        /* text color */
-            --text-dim: #8b949e;         /* color fordescriptions */
-            --accent: #58a6ff;           /* accent color for highlights */
-            --accent-hover: #79c0ff;     /* hover color */
-            --border: #30363d;           /* border color */
-            --code-green: #7ee787;       /* color for "commands" */
-            --font-mono: 'Fira Code', monospace;
-        }
-
-        /* --- Globales Reset & Basis --- */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: var(--font-mono);
-            line-height: 1.6;
-            padding: 2rem 1rem;
-            min-height: 100vh;
-        }
-
-        a { text-decoration: none; color: var(--accent); transition: 0.2s ease; }
-        a:hover { color: var(--accent-hover); text-decoration: underline; }
-
-        /* --- Layout Container --- */
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            background-color: var(--card-bg);
-        }
-
-        /* --- Header / Terminal Bar --- */
-        header {
-            background: #21262d;
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .terminal-title {
-            font-size: 0.9rem;
-            color: var(--text-dim);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .terminal-btns {
-            display: flex;
-            gap: 6px;
-        }
-        .dot { width: 12px; height: 12px; border-radius: 50%; }
-        .red { background: #58a6ff; }
-        .yellow { background: #79c0ff; }
-        .green { background: #33658A; }
-
-        /* --- Hauptinhalt --- */
-        main { padding: 2rem; }
-
-        /* Typewriter effect for the headline */
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            color: var(--text-main);
-        }
-        .subtitle {
-            color: var(--accent);
-            margin-bottom: 2rem;
-            font-weight: 600;
-        }
-        .cursor::after {
-            content: '|';
-            animation: blink 1s step-end infinite;
-        }
-
-        @keyframes blink { 50% { opacity: 0; } }
-
-        /* ---Section --- */
-        section { margin-bottom: 2.5rem; }
-        .section-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            color: var(--text-dim);
-            font-size: 0.9rem;
-        }
-        .section-header::before {
-            content: '$';
-            color: var(--code-green);
-            margin-right: 10px;
-            font-weight: bold;
-        }
-        section:first-of-type a i {
-            margin-right: 6px;
-        }
-
-        /* ---CV/Timeline --- */
-        .timeline-item {
-            border-left: 2px solid var(--border);
-            padding-left: 1.5rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -6px; top: 5px;
-            width: 10px; height: 10px;
-            background: var(--accent);
-            border-radius: 50%;
-            border: 2px solid var(--card-bg);
-        }
-        .role { font-weight: 600; font-size: 1.1rem; color: var(--text-main); }
-        .company { color: var(--accent); margin-bottom: 0.5rem; display: block; }
-        .date { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 0.5rem; }
-        .desc { color: var(--text-dim); font-size: 0.95rem; }
-
-        /* ---Projects Grid --- */
-        .project-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .project-card {
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1.2rem;
-            background: rgba(255,255,255,0.03);
-            transition: transform 0.2s, border-color 0.2s;
-        }
-        .project-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--accent);
-        }
-        .project-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-main);
-            display: flex;
-            justify-content: space-between;
-        }
-        .tech-stack {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-        .tag {
-            font-size: 0.75rem;
-            background: rgba(88, 166, 255, 0.15);
-            color: var(--accent);
-            padding: 2px 8px;
-            border-radius: 4px;
-        }
-        .project-links {
-            margin-top: 1rem;
-            display: flex;
-            gap: 1rem;
-        }
-        .icon-link { font-size: 1.2rem; }
-
-        /* --- Footer --- */
-        footer {
-            text-align: center;
-            padding: 1.5rem;
-            border-top: 1px solid var(--border);
-            color: var(--text-dim);
-            font-size: 0.85rem;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 600px) {
-            h1 { font-size: 1.5rem; }
-            main { padding: 1.5rem; }
-            .project-grid { grid-template-columns: 1fr; }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <!-- Fake Terminal Header -->
-        <header>
-            <div class="terminal-title">~/portfolio/config.yaml</div>
-            <div class="terminal-btns">
-                <div class="dot red"></div>
-                <div class="dot yellow"></div>
-                <div class="dot green"></div>
-            </div>
-        </header>
-
-        <main>
-            <section>
-                <div class="section-header">cat menu.html</div>
-                <table border="1">
-                    <th><span class="tag"><a href="index.html">/home/toadie/</a></span></th>
-                    <th>sf</th>
-                    <th><span class="tag"><a href="" alt="CSV"><i class="fa-solid fa-code-merge"></i>/home/toadie/csv</a></span></th>
-                </table>
-                    <div style="margin-top: 1rem;">
-                    <a href="index.html">/home/toadie/</a> |
-                    <a href="homelab.html" alt="homelab"><i class="fa-brands fa-github"></i>/home/toadie/homelab</a> | 
-                    <a href="" alt="CSV"><i class="fa-solid fa-code-merge"></i>/home/toadie/csv</a>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Homelab · MrToadie</title>
+        <link rel="stylesheet" href="assets/css/style.css" />
+        <link rel="icon" href="assets/favico.png" sizes="48x48">
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <div class="term-title">
+                    <span>~/homelab</span>
+                    <span class="path">· k3s cluster</span>
                 </div>
-            </section>
-            <!-- Intro Section -->
-            <section>
-                <h1>Hello, I am <span style="color:var(--accent)">MrToadie</span></h1>
-                <div class="subtitle cursor">I'm a cloud engineer && hobby developer && I love open source</div>
-                <p style="color: var(--text-dim);">
-                    weiß noch keinen text
+                <div class="dots">
+                    <div class="dot dotleft"></div>
+                    <div class="dot dotmiddle"></div>
+                    <div class="dot dotright"></div>
+                </div>
+            </header>
+
+            <main>
+                <nav class="top">
+                    <a href="">/home/</a>
+                    <a href="#infrastructure">/infrastructure</a>
+                    <a href="#hardware">/hardware</a>
+                    <a href="#software">/tools</a>
+                    <a href="#incidents">/incidents</a>
+                </nav>
+
+                <h1>/homelab</h1>
+                <div class="subtitle cursor">
+                    k3s on Raspberry Pi · self-hosted, self-broken, self-fixed
+                </div>
+
+                <h2 id="infrastructure">
+                    <span style="color: var(--accent)">/infrastructure</span>
+                </h2>
+                <section>
+                    <div class="section-header">
+                        <span>kubectl get nodes -o wide</span>
+                        <span class="right" id="refresh-info"
+                            >auto-refresh · 5 min</span
+                        >
+                    </div>
+
+                    <div class="stats" id="stats">
+                        <div class="stat">
+                            <div class="k">Nodes ready</div>
+                            <div class="v loading">lade…</div>
+                        </div>
+                        <div class="stat">
+                            <div class="k">Pods running</div>
+                            <div class="v">—</div>
+                        </div>
+                        <div class="stat">
+                            <div class="k">Namespaces</div>
+                            <div class="v">—</div>
+                        </div>
+                        <div class="stat">
+                            <div class="k">Deployments</div>
+                            <div class="v">—</div>
+                        </div>
+                    </div>
+
+                    <div class="node-grid" id="node-metrics">
+                        <p class="loading">Cluster-Daten werden geladen…</p>
+                    </div>
+
+                    <div class="demo-note" id="demo-note">
+                        Demo-Daten — <code>data/cluster.json</code> war nicht
+                        erreichbar. Auf der Live-Seite erscheinen hier die
+                        echten Cluster-Werte.
+                    </div>
+                </section>
+
+                <h2 id="hardware">
+                    <span style="color: var(--accent)">/hardware</span>
+                </h2>
+                <section>
+                    <table class="hw-table">
+                        <thead>
+                            <tr>
+                                <th>Node</th>
+                                <th>Board</th>
+                                <th>RAM</th>
+                                <th>Storage</th>
+                                <th>Rolle</th>
+                                <th>Bemerkungen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>winterfell</strong></td>
+                                <td>Raspberry Pi 4</td>
+                                <td>8 GB</td>
+                                <td>USB-SSD (XFS)</td>
+                                <td>control-plane</td>
+                                <td>
+                                    <span class="tag">Root auf USB</span>
+                                    <span class="tag">etcd auf NVMe</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>worker01</strong></td>
+                                <td>Raspberry Pi 4</td>
+                                <td>1 GB</td>
+                                <td>Samsung EVO SD</td>
+                                <td>worker</td>
+                                <td>
+                                    <span class="tag">Pod-Limits</span>
+                                    <span class="tag">Thermal Throttling</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>worker02</strong></td>
+                                <td>Raspberry Pi 4</td>
+                                <td>1 GB</td>
+                                <td>Samsung EVO SD</td>
+                                <td>worker</td>
+                                <td>
+                                    <span class="tag">NFS Client</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>worker03</strong></td>
+                                <td>Raspberry Pi 4</td>
+                                <td>2 GB</td>
+                                <td>Samsung EVO SD</td>
+                                <td>worker</td>
+                                <td>
+                                    <span class="tag">Heißer Arbeiter</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="hw-note">
+                        <strong>Warum USB-SSD statt SD-Karte?</strong> Die SD-Karten auf winterfell sind zweimal innerhalb von sechs Monaten gestorben — einmal korruptes etcd, einmal bootblock defekt. Seitdem läuft rootfs und /var/lib/k3s auf einem Sandisk Extreme Plus USB-SSD via Realtek RTL9210-Adapter. Der Adapter braucht Kernel 6.2+, funktioniert aber nicht stabil unter allen Raspberry Pi OS-Versionen.
+                    </div>
+
+                    <div class="hw-note">
+                        <strong>cgroup-Limits auf den 1-GB-Pis:</strong> worker01/02 haben `--kubelet-arg=max-pods=20` und `--kubelet-arg=eviction-hard=memory.available&lt;100Mi`. Ohne diese Limits kippen sie regelmäßig in OOM-Kill-Schleifen, sobald Buchlore oder Grafana etwas mehr RAM ziehen.
+                    </div>
+
+                    <p>
+                        Gesamtverbrauch im Idle: ~35W (alle 4 Nodes + Switch + NAS).
+                        Spitzenlast bei Velero-Backup oder großen Deployments: bis zu 65W.
+                        Strompreis (DE, 2026): ca. €0,35/kWh → Jahreskosten ~€35–45 je nach Auslastung.
+                    </p>
+                </section>
+
+                <h2 id="software">
+                    <span style="color: var(--accent)">/software & tools</span>
+                </h2>
+                <section>
+                    <h3 class="category-heading">Ingress & DNS</h3>
+                    <div class="tool-grid">
+                        <div class="tool-card">
+                            <div class="tool-name">Traefik</div>
+                            <div class="tool-desc">Ingress-Controller für alle internen Dienste (grafana.local, forgejo.local)</div>
+                            <div class="tool-reason">
+                                "k3s bringt Traefik mit, nginx-ingress wäre eine zusätzliche Schicht gewesen."
+                            </div>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-name">Unbound</div>
+                            <div class="tool-desc">Recursive DNS Resolver auf Raspberry Pi Zero</div>
+                            <div class="tool-reason">
+                                "FRITZ!Box erlaubt keine eigenen DNS-Einträge im aktuellen Tarif. Unbound löst *.local auf Cluster-IPs."
+                            </div>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-name">Caddy</div>
+                            <div class="tool-desc">Reverse Proxy auf Raspberry Pi Zero (Dynacat exposure)</div>
+                            <div class="tool-reason">
+                                "Automatische TLS-Zertifikate für watcher.local, leichter als Nginx für einen Proxy."
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="category-heading">Monitoring & Alerting</h3>
+                    <div class="tool-grid">
+                        <div class="tool-card">
+                            <div class="tool-name">Prometheus + Grafana</div>
+                            <div class="tool-desc">Node Exporter, kube-state-metrics, custom ServiceMonitors</div>
+                            <div class="tool-reason">
+                                "Standard-Stack mit Helm chart kube-prometheus-stack. Eigene Dashboards für Velero-Metriken."
+                            </div>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-name">Uptime Kuma</div>
+                            <div class="tool-desc">HTTP/TCP/Ping-Checks auf alle Dienste</div>
+                            <div class="tool-reason">
+                                "Einfache Einrichtung, sieht gut aus, überwacht auch Dinge außerhalb des Clusters (NFS, MinIO)."
+                            </div>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-name">Dynacat</div>
+                            <div class="tool-desc">Dashboard auf Raspberry Pi Zero (Podman)</div>
+                            <div class="tool-reason">
+                                "Leichtgewichtig, SSH-basiert, zeigt Node-Metriken ohne Kubernetes-API zu benötigen."
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="category-heading">CI/CD & Version Control</h3>
+                    <div class="tool-grid">
+                        <div class="tool-card">
+                            <div class="tool-name">Forgejo</div>
+                            <div class="tool-desc">Git Hosting (Fork von Gitea)</div>
+                            <div class="tool-reason">
+                                "GitHub ist öffentlich. Forgejo lokal für private Repos, kein Internet-Zugriff nötig."
+                            </div>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-name">Ansible</div>
+                            <div class="tool-desc">Configuration Management, Paket-Synchronisierung</div>
+                            <div class="tool-reason">
+                                "Playbooks vergleichen Pakete auf workers, installieren fehlende, exportieren Specs als JSON."
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="category-heading">Storage & Backups</h3>
+                    <div class="tool-grid">
+                        <div class="tool-card">
+                            <div class="tool-name">Velero + MinIO</div>
+                            <div class="tool-desc">Kubernetes Backup/Restore auf lokales S3-kompatibles Ziel</div>
+                            <div class="tool-reason">
+                                "Backup von Metadaten + PVs. Restore getestet. MinIO läuft in Docker auf Desktop, nicht im Cluster."
+                            </div>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-name">NFS Subdir Provisioner</div>
+                            <div class="tool-desc">Dynamische PersistentVolumes über NFS</div>
+                            <div class="tool-reason">
+                                "Statt local-path: Daten bleiben erhalten, wenn Pod neu geplant wird. Performance ausreichend für kleine DBs."
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="category-heading">Development & Utilities</h3>
+                    <div class="tool-grid">
+                        <div class="tool-card">
+                            <div class="tool-name">k9s</div>
+                            <div class="tool-desc">Terminal-UI für Kubernetes</div>
+                            <div class="tool-reason">
+                                "Schneller als `kubectl get pods -A`, Filter, Live-Logs, Port-Forwarding."
+                            </div>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-name">FreshRSS</div>
+                            <div class="tool-desc">RSS-Reader (Migration geplant zu k3s)</div>
+                            <div class="tool-reason">
+                                "Aktuell auf separater VM. Docker-Compose einfach zu migrieren, wenn Zeit ist."
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <h2 id="incidents">
+                    <span style="color: var(--accent)">/incidents</span>
+                </h2>
+                <section>
+                    <div class="section-header">
+                        <span>Incident History — echte Vorfälle</span>
+                        <span class="right">letzte 12 Monate</span>
+                    </div>
+
+                    <div class="incident-card">
+                        <span class="incident-severity severity-high">high</span>
+                        <div class="incident-title">SD-Karte corruptions auf winterfell</div>
+                        <div class="incident-meta">Januar 2026 · Dauer: 4 Stunden · Impact: control-plane offline</div>
+                        <p>
+                            etcd meldete `database error: snapshot corrupted`. Logs zeigten I/O-Fehler auf `/dev/mmcblk0`.
+                            Node konnte nicht neu starten, etcd-Cluster fiel auf 1 Mitglied (Quorum verloren).
+                        </p>
+                        <ol class="resolution-list">
+                            <li>Neues Image von Raspberry Pi OS Lite auf SD-Karte gebrannt</li>
+                            <li>k3s-Token von backup-node manuell kopiert</li>
+                            <li>Node wieder mit Cluster verbunden, etcd-Replizierung initiiert</li>
+                            <li>Nach Incident: Rootfs auf USB-SSD migriert, etcd auf separates Volume ausgelagert</li>
+                        </ol>
+                    </div>
+
+                    <div class="incident-card">
+                        <span class="incident-severity severity-high">high</span>
+                        <div class="incident-title">Docker Daemon durch TCP-Listener lahmgelegt</div>
+                        <div class="incident-meta">Februar 2026 · Dauer: 2 Stunden · Impact: keine Container-Starts möglich</div>
+                        <p>
+                            Versucht, Docker über TCP zu aktivieren (`-H tcp://0.0.0.0:2375`). Danach `systemctl start docker` fehlgeschlagen
+                            mit `Failed to start Docker Application Container Engine`. Logs zeigten Socket-Conflict mit existierender Unix-Socket.
+                        </p>
+                        <ol class="resolution-list">
+                            <li>Docker Service gestoppt</li>
+                            <li>`/etc/docker/daemon.json` auf Leerzeichen überprüft, TCP-Entry entfernt</li>
+                            <li>Service neu gestartet, Funktionstest mit `docker ps`</li>
+                            <li>Später: Nur Unix-Socket, SSH-Tunnel für Remote-Zugriff</li>
+                        </ol>
+                    </div>
+
+                    <div class="incident-card">
+                        <span class="incident-severity severity-medium">medium</span>
+                        <div class="incident-title">Pi Zero unter Blocky instabil</div>
+                        <div class="incident-meta">März 2026 · Dauer: 1 Stunde · Impact: DNS-Auflösung intermittierend fehlgeschlagen</div>
+                        <p>
+                            Blocky (DNS Resolver) lief auf Raspberry Pi Zero 2W, 100% CPU-Last nach 3 Tagen Uptime.
+                            Gerät wurde unresponsive, musste hart neu gestartet werden.
+                        </p>
+                        <ol class="resolution-list">
+                            <li>Blocky auf Desktop (Docker) migriert, Pi Zero nur noch Dynacat</li>
+                            <li>Pi Zero auf statische IP mit manueller DNS-Einträge in Dynacat konfiguriert</li>
+                            <li>Alternative evaluiert: Unbound statt Blocky, weniger Ressourcen-intensiv</li>
+                        </ol>
+                    </div>
+
+                    <div class="incident-card">
+                        <span class="incident-severity severity-medium">medium</span>
+                        <div class="incident-title">Node Rejoin nach k3s-Update — Token Mismatch</div>
+                        <div class="incident-meta">April 2026 · Dauer: 30 Minuten · Impact: worker01 NotReady</div>
+                        <p>
+                            k3s-Update auf control-plane durchgeführt. Nach Neustart meldete worker01 `token mismatch`.
+                            Agent konnte sich nicht authentifizieren, Pod-Scheduling unterbrochen.
+                        </p>
+                        <ol class="resolution-list">
+                            <li>Token von `/var/lib/rancher/k3s/server/node-token` auf control-plane ausgelesen</li>
+                            <li>Auf worker01 in `/etc/rancher/k3s/config.yaml` eingefügt</li>
+                            <li>k3s-agent neu gestartet, Node wieder im Cluster sichtbar</li>
+                            <li>Lösung: Automatisiertes Backup des Tokens auf externer Maschine</li>
+                        </ol>
+                    </div>
+
+                    <div class="incident-card">
+                        <span class="incident-severity severity-low">low</span>
+                        <div class="incident-title">OpenVPN Replay Detection Error</div>
+                        <div class="incident-meta">Mai 2026 · Dauer: 15 Minuten · Impact: Tunnel nicht aufgebaut</div>
+                        <p>
+                            `read UDPv4 [EAGAIN]: Resource temporarily unavailable (code=11)` während Tunnel-Etablierung.
+                            Replay Detection war zu aggressiv eingestellt.
+                        </p>
+                        <ol class="resolution-list">
+                            <li>openvpn.conf: `replay-window 64 15` statt Standard-Werte</li>
+                            <li>Tunnel neu initialisiert, Verbindung stabil</li>
+                        </ol>
+                    </div>
+
+                    <div class="incident-card">
+                        <span class="incident-severity severity-medium">medium</span>
+                        <div class="incident-title">Velero Metrics nicht in Prometheus sichtbar</div>
+                        <div class="incident-meta">Juni 2026 · Dauer: 45 Minuten · Impact: kein Monitoring der Backups</div>
+                        <p>
+                            ServiceMonitor für Velero erstellt, aber Metriken erschienen nicht in Prometheus. Logs zeigten
+                            `target scrape failed` — Label-Mismatch zwischen ServiceMonitor und Service (`app.kubernetes.io/instance` vs. `release`).
+                        </p>
+                        <ol class="resolution-list">
+                            <li>ServiceMonitor-Labels angepasst (helm chart release name = `monitoring`)</li>
+                            <li>Prometheus Reload getriggert durch Annotation</li>
+                            <li>Velero-Endpoints in Prometheus sichtbar, Dashboards aktualisiert</li>
+                            <li>Template für ServiceMonitor erstellt, um Fehler zu vermeiden</li>
+                        </ol>
+                    </div>
+
+                    <div class="incident-card">
+                        <span class="incident-severity severity-high">high</span>
+                        <div class="incident-title">GitGuardian Alert — Kubernetes JWT im öffentlichen Repo</div>
+                        <div class="incident-meta">Juli 2026 · Dauer: 2 Stunden · Impact: Sicherheitsrisiko, Repository geleakt</div>
+                        <p>
+                            GitGuardian meldete exponiertes JWT-Token in öffentlichem GitHub-Repository. Das Token hatte
+                            Zugriff auf k3s API Server mit cluster-admin-Rechten. Repository war kurzzeitig öffentlich.
+                        </p>
+                        <ol class="resolution-list">
+                            <li>Repository sofort privat gestellt</li>
+                            <li>JWT-Token invalidiert, neues ServiceAccount-Token erstellt</li>
+                            <li>GitGuardian-Scan in CI/CD Pipeline integriert</li>
+                            <li>.gitignore aktualisiert, um kubeconfig und Secrets zu schützen</li>
+                            <li>Commit-History mit git-filter-repo bereinigt</li>
+                        </ol>
+                    </div>
+                </section>
+            </main>
+
+            <footer>
+                <p>
+                    © 2026 MrToadie · built with
+                    <span class="footer-icons">
+                        <span
+                            class="ic ic-linux"
+                            role="img"
+                            aria-label="Linux"
+                        ></span>
+                        <span
+                            class="ic ic-music"
+                            role="img"
+                            aria-label="Musik"
+                        ></span>
+                        <span
+                            class="ic ic-guitar"
+                            role="img"
+                            aria-label="Gitarre"
+                        ></span>
+                        <span
+                            class="ic ic-coffee"
+                            role="img"
+                            aria-label="Kaffee"
+                        ></span>
+                    </span>
                 </p>
-                <div style="margin-top: 1rem;">
-                    <a href="https://www.linkedin.com/in/mikeilhauer/"><i class="fa-brands fa-linkedin"></i>LinkedIn</a> |
-                    <a href="https://github.com/mrtoadie" target="_blank" alt="GitHub Profile"><i class="fa-brands fa-github"></i>GitHub</a> | 
-                    <a href="https://codeberg.org/mrtoadie" target="_blank" alt="Codeberg Profile"><i class="fa-solid fa-code-merge"></i>Codeberg</a>
-                </div>
-            </section>
+            </footer>
+        </div>
 
-            <!-- Experience -->
-            <section>
-                <div class="section-header">cat experience.md</div>
-                
-                <div class="timeline-item">
-                    <span class="role">Cloud Engineer</span>
-                    <span class="company">---</span>
-                    <span class="date">2024 – today</span>
-                    <p class="desc">Administration and maintenance of Microsoft Azure /M365.</p>
-                    <span class="tag">Exchange Online</span>
-                    <span class="tag">Intune</span>
-                    <span class="tag">Azure / Entra</span>
-                    <span class="tag">Azure Virtual Desktop</span>
-                    <span class="tag">PowerShell</span>
-                </div>
-
-                <div class="timeline-item">
-                    <span class="role">System / Network Administrator</span>
-                    <span class="company">---</span>
-                    <span class="date">2010 – 2016</span>
-                    <p class="desc">- Betrieb, Wartung und Weiterentwicklung der IT Infrastruktur</p>
-                    <p class="desc">- First-Level, second & third-level support (yes, that’s right, all support levels)</p>
-                    <p class="desc">- Windows Embedded Development</p>
-                    <span class="tag">Windows Server 2003 - 2012</span>
-                    <span class="tag">Active Directory, DNS, DHCP, etc...</span>
-                    <span class="tag">Exchange Server 2003 - 2010</span>
-                    <span class="tag">Client migration from Windows XP to Windows 10</span>
-                    <span class="tag">Hyper-V & VMware</span>
-                    <span class="tag">Ubuntu & Debian Servers</span>
-                </div>
-
-                <div class="timeline-item">
-                    <span class="role">Training as IT Technician</span>
-                    <span class="company">---</span>
-                    <span class="date">2000 – 2002</span>
-                    <p class="desc"></p>
-                    <span class="tag">Windows NT</span>
-                    <span class="tag">Novell Netware</span>
-                    <span class="tag">Application programming (Turbo Pascal | C)</span>                    
-            </section>
-
-            <!-- Projects -->
-            <section>
-                <div class="section-header">ls ./projects</div>
-                <div class="project-grid">
-                    
-                    <!-- Project 1 -->
-                    <div class="project-card">
-                        <div class="project-title">cert-checker</div>
-                        <p class="desc" style="font-size: 0.9rem;"><b>cert-checker</b> is a tool that monitors SSL/TLS <i>certificates</i> on domains and local files, analyzes expiration dates, and alerts users if any issues are detected.</p>
-                        <div class="tech-stack">
-                            <span class="tag">Go</span>
-                            <span class="tag"><a href="https://aur.archlinux.org/packages/cert-checker" target="_blank" title="AUR Package">AUR</a></span>
-                            <span class="tag">PKGBUILD</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/mrtoadie/go-check-cert" target="_blank" title="GitHub Repository"><i class="fab fa-github icon-link"></i></a>
-                            <a href="https://aur.archlinux.org/packages/cert-checker" target="_blank" title="AUR Package"><i class="fas fa-external-link-alt icon-link"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Project 2 -->
-                    <div class="project-card">
-                        <div class="project-title">kvm-configurator</div>
-                        <p class="desc" style="font-size: 0.9rem;"><b>kvm-configurator</b> creates a <i>virtual machine</i> and registers it with qemu.</p>
-                        <div class="tech-stack">
-                            <span class="tag">Go</span>
-                            <span class="tag">CLI</span>
-                            <span class="tag">JSON</span>
-                            <span class="tag"><a href="https://aur.archlinux.org/packages/kvm-configurator" target="_blank" title="AUR Package">AUR</a></span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/mrtoadie/kvm-configurator" target="_blank" title="GitHub Repository"><i class="fab fa-github icon-link"></i></a>
-                            <a href="https://aur.archlinux.org/packages/kvm-configurator" target="_blank" title="AUR Package"><i class="fas fa-external-link-alt icon-link"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Project 3 -->
-                    <div class="project-card">
-                        <div class="project-title">---</div>
-                        <p class="desc" style="font-size: 0.9rem;">---</p>
-                        <div class="tech-stack">
-                            <span class="tag">---</span>
-                            <span class="tag">---</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" target="_blank" title="GitHub Repository"><i class="fab fa-github icon-link"></i></a>
-                        </div>
-                    </div>
-
-                </div>
-            </section>
-
-            <!-- Skills / Tech Stack -->
-            <section>
-                <div class="section-header">cat skills.md</div>
-                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                    <span class="tag" style="background: transparent; border: 1px solid var(--border);">Linux (Arch Linux && NixOS)</span>
-                    <span class="tag" style="background: transparent; border: 1px solid var(--border);">Go && Bash</span>
-                    <span class="tag" style="background: transparent; border: 1px solid var(--border);">Kubernetes</span>
-                    <span class="tag" style="background: transparent; border: 1px solid var(--border);">Docker</span>
-                    <span class="tag" style="background: transparent; border: 1px solid var(--border);">Git</span>
-                    <span class="tag" style="background: transparent; border: 1px solid var(--border);">Ansible</span>
-                </div>
-            </section>
-
-            <!-- Homelab -->
-            <section>
-                <div class="section-header">journalctl -u homelab</div>
-                <p class="desc" style="font-size: 0.9rem;">I run a small kubernetes cluster on several Raspberry Pis. I use it to test new technologies and run personal projects.</p>
-                <div class="section-header">kubectl get pods</div>
-                <div class="tech-stack" style="margin-top: 1rem;">
-                    <span class="tag" style="background: transparent; border: 1px solid var(--border);">Raspberry Pi</span>
-                    <span class="tag" style="background: transparent; border: 1px solid var(--border);">Ubuntu</span>
-                    <span class="tag" style="background: transparent; border: 1px solid var(--border);">Kubernetes</span>
-                    <span class="tag" style="background: transparent; border: 1px solid var(--border);">Pi-Hole</span>
-                    <span class="tag" style="background: transparent; border: 1px solid var(--border);">Git-Server</span>
-                    <span class="tag" style="background: transparent; border: 1px solid var(--border);">Personal cloud</span>
-                </div>
-            </section>
-        </main>
-
-        <footer>
-            <p>© 2026 MrToadie. Built with <i class="fa-brands fa-linux"></i> | <i class="fa-solid fa-music"></i> | <i class="fa-solid fa-guitar"></i> | <i class="fa-solid fa-mug-hot"></i></p>
-        </footer>
-    </div>
-
-    <!-- Font Awesome for icons (loaded in <head>, but confirmed here to be on the safe side) -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</body>
+        <script src="assets/js/dashboard.js" defer></script>
+    </body>
 </html>

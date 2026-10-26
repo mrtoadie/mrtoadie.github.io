@@ -34,7 +34,5 @@ config-local.yaml
 config.local.yml
 
 # Testing
-test-data/
-fixtures/
-__pycache__/
-node_modules/
+
+
