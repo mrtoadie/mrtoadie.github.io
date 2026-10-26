@@ -86,7 +86,7 @@
                                 <th>Node</th>
                                 <th>Board</th>
                                 <th>RAM</th>
-                                <th>Storage</th>
+                                <th>OS</th>
                                 <th>Rolle</th>
                                 <th>Bemerkungen</th>
                             </tr>
@@ -96,60 +96,66 @@
                                 <td><strong>winterfell</strong></td>
                                 <td>Raspberry Pi 4</td>
                                 <td>8 GB</td>
-                                <td>USB-SSD (XFS)</td>
+                                <td>Raspberry Pi OS</td>
                                 <td>control-plane</td>
                                 <td>
-                                    <span class="tag">Root auf USB</span>
-                                    <span class="tag">etcd auf NVMe</span>
+                                    <span class="tag">etcd auf USB-NVMe</span>
+                                    <span class="tag">XFS</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td><strong>worker01</strong></td>
                                 <td>Raspberry Pi 4</td>
                                 <td>1 GB</td>
-                                <td>Samsung EVO SD</td>
+                                <td>Raspberry Pi OS</td>
                                 <td>worker</td>
                                 <td>
-                                    <span class="tag">Pod-Limits</span>
-                                    <span class="tag">Thermal Throttling</span>
+
                                 </td>
                             </tr>
                             <tr>
                                 <td><strong>worker02</strong></td>
                                 <td>Raspberry Pi 4</td>
                                 <td>1 GB</td>
-                                <td>Samsung EVO SD</td>
+                                <td>Raspberry Pi OS</td>
                                 <td>worker</td>
                                 <td>
-                                    <span class="tag">NFS Client</span>
+
                                 </td>
                             </tr>
                             <tr>
                                 <td><strong>worker03</strong></td>
                                 <td>Raspberry Pi 4</td>
                                 <td>2 GB</td>
-                                <td>Samsung EVO SD</td>
+                                <td>Raspberry Pi OS</td>
                                 <td>worker</td>
                                 <td>
-                                    <span class="tag">Heißer Arbeiter</span>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>watcher</strong></td>
+                                <td>Raspberry Pi Zero 2W</td>
+                                <td>512 MB</td>
+                                <td>Raspberry Pi OS</td>
+                                <td>nights watch</td>
+                                <td>
+                                    <span class="tag">Unbound</span>
+                                    <span class="tag">Caddy</span>
+                                    <span class="tag">Dynacat</span>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
 
                     <div class="hw-note">
-                        <strong>Warum USB-SSD statt SD-Karte?</strong> Die SD-Karten auf winterfell sind zweimal innerhalb von sechs Monaten gestorben — einmal korruptes etcd, einmal bootblock defekt. Seitdem läuft rootfs und /var/lib/k3s auf einem Sandisk Extreme Plus USB-SSD via Realtek RTL9210-Adapter. Der Adapter braucht Kernel 6.2+, funktioniert aber nicht stabil unter allen Raspberry Pi OS-Versionen.
+                        <strong>Warum USB-SSD statt SD-Karte?</strong> warum zusätzlich usb-ssd
                     </div>
 
                     <div class="hw-note">
-                        <strong>cgroup-Limits auf den 1-GB-Pis:</strong> worker01/02 haben `--kubelet-arg=max-pods=20` und `--kubelet-arg=eviction-hard=memory.available&lt;100Mi`. Ohne diese Limits kippen sie regelmäßig in OOM-Kill-Schleifen, sobald Buchlore oder Grafana etwas mehr RAM ziehen.
+                        <strong>Raspberry Pis statt Homeserver:</strong> hier fehlt text
                     </div>
 
-                    <p>
-                        Gesamtverbrauch im Idle: ~35W (alle 4 Nodes + Switch + NAS).
-                        Spitzenlast bei Velero-Backup oder großen Deployments: bis zu 65W.
-                        Strompreis (DE, 2026): ca. €0,35/kWh → Jahreskosten ~€35–45 je nach Auslastung.
-                    </p>
                 </section>
 
                 <h2 id="software">
@@ -169,7 +175,7 @@
                             <div class="tool-name">Unbound</div>
                             <div class="tool-desc">Recursive DNS Resolver auf Raspberry Pi Zero</div>
                             <div class="tool-reason">
-                                "FRITZ!Box erlaubt keine eigenen DNS-Einträge im aktuellen Tarif. Unbound löst *.local auf Cluster-IPs."
+                                "Router erlaubt keine eigenen DNS-Einträge. Unbound löst *.local auf Cluster-IPs."
                             </div>
                         </div>
                         <div class="tool-card">
@@ -188,13 +194,6 @@
                             <div class="tool-desc">Node Exporter, kube-state-metrics, custom ServiceMonitors</div>
                             <div class="tool-reason">
                                 "Standard-Stack mit Helm chart kube-prometheus-stack. Eigene Dashboards für Velero-Metriken."
-                            </div>
-                        </div>
-                        <div class="tool-card">
-                            <div class="tool-name">Uptime Kuma</div>
-                            <div class="tool-desc">HTTP/TCP/Ping-Checks auf alle Dienste</div>
-                            <div class="tool-reason">
-                                "Einfache Einrichtung, sieht gut aus, überwacht auch Dinge außerhalb des Clusters (NFS, MinIO)."
                             </div>
                         </div>
                         <div class="tool-card">
@@ -238,24 +237,6 @@
                             <div class="tool-desc">Dynamische PersistentVolumes über NFS</div>
                             <div class="tool-reason">
                                 "Statt local-path: Daten bleiben erhalten, wenn Pod neu geplant wird. Performance ausreichend für kleine DBs."
-                            </div>
-                        </div>
-                    </div>
-
-                    <h3 class="category-heading">Development & Utilities</h3>
-                    <div class="tool-grid">
-                        <div class="tool-card">
-                            <div class="tool-name">k9s</div>
-                            <div class="tool-desc">Terminal-UI für Kubernetes</div>
-                            <div class="tool-reason">
-                                "Schneller als `kubectl get pods -A`, Filter, Live-Logs, Port-Forwarding."
-                            </div>
-                        </div>
-                        <div class="tool-card">
-                            <div class="tool-name">FreshRSS</div>
-                            <div class="tool-desc">RSS-Reader (Migration geplant zu k3s)</div>
-                            <div class="tool-reason">
-                                "Aktuell auf separater VM. Docker-Compose einfach zu migrieren, wenn Zeit ist."
                             </div>
                         </div>
                     </div>
@@ -330,20 +311,6 @@
                             <li>Auf worker01 in `/etc/rancher/k3s/config.yaml` eingefügt</li>
                             <li>k3s-agent neu gestartet, Node wieder im Cluster sichtbar</li>
                             <li>Lösung: Automatisiertes Backup des Tokens auf externer Maschine</li>
-                        </ol>
-                    </div>
-
-                    <div class="incident-card">
-                        <span class="incident-severity severity-low">low</span>
-                        <div class="incident-title">OpenVPN Replay Detection Error</div>
-                        <div class="incident-meta">Mai 2026 · Dauer: 15 Minuten · Impact: Tunnel nicht aufgebaut</div>
-                        <p>
-                            `read UDPv4 [EAGAIN]: Resource temporarily unavailable (code=11)` während Tunnel-Etablierung.
-                            Replay Detection war zu aggressiv eingestellt.
-                        </p>
-                        <ol class="resolution-list">
-                            <li>openvpn.conf: `replay-window 64 15` statt Standard-Werte</li>
-                            <li>Tunnel neu initialisiert, Verbindung stabil</li>
                         </ol>
                     </div>
 
