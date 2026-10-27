@@ -205,6 +205,15 @@ Collector kein specs-Feld mitschreibt. */
     var mem = num(
       u.mem_percent !== undefined ? u.mem_percent : u.mem,
     );
+    // in nodeCard(), vor den Gauges:
+    var temp = num(u.temp_c);
+    if (temp !== null) {
+      specHtml += specLine("thermometer", temp + " °C", false);
+    }
+    var podsCount = u.pods;
+    if (podsCount != null) {
+      specHtml += specLine("server", podsCount + " Pods", false);
+    }
     var isReady = n.status === "True";
     var isCp = /control/i.test(n.role || "");
     var resolved = resolveSpecs(n);

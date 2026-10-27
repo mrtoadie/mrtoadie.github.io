@@ -41,9 +41,7 @@
                 <section>
                     <div class="section-header">
                         <span>kubectl get nodes -o wide</span>
-                        <span class="right" id="refresh-info"
-                            >auto-refresh · 5 min</span
-                        >
+                        <span class="right" id="refresh-info">auto-refresh · 5 min</span>
                     </div>
 
                     <div class="stats" id="stats">
@@ -80,6 +78,10 @@
                     <span style="color: var(--accent)">/hardware</span>
                 </h2>
                 <section>
+                <div class="section-header">
+                        <span>kubectl get nodes -o wide</span>
+                        <span class="right" id="refresh-info">auto-refresh · 5 min</span>
+                    </div>
                     <table class="hw-table">
                         <thead>
                             <tr>
@@ -162,6 +164,10 @@
                     <span style="color: var(--accent)">/software & tools</span>
                 </h2>
                 <section>
+                <div class="section-header">
+                        <span>kubectl get namespace</span>
+                        <span class="right" id="refresh-info">auto-refresh · 5 min</span>
+                    </div>
                     <h3 class="category-heading">Ingress & DNS</h3>
                     <div class="tool-grid">
                         <div class="tool-card">
@@ -247,7 +253,7 @@
                 </h2>
                 <section>
                     <div class="section-header">
-                        <span>Incident History — echte Vorfälle</span>
+                        <span>kubectl get events</span>
                         <span class="right">letzte 12 Monate</span>
                     </div>
 
