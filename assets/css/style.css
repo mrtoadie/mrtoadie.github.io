@@ -118,6 +118,12 @@ a:hover {
 .ic-coffee {
   --i: url("../icons/coffee.svg");
 }
+.ic-thermometer {
+  --i: url("../icons/thermometer.svg");
+}
+.ic-clock {
+  --i: url("../icons/clock.svg");
+}
 
 /* ---------- Terminal header ---------- */
 header {
@@ -418,6 +424,14 @@ section:last-child {
   border-color: rgba(248, 81, 73, 0.35);
   background: rgba(248, 81, 73, 0.12);
 }
+/* Temperatur-/Disk-Warnung */
+.node-spec.stat-warn {
+  color: var(--amber);
+}
+.node-spec.stat-warn .ic {
+  color: var(--amber);
+}
+
 
 /* ---------- Ring gauges ---------- */
 .gauges {
