@@ -101,8 +101,8 @@ Running pods scheduled on that node (both added in collect.sh v2). */
         var d = Math.floor(sec / 86400);
         var h = Math.floor((sec % 86400) / 3600);
         var m = Math.floor((sec % 3600) / 60);
-        if (d > 0) return d + " Tg. " + h + " Std.";
-        if (h > 0) return h + " Std. " + m + " Min.";
+        if (d > 0) return d + " d " + h + " h";
+        if (h > 0) return h + " h " + m + " m";
         return m + " Min.";
     }
 
@@ -122,9 +122,9 @@ Running pods scheduled on that node (both added in collect.sh v2). */
         var d = new Date(iso);
         if (isNaN(d.getTime())) return "–";
         var s = Math.floor((Date.now() - d.getTime()) / 1000);
-        if (s < 60) return "gerade eben";
-        if (s < 3600) return Math.floor(s / 60) + " Min.";
-        if (s < 86400) return Math.floor(s / 3600) + " Std.";
+        if (s < 60) return "just now";
+        if (s < 3600) return Math.floor(s / 60) + " m";
+        if (s < 86400) return Math.floor(s / 3600) + " h";
         return d.toLocaleDateString("de-DE");
     }
 
@@ -232,7 +232,7 @@ Running pods scheduled on that node (both added in collect.sh v2). */
         nodes.length ? nodes.map(function (n) { return nodeCard(n, usage); }).join("") : '<p class="loading">Keine Node-Daten im Feed.</p>';
 
         var info = document.getElementById("refresh-info");
-        if (info) info.textContent = "auto-refresh · 5 min · last updated: " + ago(d.timestamp);
+        if (info) info.textContent = "auto-refresh: 5 m · last updated: " + ago(d.timestamp);
 
         document.getElementById("demo-note").style.display = isDemo ? "block" : "none";
     }
