@@ -46,16 +46,16 @@ Running pods scheduled on that node (both added in collect.sh v2). */
     var DEMO = {
         timestamp: new Date().toISOString(),
  nodes: [
-     { name: "winterfell", role: "control-plane", status: "True", version: "v1.36.3+k3s1", specs: ["Raspberry Pi 4 · 8 GB RAM", "USB-SSD (XFS)"] },
+     { name: "winterfell", role: "control-plane", status: "True", version: "v1.36.3+k3s1", specs: ["Raspberry Pi 4 · 8 GB RAM"] },
  { name: "worker01", role: "worker", status: "True", version: "v1.36.2+k3s1", specs: ["Raspberry Pi 4 · 1 GB RAM"] },
  { name: "worker02", role: "worker", status: "True", version: "v1.36.3+k3s1", specs: ["Raspberry Pi 4 · 1 GB RAM"] },
  { name: "worker03", role: "worker", status: "True", version: "v1.36.3+k3s1", specs: ["Raspberry Pi 4 · 2 GB RAM"] },
  ],
  resource_usage: {
-     winterfell: { cpu_percent: 14, mem_percent: 41, disk_percent: 39, temp_c: 37, pods: 25, load1: 1.97, uptime_s: 52546 },
-     worker01: { cpu_percent: 9, mem_percent: 33, disk_percent: 49, temp_c: 38, pods: 4, load1: 0.14, uptime_s: 22005 },
-     worker02: { cpu_percent: 22, mem_percent: 58, disk_percent: 49, temp_c: 41, pods: 3, load1: 0.07, uptime_s: 16094 },
-     worker03: { cpu_percent: 76, mem_percent: 26, disk_percent: 51, temp_c: 44, pods: 2, load1: 0.11, uptime_s: 62551 },
+     winterfell: { cpu_percent: 14, mem_percent: 41, disk_percent: 39, temp_c: 37, pods: 25, uptime_s: 52546 },
+     worker01: { cpu_percent: 9, mem_percent: 33, disk_percent: 49, temp_c: 38, pods: 4, uptime_s: 22005 },
+     worker02: { cpu_percent: 22, mem_percent: 58, disk_percent: 49, temp_c: 41, pods: 3, uptime_s: 16094 },
+     worker03: { cpu_percent: 76, mem_percent: 26, disk_percent: 51, temp_c: 44, pods: 2, uptime_s: 62551 },
  },
  pods: { total: 47, running: 45, pending: 2 },
  namespaces: 12,
@@ -173,7 +173,6 @@ Running pods scheduled on that node (both added in collect.sh v2). */
         var temp = num(u.temp_c);
         var pods = num(u.pods);
         var disk = num(u.disk_percent);
-        var load = num(u.load1);
         var uptime = fmtUptime(num(u.uptime_s));
         var isReady = n.status === "True";
         var isCp = /control/i.test(n.role || "");
@@ -198,7 +197,6 @@ Running pods scheduled on that node (both added in collect.sh v2). */
          *           narrow screens. Split into two specLine() calls if you prefer them
          *           stacked. */
         var vitals = [];
-        if (load !== null) vitals.push("Load " + load.toFixed(2));
         if (uptime !== null) vitals.push("Uptime " + uptime);
         if (vitals.length) {
             specHtml += specLine("clock", vitals.join(" · "));
