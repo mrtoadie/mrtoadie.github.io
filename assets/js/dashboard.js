@@ -36,7 +36,7 @@ Running pods scheduled on that node (both added in collect.sh v2). */
     var REFRESH_MS = 5 * 60 * 1000;
 
     var SPEC_FALLBACK = {
-        winterfell: ["Raspberry Pi 4 · 8 GB RAM", "USB-SSD (XFS)"],
+        winterfell: ["Raspberry Pi 4 · 8 GB RAM"],
  worker01: ["Raspberry Pi 4 · 1 GB RAM"],
  worker02: ["Raspberry Pi 4 · 1 GB RAM"],
  worker03: ["Raspberry Pi 4 · 2 GB RAM"],
