@@ -2,35 +2,35 @@
     "use strict";
 
     /* Data contract for data/cluster.json:
-       {
-         timestamp: "2026-10-24T08:12:00Z",
-         nodes: [{
-           name: "winterfell",
-           role: "control-plane" | "worker",
-           status: "True" | "False",
-           version: "v1.36.3+k3s1",
-         }],
-         resource_usage: { "winterfell": {
-           cpu_percent: 14, cpu_millicores: 507,
-           mem_percent: 41, mem_mib: 3714,
-           disk_percent: 39, temp_c: 37,
-           load1: 0.64, uptime_s: 36361,
-           pods: 25
-         }},
-         pods: { total: 47, running: 45, pending: 2 },
-         namespaces: 12,
-         deployments: 18,
-         services: 9
-       }
-       
-       temp_c comes from /sys/class/thermal on each host, pods is the number of
-       Running pods scheduled on that node (both added in collect.sh v2). */
+     *       {
+     *         timestamp: "2026-10-24T08:12:00Z",
+     *         nodes: [{
+     *           name: "winterfell",
+     *           role: "control-plane" | "worker",
+     *           status: "True" | "False",
+     *           version: "v1.36.3+k3s1",
+}],
+resource_usage: { "winterfell": {
+cpu_percent: 14, cpu_millicores: 507,
+mem_percent: 41, mem_mib: 3714,
+disk_percent: 39, temp_c: 37,
+load1: 0.64, uptime_s: 36361,
+pods: 25
+}},
+pods: { total: 47, running: 45, pending: 2 },
+namespaces: 12,
+deployments: 18,
+services: 9
+}
+
+temp_c comes from /sys/class/thermal on each host, pods is the number of
+Running pods scheduled on that node (both added in collect.sh v2). */
 
     var SOURCE = "data/cluster.json";
     var REFRESH_MS = 5 * 60 * 1000;
 
     var SPEC_FALLBACK = {
-        winterfell: ["Raspberry Pi 4 · 8 GB RAM", "USB-SSD (XFS)"],
+        winterfell: ["Raspberry Pi 4 · 8 GB RAM"],
         worker01: ["Raspberry Pi 4 · 1 GB RAM"],
         worker02: ["Raspberry Pi 4 · 1 GB RAM"],
         worker03: ["Raspberry Pi 4 · 2 GB RAM"],
@@ -39,22 +39,22 @@
 
     var DEMO = {
         timestamp: new Date().toISOString(),
-        nodes: [
-            { name: "winterfell", role: "control-plane", status: "True", version: "v1.36.3+k3s1", specs: ["Raspberry Pi 4 · 8 GB RAM", "USB-SSD (XFS)"] },
-            { name: "worker01", role: "worker", status: "True", version: "v1.36.2+k3s1", specs: ["Raspberry Pi 4 · 1 GB RAM"] },
-            { name: "worker02", role: "worker", status: "True", version: "v1.36.3+k3s1", specs: ["Raspberry Pi 4 · 1 GB RAM"] },
-            { name: "worker03", role: "worker", status: "True", version: "v1.36.3+k3s1", specs: ["Raspberry Pi 4 · 2 GB RAM"] },
-        ],
-        resource_usage: {
-            winterfell: { cpu_percent: 14, mem_percent: 41, temp_c: 37, pods: 25 },
-            worker01: { cpu_percent: 9, mem_percent: 33, temp_c: 38, pods: 4 },
-            worker02: { cpu_percent: 22, mem_percent: 58, temp_c: 41, pods: 3 },
-            worker03: { cpu_percent: 76, mem_percent: 26, temp_c: 44, pods: 2 },
-        },
-        pods: { total: 47, running: 45, pending: 2 },
-        namespaces: 12,
-        deployments: 18,
-        services: 9,
+ nodes: [
+     { name: "winterfell", role: "control-plane", status: "True", version: "v1.36.3+k3s1", specs: ["Raspberry Pi 4 · 8 GB RAM"] },
+ { name: "worker01", role: "worker", status: "True", version: "v1.36.2+k3s1", specs: ["Raspberry Pi 4 · 1 GB RAM"] },
+ { name: "worker02", role: "worker", status: "True", version: "v1.36.3+k3s1", specs: ["Raspberry Pi 4 · 1 GB RAM"] },
+ { name: "worker03", role: "worker", status: "True", version: "v1.36.3+k3s1", specs: ["Raspberry Pi 4 · 2 GB RAM"] },
+ ],
+ resource_usage: {
+     winterfell: { cpu_percent: 14, mem_percent: 41, disk_percent: 39, temp_c: 37, pods: 25 },
+     worker01: { cpu_percent: 9, mem_percent: 33, disk_percent: 49, temp_c: 38, pods: 4 },
+     worker02: { cpu_percent: 22, mem_percent: 58, disk_percent: 49, temp_c: 41, pods: 3 },
+     worker03: { cpu_percent: 76, mem_percent: 26, disk_percent: 51, temp_c: 44, pods: 2 },
+ },
+ pods: { total: 47, running: 45, pending: 2 },
+ namespaces: 12,
+ deployments: 18,
+ services: 9,
     };
 
     function esc(s) {
@@ -158,21 +158,19 @@
         var isCp = /control/i.test(n.role || "");
         var resolved = resolveSpecs(n);
 
-        /* 1️⃣ FIXED: Define specHtml FIRST */
         var specHtml = n.version ? specLine("tag", n.version) : "";
         resolved.lines.forEach(function (s) {
             specHtml += specLine(specIcon(s), s);
         });
 
-        /* 2️⃡ NOW append live metrics (temp, pods, disk) AFTER definition */
+        /* Live metrics as text lines: temperature and pod count only.
+         *           Disk is intentionally NOT listed here — it has its own gauge below,
+         *           which handles the warning colour via ringClass(). */
         if (temp !== null) {
             specHtml += specLine("thermometer", temp.toFixed(0) + " °C", tempClass(temp));
         }
         if (pods !== null) {
-            specHtml += specLine("server", pods.toFixed(0) + " Pods");
-        }
-        if (disk !== null && disk > 0) {
-            specHtml += specLine("disk", "Disk " + disk.toFixed(0) + " %", disk >= 85 ? "stat-warn" : "");
+            specHtml += specLine("server", "Pods " + pods.toFixed(0));
         }
 
         return (
@@ -184,7 +182,7 @@
             "</div>" +
             '<div class="node-name">' + esc(n.name) + "</div>" +
             specHtml +
-            '<div class="gauges">' + gauge(cpu, "CPU") + gauge(mem, "RAM") + "</div>" +
+            '<div class="gauges">' + gauge(cpu, "CPU") + gauge(mem, "RAM") + gauge(disk, "DISK") + "</div>" +
             "</article>"
         );
     }
@@ -196,13 +194,13 @@
         var ready = nodes.filter(function (n) { return n.status === "True"; }).length;
 
         document.getElementById("stats").innerHTML =
-            '<div class="stat"><div class="k">Nodes ready</div><div class="v">' + ready + "<small> / " + nodes.length + "</small></div></div>" +
-            '<div class="stat"><div class="k">Pods running</div><div class="v">' + (pods.running != null ? pods.running : "–") + "<small> / " + (pods.total != null ? pods.total : "–") + "</small></div></div>" +
-            '<div class="stat"><div class="k">Namespaces</div><div class="v">' + (d.namespaces != null ? d.namespaces : "–") + "</div></div>" +
-            '<div class="stat"><div class="k">Deployments</div><div class="v">' + (d.deployments != null ? d.deployments : "–") + "</div></div>";
+        '<div class="stat"><div class="k">Nodes ready</div><div class="v">' + ready + "<small> / " + nodes.length + "</small></div></div>" +
+        '<div class="stat"><div class="k">Pods running</div><div class="v">' + (pods.running != null ? pods.running : "–") + "<small> / " + (pods.total != null ? pods.total : "–") + "</small></div></div>" +
+        '<div class="stat"><div class="k">Namespaces</div><div class="v">' + (d.namespaces != null ? d.namespaces : "–") + "</div></div>" +
+        '<div class="stat"><div class="k">Deployments</div><div class="v">' + (d.deployments != null ? d.deployments : "–") + "</div></div>";
 
         document.getElementById("node-metrics").innerHTML =
-            nodes.length ? nodes.map(function (n) { return nodeCard(n, usage); }).join("") : '<p class="loading">Keine Node-Daten im Feed.</p>';
+        nodes.length ? nodes.map(function (n) { return nodeCard(n, usage); }).join("") : '<p class="loading">No node data in the feed.</p>';
 
         var info = document.getElementById("refresh-info");
         if (info) info.textContent = "auto-refresh · 5 min · last updated: " + ago(d.timestamp);
@@ -212,9 +210,9 @@
 
     function load() {
         fetch(SOURCE + "?t=" + Date.now(), { cache: "no-store" })
-            .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
-            .then(function (data) { render(data, false); })
-            .catch(function (err) { console.warn("cluster.json nicht ladbar:", err.message); render(DEMO, true); });
+        .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+        .then(function (data) { render(data, false); })
+        .catch(function (err) { console.warn("can't load cluster.json:", err.message); render(DEMO, true); });
     }
 
     load();

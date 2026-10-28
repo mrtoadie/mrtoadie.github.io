@@ -201,7 +201,7 @@ h1 {
 }
 .subtitle {
   color: var(--accent);
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   margin-bottom: 2.5rem;
 }
 .cursor::after {
@@ -227,7 +227,7 @@ section:last-child {
   display: flex;
   align-items: center;
   gap: 0.7rem;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   color: var(--dim);
   padding-bottom: 0.7rem;
   margin-bottom: 1.5rem;
@@ -247,7 +247,7 @@ section:last-child {
 /* ---------- Stat tiles ---------- */
 .stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 1rem;
   margin-bottom: 1.75rem;
 }
@@ -258,7 +258,7 @@ section:last-child {
   padding: 1.1rem 1.2rem;
 }
 .stat .k {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.09em;
   color: var(--faint);
@@ -532,40 +532,121 @@ footer {
   background: var(--card-alt);
 }
 
-/*@media (max-width: 720px) {*/
-@media (min-width: 740px) {
+/* ---------- Responsive ----------
+ *   Was previously INVERTED (@media min-width): desktop got the compact
+ *   styles, phones got the full-size defaults. Now correctly max-width. */
+@media (max-width: 740px) {
   body {
-    padding: 2rem 1rem 3rem;
+    padding: 1rem 0.75rem 2rem;
+    font-size: 15px;
+  }
+  .container {
+    border-radius: 10px;
   }
   main {
-    padding: 2rem 1.5rem;
+    padding: 1.75rem 1rem;
   }
   h1 {
     font-size: 1.65rem;
   }
+  .subtitle {
+    font-size: 0.92rem;
+    margin-bottom: 1.75rem;
+  }
+  header {
+    padding: 0.8rem 1rem;
+  }
+  .term-title {
+    font-size: 0.78rem;
+  }
+  nav.top {
+    gap: 0.45rem;
+    margin-bottom: 1.75rem;
+  }
+  nav.top a {
+    font-size: 0.78rem;
+    padding: 0.35rem 0.6rem;
+  }
+  .section-header {
+    flex-wrap: wrap;
+  }
   .stat .v {
     font-size: 1.45rem;
   }
+  .stats {
+    gap: 0.75rem;
+  }
+  .stat {
+    padding: 0.9rem 1rem;
+  }
+
+  /* One node card per row on phones */
   .node-grid {
-    /*grid-template-columns: 1fr;*/
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+  }
+  .node-card {
+    padding: 1rem 1rem 1.1rem 1.2rem;
+  }
+  .node-card:hover {
+    transform: none;
+  }
+  .node-name {
+    font-size: 1.15rem;
   }
   .gauges {
     gap: 1rem;
+    padding-top: 1rem;
   }
   .gauge {
-    width: 60px;
-    height: 60px;
+    width: 58px;
+    height: 58px;
   }
   .gauge span {
-    width: 46px;
-    height: 46px;
+    width: 44px;
+    height: 44px;
     font-size: 0.7rem;
   }
-  h2[id] {
-    scroll-margin-top: 80px;
+
+  /* Tool cards stacked full-width */
+  .tool-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Hardware table scrolls sideways instead of overflowing the layout */
+  .hw-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .incident-card {
+    padding: 1rem;
+  }
+  .resolution-list {
+    margin-left: 1.1rem;
   }
 }
+
+/* Extra-small phones: shrink gauges a bit more so three still fit */
+@media (max-width: 400px) {
+  .gauges {
+    gap: 0.7rem;
+  }
+  .gauge {
+    width: 52px;
+    height: 52px;
+  }
+  .gauge span {
+    width: 40px;
+    height: 40px;
+    font-size: 0.62rem;
+  }
+  .stat .v {
+    font-size: 1.3rem;
+  }
+}
+
 /* incidents */
 .incident-card {
   background: var(--surface);
