@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Incidents · MrToadie</title>
+        <link rel="stylesheet" href="assets/css/style.css" />
+        <link rel="icon" href="assets/favico.png" sizes="48x48">
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <div class="term-title">
+                    <span>~/incidents</span>
+                    <span class="path">· k3s cluster</span>
+                </div>
+                <div class="dots">
+                    <div class="dot dotleft"></div>
+                    <div class="dot dotmiddle"></div>
+                    <div class="dot dotright"></div>
+                </div>
+            </header>
+
+            <main>
+                <nav class="top">
+                    <a href="index.html">/home/</a>
+                    <a href="index.html#infrastructure">/infrastructure</a>
+                    <a href="index.html#hardware">/hardware</a>
+                    <a href="index.html#software">/tools</a>
+                    <a href="">/incidents</a>
+                </nav>
+
+                <h1>/incidents</h1>
+                <div class="subtitle cursor">
+                    Postmortems & Lessons Learned · last 12 months
+                </div>
+
+                <section>
+                    <div class="incident-stat">
+                        <div class="stat-card">
+                            <div class="stat-value">6</div>
+                            <div class="stat-label">Incidents</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">3</div>
+                            <div class="stat-label">High Severity</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">3</div>
+                            <div class="stat-label">Medium Severity</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">99.7%</div>
+                            <div class="stat-label">Uptime</div>
+                        </div>
+                    </div>
+
+                    <div class="incident-list">
+                        <!-- Incident 1 -->
+                        <div class="incident-card">
+                            <div class="incident-header">
+                                <span class="incident-severity severity-high">High</span>
+                                <div class="incident-title">SD-Karte Corruptions auf winterfell</div>
+                            </div>
+                            <div class="incident-meta">
+                                <span class="meta-item">Januar 2026</span>
+                                <span class="meta-divider">·</span>
+                                <span class="meta-item">Dauer: 4 Stunden</span>
+                                <span class="meta-divider">·</span>
+                                <span class="meta-item impact">Impact: control-plane offline</span>
+                            </div>
+                            <div class="incident-body">
+                                <p>
+                                    etcd meldete `database error: snapshot corrupted`. Logs zeigten I/O-Fehler auf `/dev/mmcblk0`.
+                                    Node konnte nicht neu starten, etcd-Cluster fiel auf 1 Mitglied (Quorum verloren).
+                                </p>
+                            </div>
+                            <div class="incident-resolution">
+                                <strong>Aktionen:</strong>
+                                <ol class="resolution-list">
+                                    <li>Neues Image von Raspberry Pi OS Lite auf SD-Karte gebrannt</li>
+                                    <li>k3s-Token von backup-node manuell kopiert</li>
+                                    <li>Node wieder mit Cluster verbunden, etcd-Replizierung initiiert</li>
+                                    <li>Nach Incident: Rootfs auf USB-SSD migriert, etcd auf separates Volume ausgelagert</li>
+                                </ol>
+                            </div>
+                            <div class="incident-lesson">
+                                <strong>Lesson Learned:</strong>
+                                <p>etcd auf SD-Karte ist riskant bei Rolling Updates. USB-SSD + separater etcd-Partition als Minimum. Backup des Tokens auf externe Maschine.</p>
+                            </div>
+                        </div>
+
+                        <!-- Incident 2 -->
+                        <div class="incident-card">
+                            <div class="incident-header">
+                                <span class="incident-severity severity-high">High</span>
+                                <div class="incident-title">Docker Daemon durch TCP-Listener lahmgelegt</div>
+                            </div>
+                            <div class="incident-meta">
+                                <span class="meta-item">Februar 2026</span>
+                                <span class="meta-divider">·</span>
+                                <span class="meta-item">Dauer: 2 Stunden</span>
+                                <span class="meta-divider">·</span>
+                                <span class="meta-item impact">Impact: keine Container-Starts möglich</span>
+                            </div>
+                            <div class="incident-body">
+                                <p>
+                                    Versucht, Docker über TCP zu aktivieren (`-H tcp://0.0.0.0:2375`). Danach `systemctl start docker` fehlgeschlagen
+                                    mit `Failed to start Docker Application Container Engine`. Logs zeigten Socket-Conflict mit existierender Unix-Socket.
+                                </p>
+                            </div>
+                            <div class="incident-resolution">
+                                <strong>Aktionen:</strong>
+                                <ol class="resolution-list">
+                                    <li>Docker Service gestoppt</li>
+                                    <li>`/etc/docker/daemon.json` geprüft, TCP-Einträge entfernt</li>
+                                    <li>Service neu gestartet, Funktionstest mit `docker ps`</li>
+                                    <li>Entscheidung: Nur Unix-Socket, SSH-Tunnel für Remote-Zugriff</li>
+                                </ol>
+                            </div>
+                            <div class="incident-lesson">
+                                <strong>Lesson Learned:</strong>
+                                <p>Docker TCP-Listener ohne TLS = Security Risk. SSH-Tunnel ist sicherer als offene Ports. Changes immer erst in Staging testen.</p>
+                            </div>
+                        </div>
+
+                        <!-- Incident 3 -->
+                        <div class="incident-card">
+                            <div class="incident-header">
+                                <span class="incident-severity severity-medium">Medium</span>
+                                <div class="incident-title">Pi Zero unter Blocky instabil</div>
+                            </div>
+                            <div class="incident-meta">
+                                <span class="meta-item">März 2026</span>
+                                <span class="meta-divider">·</span>
+                                <span class="meta-item">Dauer: 1 Stunde</span>
+                                <span class="meta-divider">·</span>
+                                <span class="meta-item impact">Impact: DNS-Auflösung intermittierend fehlgeschlagen</span>
+                            </div>
+                            <div class="incident-body">
+                                <p>
+                                    Blocky (DNS Resolver) lief auf Raspberry Pi Zero 2W, 100% CPU-Last nach 3 Tagen Uptime.
+                                    Gerät wurde unresponsive, musste hart neu gestartet werden.
+                                </p>
+                            </div>
+                            <div class="incident-resolution">
+                                <strong>Aktionen:</strong>
+                                <ol class="resolution-list">
+                                    <li>Blocky auf Desktop (Docker) migriert, Pi Zero nur noch Dynacat</li>
+                                    <li>Pi Zero auf statische IP mit manueller DNS-Einträge in Dynacat konfiguriert</li>
+                                    <li>Alternative evaluiert: Unbound statt Blocky, weniger ressourcenintensiv</li>
+                                </ol>
+                            </div>
+                            <div class="incident-lesson">
+                                <strong>Lesson Learned:</strong>
+                                <p>Pi Zero 2W ist极限 für 1 Container. Blocky benötigt mehr RAM als verfügbar bei langer Laufzeit. Hardware Limits dokumentieren.</p>
+                            </div>
+                        </div>
+
+                        <!-- Incident 4 -->
+                        <div class="incident-card">
+                            <div class="incident-header">
+                                <span class="incident-severity severity-medium">Medium</span>
+                                <div class="incident-title">Node Rejoin nach k3s-Update — Token Mismatch</div>
+                            </div>
+                            <div class="incident-meta">
+                                <span class="meta-item">April 2026</span>
+                                <span class="meta-divider">·</span>
+                                <span class="meta-item">Dauer: 30 Minuten</span>
+                                <span class="meta-divider">·</span>
+                                <span class="meta-item impact">Impact: worker01 NotReady</span>
+                            </div>
+                            <div class="incident-body">
+                                <p>
+                                    k3s-Update auf control-plane durchgeführt. Nach Neustart meldete worker01 `token mismatch`.
+                                    Agent konnte sich nicht authentifizieren, Pod-Scheduling unterbrochen.
+                                </p>
+                            </div>
+                            <div class="incident-resolution">
+                                <strong>Aktionen:</strong>
+                                <ol class="resolution-list">
+                                    <li>Token von `/var/lib/rancher/k3s/server/node-token` auf control-plane ausgelesen</li>
+                                    <li>Auf worker01 in `/etc/rancher/k3s/config.yaml` eingefügt</li>
+                                    <li>k3s-agent neu gestartet, Node wieder im Cluster sichtbar</li>
+                                    <li>Backup des Tokens auf externer Maschine implementiert</li>
+                                </ol>
+                            </div>
+                            <div class="incident-lesson">
+                                <strong>Lesson Learned:</strong>
+                                <k3s-Updates auf Control Plane sollten automatisiertes Backup des Tokens trigger. Dokumentation für Node-Recovery als Runbook.</p>
+                            </div>
+                        </div>
+
+                        <!-- Incident 5 -->
+                        <div class="incident-card">
+                            <div class="incident-header">
+                                <span class="incident-severity severity-medium">Medium</span>
+                                <div class="incident-title">Velero Metrics nicht in Prometheus sichtbar</div>
+                            </div>
+                            <div class="incident-meta">
+                                <span class="meta-item">Juni 2026</span>
+                                <span class="meta-divider">·</span>
+                                <span class="meta-item">Dauer: 45 Minuten</span>
+                                <span class="meta-divider">·</span>
+                                <span class="meta-item impact">Impact: kein Monitoring der Backups</span>
+                            </div>
+                            <div class="incident-body">
+                                <p>
+                                    ServiceMonitor für Velero erstellt, aber Metriken erschienen nicht in Prometheus. Logs zeigten
+                                    `target scrape failed` — Label-Mismatch zwischen ServiceMonitor und Service (`app.kubernetes.io/instance` vs. `release`).
+                                </p>
+                            </div>
+                            <div class="incident-resolution">
+                                <strong>Aktionen:</strong>
+                                <ol class="resolution-list">
+                                    <li>ServiceMonitor-Labels angepasst (helm chart release name = `monitoring`)</li>
+                                    <li>Prometheus Reload getriggert durch Annotation</li>
+                                    <li>Velero-Endpoints in Prometheus sichtbar, Dashboards aktualisiert</li>
+                                    <li>Template für ServiceMonitor erstellt, um Fehler zu vermeiden</li>
+                                </ol>
+                            </div>
+                            <div class="incident-lesson">
+                                <strong>Lesson Learned:</strong>
+                                <p>Helm Release-Namen sind entscheidend für ServiceMonitors. Vor Deployment Labels mit `kubectl get svc -o yaml` prüfen. Dokumentieren, welcher Helm Release Name verwendet wird.</p>
+                            </div>
+                        </div>
+
+                        <!-- Incident 6 -->
+                        <div class="incident-card">
+                            <div class="incident-header">
+                                <span class="incident-severity severity-high">High</span>
+                                <div class="incident-title">GitGuardian Alert — Kubernetes JWT im öffentlichen Repo</div>
+                            </div>
+                            <div class="incident-meta">
+                                <span class="meta-item">Juli 2026</span>
+                                <span class="meta-divider">·</span>
+                                <span class="meta-item">Dauer: 2 Stunden</span>
+                                <span class="meta-divider">·</span>
+                                <span class="meta-item impact">Impact: Sicherheitsrisiko, Repository geleakt</span>
+                            </div>
+                            <div class="incident-body">
+                                <p>
+                                    GitGuardian meldete exponiertes JWT-Token in öffentlichem GitHub-Repository. Das Token hatte
+                                    Zugriff auf k3s API Server mit cluster-admin-Rechten. Repository war kurzzeitig öffentlich.
+                                </p>
+                            </div>
+                            <div class="incident-resolution">
+                                <strong>Aktionen:</strong>
+                                <ol class="resolution-list">
+                                    <li>Repository sofort privat gestellt</li>
+                                    <li>JWT-Token invalidiert, neues ServiceAccount-Token erstellt</li>
+                                    <li>GitGuardian-Scan in CI/CD Pipeline integriert</li>
+                                    <li>.gitignore aktualisiert, um kubeconfig und Secrets zu schützen</li>
+                                    <li>Commit-History mit git-filter-repo bereinigt</li>
+                                </ol>
+                            </div>
+                            <div class="incident-lesson">
+                                <strong>Lesson Learned:</strong>
+                                <p>Secret Scanning ist kein Feature, sondern Mandatory. Pre-commit Hooks mit gitleaks/gitguardian-cli. Keine Secrets in History – git-secrets oder BFG Repo-Cleaner bei Leaks.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <footer>
+                    <p>
+                        © 2026 MrToadie · built with
+                        <span class="footer-icons">
+                            <span
+                                class="ic ic-linux"
+                                role="img"
+                                aria-label="Linux"
+                            ></span>
+                            <span
+                                class="ic ic-music"
+                                role="img"
+                                aria-label="Musik"
+                            ></span>
+                            <span
+                                class="ic ic-guitar"
+                                role="img"
+                                aria-label="Gitarre"
+                            ></span>
+                            <span
+                                class="ic ic-coffee"
+                                role="img"
+                                aria-label="Kaffee"
+                            ></span>
+                        </span>
+                    </p>
+                </footer>
+            </main>
+        </div>
+
+        <script src="assets/js/dashboard.js" defer></script>
+    </body>
+</html>

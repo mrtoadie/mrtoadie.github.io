@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Projekte · MrToadie</title>
+        <link rel="stylesheet" href="assets/css/style.css" />
+        <link rel="icon" href="assets/favico.png" sizes="48x48">
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <div class="term-title">
+                    <span>~/projects</span>
+                    <span class="path">· k3s cluster</span>
+                </div>
+                <div class="dots">
+                    <div class="dot dotleft"></div>
+                    <div class="dot dotmiddle"></div>
+                    <div class="dot dotright"></div>
+                </div>
+            </header>
+
+            <main>
+                <nav class="top">
+                    <a href="index.html">/home/</a>
+                    <a href="index.html#infrastructure">/infrastructure</a>
+                    <a href="index.html#hardware">/hardware</a>
+                    <a href="index.html#software">/tools</a>
+                    <a href="incidents.html">/incidents</a>
+                </nav>
+
+                <h1>/projects</h1>
+                <div class="subtitle cursor">
+                    Open-Source Homelab & Automation Projects · self-hosted, self-broken, self-fixed
+                </div>
+
+                <section>
+                    <div class="project-grid">
+                        <!-- Project 1: homelab-collector -->
+                        <div class="project-card">
+                            <div class="project-header">
+                                <div class="project-name">homelab-collector</div>
+                                <div class="project-tags">
+                                    <span class="tag">Bash</span>
+                                    <span class="tag">k3s</span>
+                                    <span class="tag">GitHub API</span>
+                                </div>
+                            </div>
+                            <div class="project-desc">
+                                Automatische Sammlung von Kubernetes-Cluster-Metriken (CPU, RAM, Disk, Temp) und Publikation auf GitHub Pages.
+                                Dynamische Node-Abfrage via SSH, robuste Fehlerbehandlung bei unerreichbaren Nodes.
+                            </div>
+                            <div class="project-meta">
+                                <span><i class="ic ic-crown"></i> Runtime: 6+ Monate</span>
+                                <span><i class="ic ic-server"></i> 4 Nodes</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/mrtoadie/homelab-collector" target="_blank">GitHub ↗</a>
+                            </div>
+                        </div>
+
+                        <!-- Project 2: velero-manager -->
+                        <div class="project-card">
+                            <div class="project-header">
+                                <div class="project-name">velero-manager</div>
+                                <div class="project-tags">
+                                    <span class="tag">Go</span>
+                                    <span class="tag">Charm Huh</span>
+                                    <span class="tag">Velero</span>
+                                </div>
+                            </div>
+                            <div class="project-desc">
+                                Interaktive TUI für Velero Backup/Restore Operationen. Manuelles vs. scheduled Backups unterscheiden, Namespace-Selektion,
+                                Schedule-Erstellung ohne YAML-Hände. Charm Huh statt Bubble Tea für native CLI-Erfahrung.
+                            </div>
+                            <div class="project-meta">
+                                <span><i class="ic ic-clock"></i> Build: 3 Wochen</span>
+                                <span><i class="ic ic-database"></i> MinIO S3</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/mrtoadie/velero-manager" target="_blank">GitHub ↗</a>
+                            </div>
+                        </div>
+
+                        <!-- Project 3: Dynacat Dashboard -->
+                        <div class="project-card">
+                            <div class="project-header">
+                                <div class="project-name">Dynacat Customization</div>
+                                <div class="project-tags">
+                                    <span class="tag">JavaScript</span>
+                                    <span class="tag">Podman</span>
+                                    <span class="tag">Kubernetes</span>
+                                </div>
+                            </div>
+                            <div class="project-desc">
+                                Selbst gehostetes k3s-Dashboard auf Raspberry Pi Zero 2W. Eigenes API für Pod-Metriken,
+                FontAwesome-Icons ohne Google Fonts, color-codierte Gauge-Indikatoren.
+                            </div>
+                            <div class="project-meta">
+                                <span><i class="ic ic-microchip"></i> Resources: ~100MB RAM</span>
+                                <span><i class="ic ic-check"></i> Auto-start</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/mrtoadie/dynacat-custom" target="_blank">GitHub ↗</a>
+                            </div>
+                        </div>
+
+                        <!-- Project 4: ansible-sync -->
+                        <div class="project-card">
+                            <div class="project-header">
+                                <div class="project-name">ansible-sync</div>
+                                <div class="project-tags">
+                                    <span class="tag">Ansible</span>
+                                    <span class="tag">Bash</span>
+                                    <span class="tag">Go</span>
+                                </div>
+                            </div>
+                            <div class="project-desc">
+                Paket-Synchronisierung über heterogene Worker-Nodes (Debian Trixie, NixOS). Playbooks vergleichen
+                installierte Pakete, installieren fehlende basierend auf Baseline-Host, exportieren Specs als JSON.
+                            </div>
+                            <div class="project-meta">
+                                <span><i class="ic ic-server"></i> 3 Worker Nodes</span>
+                                <span><i class="ic ic-clock"></i> 15min Sync</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/mrtoadie/ansible-sync" target="_blank">GitHub ↗</a>
+                            </div>
+                        </div>
+
+                        <!-- Project 5: go-dashboard -->
+                        <div class="project-card">
+                            <div class="project-header">
+                                <div class="project-name">go-dashboard</div>
+                                <div class="project-tags">
+                                    <span class="tag">Go</span>
+                                    <span class="tag">HTML/JS</span>
+                                    <span class="tag">Static Site</span>
+                                </div>
+                            </div>
+                            <div class="project-desc">
+                                Statisches Portfolio mit Live-Kubernetes-Metriken. Responsive Design,
+                                auto-refresh alle 5 min, Cache-Busting, Demo-Modus bei Offline-Status.
+                            </div>
+                            <div class="project-meta">
+                                <span><i class="ic ic-monitor"></i> Mobile First</span>
+                                <span><i class="ic ic-globe"></i> No Backend</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://mrtoadie.github.io" target="_blank">Live ↗</a>
+                            </div>
+                        </div>
+
+                        <!-- Placeholder for future projects -->
+                        <div class="project-card muted">
+                            <div class="project-header">
+                                <div class="project-name">...</div>
+                            </div>
+                            <div class="project-desc">
+                                Weitere Projekte in Arbeit. Nächste Ziele: Grafana Dashboard Templates,
+                Prometheus Alerting Rules als GitOps, Kubernetes Operator für Backup Automation.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <footer>
+                    <p>
+                        © 2026 MrToadie · built with
+                        <span class="footer-icons">
+                            <span
+                                class="ic ic-linux"
+                                role="img"
+                                aria-label="Linux"
+                            ></span>
+                            <span
+                                class="ic ic-music"
+                                role="img"
+                                aria-label="Musik"
+                            ></span>
+                            <span
+                                class="ic ic-guitar"
+                                role="img"
+                                aria-label="Gitarre"
+                            ></span>
+                            <span
+                                class="ic ic-coffee"
+                                role="img"
+                                aria-label="Kaffee"
+                            ></span>
+                        </span>
+                    </p>
+                </footer>
+            </main>
+        </div>
+
+        <script src="assets/js/dashboard.js" defer></script>
+    </body>
+</html>

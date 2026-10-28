@@ -805,3 +805,97 @@ footer {
   border-top: 1px solid var(--border);
   background: var(--card-alt);
 }
+/* ---------- Projects page ---------- */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1rem;
+}
+.project-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.2rem;
+  transition: border-color 0.18s ease;
+}
+.project-card:hover { border-color: var(--accent); }
+.project-card.muted { opacity: 0.55; border-style: dashed; }
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+.project-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+.project-tags { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+.project-desc {
+  font-size: 0.88rem;
+  color: var(--dim);
+  margin-bottom: 0.9rem;
+}
+.project-meta {
+  display: flex;
+  gap: 1.2rem;
+  font-size: 0.75rem;
+  color: var(--faint);
+  margin-bottom: 0.75rem;
+}
+.project-links {
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
+  font-size: 0.85rem;
+}
+
+/* ---------- Incidents page ---------- */
+.incident-stat {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  text-align: center;
+}
+.stat-value {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.stat-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--faint);
+  margin-top: 0.3rem;
+}
+.incident-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+.incident-lesson {
+  background: rgba(163, 113, 247, 0.07);
+  border-left: 3px solid var(--purple);
+  padding: 0.75rem 1rem;
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--dim);
+}
+.incident-lesson strong { color: var(--purple); }
+
+/* Responsive */
+@media (max-width: 740px) {
+  .project-grid { grid-template-columns: 1fr; }
+}
