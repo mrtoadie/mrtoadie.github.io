@@ -124,6 +124,19 @@ a:hover {
 .ic-clock {
   --i: url("../icons/clock.svg");
 }
+.ic-winterfell {
+  --i: url("../icons/winterfell.svg");
+}
+
+.node-icon {
+  width: 40px;
+  text-align: center;
+}
+.node-icon .ic {
+  width: 18px;
+  height: 18px;
+  color: var(--red);
+}
 
 /* ---------- Terminal header ---------- */
 header {
@@ -258,7 +271,7 @@ section:last-child {
   padding: 1.1rem 1.2rem;
 }
 .stat .k {
-  font-size: 0.8rem;
+  font-size: 1.0rem;
   text-transform: uppercase;
   letter-spacing: 0.09em;
   color: var(--faint);
@@ -293,7 +306,7 @@ section:last-child {
   background: linear-gradient(
     180deg,
     rgba(88, 166, 255, 0.055),
-                              rgba(88, 166, 255, 0.012)
+    rgba(88, 166, 255, 0.012)
   );
   overflow: hidden;
   transition:
@@ -334,7 +347,7 @@ section:last-child {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  font-size: 0.72rem;
+  font-size: 0.80rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -382,7 +395,7 @@ section:last-child {
 }
 
 .node-name {
-  font-size: 1.35rem;
+  font-size: 1.45rem;
   font-weight: 600;
   letter-spacing: -0.015em;
   line-height: 1.25;
@@ -393,7 +406,7 @@ section:last-child {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.88rem;
+  font-size: 0.98rem;
   color: var(--dim);
   margin: 0.2rem 0;
 }
@@ -463,7 +476,7 @@ section:last-child {
   background: var(--surface);
   display: grid;
   place-items: center;
-  font-size: 0.8rem;
+  font-size: 1.0rem;
   font-variant-numeric: tabular-nums;
   color: var(--text);
 }
@@ -483,7 +496,7 @@ section:last-child {
   color: var(--faint);
 }
 .gauge-wrap small {
-  font-size: 0.65rem;
+  font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.09em;
   color: var(--faint);
