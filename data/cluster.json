@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-29T21:50:27Z",
+  "timestamp": "2026-10-29T21:55:13Z",
   "collected_on": "winterfell",
-  "nodes": [{"name":"winterfell","role":"control-plane","status":"True","version":"v1.36.3+k3s1"},{"name":"worker01","role":"worker","status":"True","version":"v1.36.2+k3s1"},{"name":"worker02","role":"worker","status":"True","version":"v1.36.3+k3s1"},{"name":"worker03","role":"worker","status":"True","version":"v1.36.3+k3s1"}],
-  "resource_usage": {"winterfell":{"cpu_percent":14,"cpu_millicores":567,"mem_percent":55,"mem_mib":4375,"disk_percent":39,"temp_c":36.5,"load1":1.20,"uptime_s":17512,"pods":18},"worker01":{"cpu_percent":2,"cpu_millicores":98,"mem_percent":38,"mem_mib":348,"disk_percent":49,"temp_c":31.6,"load1":0.25,"uptime_s":17502,"pods":3},"worker02":{"cpu_percent":2,"cpu_millicores":84,"mem_percent":38,"mem_mib":345,"disk_percent":49,"temp_c":30.7,"load1":0.38,"uptime_s":17497,"pods":3},"worker03":{"cpu_percent":1,"cpu_millicores":78,"mem_percent":45,"mem_mib":838,"disk_percent":51,"temp_c":37.0,"load1":0.26,"uptime_s":17517,"pods":3}},
+  "nodes": [{"name":"winterfell","role":"control-plane","status":"True","version":"v1.36.3+k3s1"},{"name":"worker01","role":"worker","status":"True","version":"v1.36.2+k3s1"},{"name":"worker02","role":"worker","status":"True","version":"v1.36.3+k3s1"},{"name":"worker03","role":"worker","status":"Unknown","version":"v1.36.3+k3s1"}],
+  "resource_usage": {"winterfell":{"cpu_percent":13,"cpu_millicores":543,"mem_percent":55,"mem_mib":4370,"disk_percent":39,"temp_c":38.5,"load1":1.05,"uptime_s":17799,"pods":18},"worker01":{"cpu_percent":2,"cpu_millicores":111,"mem_percent":38,"mem_mib":347,"disk_percent":49,"temp_c":31.2,"load1":0.04,"uptime_s":17788,"pods":3},"worker02":{"cpu_percent":3,"cpu_millicores":134,"mem_percent":38,"mem_mib":346,"disk_percent":49,"temp_c":30.7,"load1":0.14,"uptime_s":17783,"pods":3},"worker03":{"cpu_percent":null,"cpu_millicores":null,"mem_percent":null,"mem_mib":null,"disk_percent":null,"temp_c":null,"load1":null,"uptime_s":null,"pods":3}},
   "pods": {
     "total": 27,
     "running": 27,
