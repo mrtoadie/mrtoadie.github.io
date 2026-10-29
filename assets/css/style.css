@@ -88,8 +88,11 @@ a:hover {
 .ic-crown {
   --i: url("../icons/crown.svg");
 }
-.ic-server {
-  --i: url("../icons/server.svg");
+.ic-pods {
+  --i: url("../icons/pods.svg");
+}
+.ic-worker {
+  --i: url("../icons/worker.svg");
 }
 .ic-cpu {
   --i: url("../icons/cpu.svg");
@@ -128,7 +131,7 @@ a:hover {
   --i: url("../icons/winterfell.svg");
 }
 .ic-nightswatch {
-  --i: url("../icons/nightswatch1.svg");
+  --i: url("../icons/nightswatch.svg");
 }
 
 /* ---------- Terminal header ---------- */

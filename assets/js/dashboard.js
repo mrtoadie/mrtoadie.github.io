@@ -190,7 +190,7 @@ Running pods scheduled on that node (both added in collect.sh v2). */
             specHtml += specLine("thermometer", "Temp " + temp.toFixed(0) + " °C", tempClass(temp));
         }
         if (pods !== null) {
-            specHtml += specLine("server", "Pods " + pods.toFixed(0));
+            specHtml += specLine("worker", "Pods " + pods.toFixed(0));
         }
 
         /* Load average and uptime share one line to keep the card compact on

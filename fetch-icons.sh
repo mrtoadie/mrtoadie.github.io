@@ -38,6 +38,10 @@ declare -A ICONS=(
     [coffee]="lucide:coffee"        # footer
     [winterfell]="lucide:chess-rook"
     [nightswatch]="token-branded:raven"
+    [pods]="carbon:kubernetes-pod"
+    [worker]="carbon:kubernetes-worker-node"
+    [control]="carbon:kubernetes-control-plane-node"
+    [kubernetes]="carbon:logo-kubernetes"
 )
 
 mkdir -p "$OUT_DIR"
