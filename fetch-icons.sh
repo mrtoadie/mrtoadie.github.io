@@ -36,8 +36,8 @@ declare -A ICONS=(
     [music]="lucide:music"          # footer
     [guitar]="lucide:guitar"        # footer
     [coffee]="lucide:coffee"        # footer
-    [winterfell]="fa6-solid:chess-rook"
-    [nightswatch]="game-icons:raven"
+    [winterfell]="lucide:chess-rook"
+    [nightswatch]="token-branded:raven"
 )
 
 mkdir -p "$OUT_DIR"

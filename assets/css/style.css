@@ -127,15 +127,8 @@ a:hover {
 .ic-winterfell {
   --i: url("../icons/winterfell.svg");
 }
-
-.node-icon {
-  width: 40px;
-  text-align: center;
-}
-.node-icon .ic {
-  width: 18px;
-  height: 18px;
-  color: var(--red);
+.ic-nightswatch {
+  --i: url("../icons/nightswatch.svg");
 }
 
 /* ---------- Terminal header ---------- */
