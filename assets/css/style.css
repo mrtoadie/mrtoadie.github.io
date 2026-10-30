@@ -88,6 +88,9 @@ a:hover {
 .ic-crown {
   --i: url("../icons/crown.svg");
 }
+.ic-server {
+  --i: url("../icons/server.svg");
+}
 .ic-pods {
   --i: url("../icons/pods.svg");
 }
