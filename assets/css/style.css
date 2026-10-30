@@ -911,3 +911,22 @@ footer {
 @media (max-width: 740px) {
   .project-grid { grid-template-columns: 1fr; }
 }
+
+
+.watcher-badge {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  color: var(--dim);
+}
+.watcher-badge.online {
+  color: var(--green);
+  border-color: rgba(126, 231, 135, 0.35);
+  background: rgba(126, 231, 135, 0.12);
+}
+.watcher-badge.offline {
+  color: var(--red);
+  border-color: rgba(248, 81, 73, 0.35);
+  background: rgba(248, 81, 73, 0.12);
+}
