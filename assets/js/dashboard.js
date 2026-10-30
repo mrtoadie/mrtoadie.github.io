@@ -247,3 +247,21 @@ Running pods scheduled on that node (both added in collect.sh v2). */
     load();
     setInterval(load, REFRESH_MS);
 })();
+
+var WATCHER_MAX_AGE_MS = 30 * 60 * 1000;  // 2 heartbeats = considered offline
+
+function loadWatcherStatus() {
+    fetch("data/watcher.json?t=" + Date.now(), { cache: "no-store" })
+    .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+    .then(function (w) {
+        var age = Date.now() - new Date(w.timestamp).getTime();
+        var online = age < WATCHER_MAX_AGE_MS;
+        var el = document.getElementById("watcher-status");
+        if (el) {
+            el.className = "watcher-badge " + (online ? "online" : "offline");
+            el.textContent = "watcher " + (online ? "online" : "offline (" + ago(w.timestamp) + ")");
+        }
+    })
+    .catch(function () { /* leave previous state */ });
+}
+loadWatcherStatus();
