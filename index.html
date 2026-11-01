@@ -68,124 +68,47 @@
                         echten Cluster-Werte.
                     </div>
                 </section>
+                <!-- Storage -->
+                <h2><span style="color: var(--accent)">/storage</span></h2>
                 <section>
                     <div class="section-header">
-                        <span>$ df -h /clusterdata</span>
-                        <span class="right">USB-Storage · XFS</span>
+                        <span>df -h /mnt/clusterdata</span>
+                        <span class="right">XFS · USB-NVMe an winterfell</span>
                     </div>
                     <div class="storage-card" id="usb-storage-card"></div>
                 </section>
-                <!-- WATCHER CARD -->
+                <!-- Watcher -->
+                <h2><span style="color: var(--accent)">/watcher</span></h2>
                 <section>
                     <div class="section-header">
-                        <span>ls -la /homelab</span>
-                        <span class="right">Standalone Node</span>
+                        <span>systemctl status watcher-heartbeat.timer</span>
+                        <span class="right">Night's Watch</span>
                     </div>
-                    <div id="watcher-card" class="node-grid">
-                        <p class="loading">Watcher-Daten werden geladen…</p>
-                    </div>
+                    <div id="watcher-card"></div>
                 </section>
-                <!-- SETUP -->
+                <!-- Setup -->
                 <h2 id="setup"><span style="color: var(--accent)">/setup</span></h2>
                 <section>
                     <div class="section-header">
                         <span>ls -la /rack</span>
                         <span class="right">Stand: Oktober 2026</span>
                     </div>
-                    <!-- PHOTOS -->
                     <div class="photo-grid">
                         <figure class="photo">
-                            <img src="assets/img/setup-cluster.webp" alt="USB-SSD am Control-Plane-Node winterfell" loading="lazy" width="750" height="1000"/>
+                            <img src="assets/img/setup-cluster.webp" alt="Raspberry Pis" loading="lazy" width="750" height="1000"/>
                             <figcaption>
-                                winterfells Rootfs liegt auf einer USB-SSD — die
-                                Konsequenz aus dem SD-Karten-Ausfall (siehe
-                                /incidents).
+                                Raspberry Pis
                             </figcaption>
                         </figure>
 
                         <figure class="photo">
-                            <img src="assets/img/cluster-architecture.webp" alt="Raspberry Pi Zero 2W mit Gehäuse" loading="lazy"/>
+                            <img src="assets/img/cluster-architecture.webp" alt="Homelab Diagramm" loading="lazy"/>
                             <figcaption>
-                                watcher — ein Pi Zero 2W mit 512 MB RAM. Führt
-                                Nachts Wache: prüft von außerhalb des Clusters
-                                dessen Erreichbarkeit und pusht den Status nach
-                                GitHub.
+                                Homelab Diagramm
                             </figcaption>
                         </figure>
                     </div>
-                    <!-- ---------- Inventar (eingedampft: Node / OS / Rolle / Bemerkungen) ---------- -->
-                    <table class="hw-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>OS</th>
-                                <th>RAM</th>
-                                <th>Rolle</th>
-                                <th>Bemerkungen</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>winterfell</strong></td>
-                                <td>Raspberry Pi OS</td>
-                                <td>8 GB</td>
-                                <td>control-plane</td>
-                                <td>
-                                    <span class="tag">etcd auf USB-NVMe</span>
-                                    <span class="tag">XFS</span>
-                                </td>
-                                <td><span class="tag">running</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>worker01</strong></td>
-                                <td>Raspberry Pi OS</td>
-                                <td>1 GB</td>
-                                <td>worker node</td>
-                                <td>—</td>
-                                <td><span class="tag">running</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>worker02</strong></td>
-                                <td>Raspberry Pi OS</td>
-                                <td>1 GB</td>
-                                <td>worker node</td>
-                                <td>—</td>
-                                <td><span class="tag">running</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>worker03</strong></td>
-                                <td>Raspberry Pi OS</td>
-                                <td>2 GB</td>
-                                <td>worker node</td>
-                                <td>—</td>
-                                <td><span class="tag">running</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>watcher</strong></td>
-                                <td>Raspberry Pi OS</td>
-                                <td>512 MB</td>
-                                <td>nights watch</td>
-                                <td>
-                                    <span class="tag">Unbound</span>
-                                    <span class="tag">Caddy</span>
-                                    <span class="tag">Dynacat</span>
-                                </td>
-                                <td><span class="watcher-badge" id="watcher-status">watcher: lade…</span>
-                                <span class="right" id="refresh-info">auto-refresh · 5 min</span></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>NixOS</td>
-                                <td>2 GB</td>
-                                <td>Testsystem</td>
-                                <td>Evaluierung NixOS vs. Raspberry Pi OS</td>
-                                <td><span class="tag">WIP / EVAL</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <!-- ---------- Erklärtexte (ersetzen die alten Platzhalter-hw-notes) ---------- -->
+                    <!-- Notes -->
                     <div class="hw-note">
                         <strong>Warum zusätzlich eine USB-SSD?</strong>
                         SD-Karten sind für Lese-Last gebaut, nicht für permanente Schreibarbeit. Kubernetes schreibt kontinuierlich in seine Datenbank (etcd) — genau das Muster, das SD-Karten korrupt werden lässt. Deshalb werden alle Daten auf einer USB-SSD mit XFS gespeichert. Die SD-Karte beherbergt nur das Betriebssystem, keine Cluster- oder Workload-Daten.
@@ -200,12 +123,8 @@
                 <h2><span style="color: var(--accent)">/hardware</span></h2>
                 <section>
                     <div class="section-header">
-                        <span>kubectl get nodes -o wide</span>
-                        <span class="right" id="refresh-info"
-                            >auto-refresh · 5 min</span
-                        >
-                        <span class="watcher-badge" id="watcher-status">watcher: lade…</span>
-                        <span class="right" id="refresh-info">auto-refresh · 5 min</span>
+                        <span>cat inventory.json | jq</span>
+                        <span class="right">Stand: Oktober 2026</span>
                     </div>
 
                     <table class="hw-table">
@@ -240,7 +159,7 @@
                                 <td>1 GB</td>
                                 <td>Raspberry Pi OS</td>
                                 <td>worker</td>
-                                <td></td>
+                                <td>—</td>
                             </tr>
                             <tr>
                                 <td><strong>worker02</strong></td>
@@ -248,7 +167,7 @@
                                 <td>1 GB</td>
                                 <td>Raspberry Pi OS</td>
                                 <td>worker</td>
-                                <td></td>
+                                <td>—</td>
                             </tr>
                             <tr>
                                 <td><strong>worker03</strong></td>
@@ -256,7 +175,7 @@
                                 <td>2 GB</td>
                                 <td>Raspberry Pi OS</td>
                                 <td>worker</td>
-                                <td></td>
+                                <td>—</td>
                             </tr>
                             <tr>
                                 <td>
@@ -273,18 +192,16 @@
                                     <span class="tag">Dynacat</span>
                                 </td>
                             </tr>
+                            <tr>
+                                <td><strong>eval-01</strong></td>
+                                <td>Raspberry Pi 4</td>
+                                <td>2 GB</td>
+                                <td>NixOS</td>
+                                <td>Testsystem</td>
+                                <td>Evaluierung NixOS vs. Raspberry Pi OS</td>
+                            </tr>
                         </tbody>
                     </table>
-
-                    <div class="hw-note">
-                        <strong>Warum USB-SSD statt SD-Karte?</strong> warum
-                        zusätzlich usb-ssd
-                    </div>
-
-                    <div class="hw-note">
-                        <strong>Raspberry Pis statt Homeserver:</strong> hier
-                        fehlt text
-                    </div>
                 </section>
 
                 <h2 id="software">
@@ -297,7 +214,7 @@
                             >auto-refresh · 5 min</span
                         >
                     </div>
-                    <h3 class="category-heading">Ingress & DNS</h3>
+                    <h3 class="category-heading">Network</h3>
                     <div class="tool-grid">
                         <div class="tool-card">
                             <div class="tool-name">Traefik</div>
@@ -306,7 +223,7 @@
                                 (grafana.local, forgejo.local)
                             </div>
                             <div class="tool-reason">
-                                "Nur k3s eigener Traefik."
+                                "Der mit k3s mitgelieferte Standard — läuft unauffällig seit Tag eins."
                             </div>
                         </div>
                         <div class="tool-card">
@@ -326,8 +243,8 @@
                                 exposure)
                             </div>
                             <div class="tool-reason">
-                                "Automatische TLS-Zertifikate für watcher.local,
-                                sehr Ressourcen schonend und perfekt für ein Pi Zero."
+                                „Für lokale Domains wie watcher.local nutzt Caddy selbstsignierte Zertifikate.
+                                Sehr Ressourcen schonend und perfekt für ein Pi Zero."
                             </div>
                         </div>
                     </div>
@@ -341,9 +258,7 @@
                                 ServiceMonitors
                             </div>
                             <div class="tool-reason">
-                                "Standard-Stack mit Helm chart
-                                kube-prometheus-stack. Eigene Dashboards für
-                                Velero-Metriken."
+                                "kube-prometheus-stack via Helm. Eigene Dashboards für Velero-Metriken."
                             </div>
                         </div>
                         <div class="tool-card">
@@ -356,6 +271,17 @@
                                 Node-Metriken werden via Agent übermittelt."
                             </div>
                         </div>
+                        <div class="tool-card">
+                            <div class="tool-name">Watcher Heartbeat</div>
+                            <div class="tool-desc">
+                                Eigenes Heartbeat-Script, pusht alle 5 Minuten
+                                 Watcher-Status
+                            </div>
+                            <div class="tool-reason">
+                                "Wer überwacht den Wächter? Ein systemd-Timer
+                                und ein JSON-File auf GitHub."
+                            </div>
+                        </div>
                     </div>
 
                     <h3 class="category-heading">CI/CD & Version Control</h3>
@@ -363,7 +289,7 @@
                         <div class="tool-card">
                             <div class="tool-name">Forgejo</div>
                             <div class="tool-desc">
-                                Git Hosting (Fork von Gitea)
+                                Git Hosting
                             </div>
                             <div class="tool-reason">
                                 "Forgejo für lokale, private Repos und Backup für GitHub / Codeberg."
@@ -372,12 +298,10 @@
                         <div class="tool-card">
                             <div class="tool-name">Ansible</div>
                             <div class="tool-desc">
-                                Configuration Management, Paket-Synchronisierung
+                                Playbooks / Configuration Management
                             </div>
                             <div class="tool-reason">
-                                "Playbooks vergleichen Pakete auf workers,
-                                installieren fehlende, exportieren Specs als
-                                JSON."
+                                "System-Updates, abgleich von Git-Repos, Analysen und Maintenance."
                             </div>
                         </div>
                     </div>

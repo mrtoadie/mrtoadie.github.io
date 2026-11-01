@@ -590,8 +590,9 @@ footer {
 
     /* One node card per row on phones */
     .node-grid {
-        grid-template-columns: 1fr;
-        gap: 0.9rem;
+        /*grid-template-columns: 1fr;
+        gap: 0.9rem;*/
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));
     }
     .node-card {
         padding: 1rem 1rem 1.1rem 1.2rem;
