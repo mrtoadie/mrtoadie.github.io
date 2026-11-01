@@ -451,7 +451,7 @@
   loadWatcherStatus();
   setInterval(load, REFRESH_MS);
   setInterval(loadWatcherStatus, REFRESH_MS);
-  // --- FÜGEN SIE HIER EIN ---
+
   var WATCHER_SPECS = ["Raspberry Pi Zero 2W · 512 MB RAM"];
   var WATCHER_MAX_AGE_MS = 30 * 60 * 1000;
 
@@ -509,11 +509,6 @@
       "</div>" +
       '<div class="node-name">watcher</div>' +
       specHtml +
-      '<div class="gauges">' +
-      gauge(cpu, "CPU") +
-      gauge(mem, "RAM") +
-      gauge(disk, "DISK") +
-      "</div>" +
       "</article>"
     );
   }
