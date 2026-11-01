@@ -5,7 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Homelab · MrToadie</title>
         <link rel="stylesheet" href="assets/css/style.css" />
-        <link rel="icon" href="assets/favico.png" sizes="48x48">
+        <script src="assets/js/lightbox.js" defer></script>
+        <link rel="icon" href="assets/favico.png" sizes="48x48" />
     </head>
     <body>
         <div class="container">
@@ -20,22 +21,18 @@
                     <div class="dot dotright"></div>
                 </div>
             </header>
-
             <main>
                 <nav class="top">
                     <a href="index.html">/homelab</a>
-                    <a href="incidents.html">/incidents</a>
+                    <!--<a href="incidents.html">/incidents</a>-->
                     <a href="projects.html">/projects</a>
                 </nav>
-
                 <h1>/homelab</h1>
                 <div class="subtitle cursor">
                     k3s on Raspberry Pi · self-hosted, self-broken, self-fixed
                 </div>
 
-                <h2 id="infrastructure">
-                    <span style="color: var(--accent)">/infrastructure</span>
-                </h2>
+                <h2><span style="color: var(--accent)">/k3s cluster</span></h2>
                 <section>
                     <div class="section-header">
                         <span>kubectl get nodes -o wide</span>
@@ -71,16 +68,144 @@
                         echten Cluster-Werte.
                     </div>
                 </section>
-
-                <h2 id="hardware">
-                    <span style="color: var(--accent)">/hardware</span>
-                </h2>
                 <section>
-                <div class="section-header">
+                    <div class="section-header">
+                        <span>$ df -h /clusterdata</span>
+                        <span class="right">USB-Storage · XFS</span>
+                    </div>
+                    <div class="storage-card" id="usb-storage-card"></div>
+                </section>
+                <!-- WATCHER CARD -->
+                <section>
+                    <div class="section-header">
                         <span>kubectl get nodes -o wide</span>
-                        <span class="right" id="refresh-info">auto-refresh · 5 min</span>
+                        <span class="right">Standalone Node</span>
+                    </div>
+                    <div id="watcher-card" class="node-grid">
+                        <p class="loading">Watcher-Daten werden geladen…</p>
+                    </div>
+                </section>
+                <!-- SETUP -->
+                <h2 id="setup"><span style="color: var(--accent)">/setup</span></h2>
+                <section>
+                    <div class="section-header">
+                        <span>ls -la /rack</span>
+                        <span class="right">Stand: Oktober 2026</span>
+                    </div>
+                    <!-- PHOTOS -->
+                    <div class="photo-grid">
+                        <figure class="photo">
+                            <img src="assets/img/setup-cluster.webp" alt="USB-SSD am Control-Plane-Node winterfell" loading="lazy" width="750" height="1000"/>
+                            <figcaption>
+                                winterfells Rootfs liegt auf einer USB-SSD — die
+                                Konsequenz aus dem SD-Karten-Ausfall (siehe
+                                /incidents).
+                            </figcaption>
+                        </figure>
+
+                        <figure class="photo">
+                            <img src="assets/img/cluster-architecture.webp" alt="Raspberry Pi Zero 2W mit Gehäuse" loading="lazy"/>
+                            <figcaption>
+                                watcher — ein Pi Zero 2W mit 512 MB RAM. Führt
+                                Nachts Wache: prüft von außerhalb des Clusters
+                                dessen Erreichbarkeit und pusht den Status nach
+                                GitHub.
+                            </figcaption>
+                        </figure>
+                    </div>
+                    <!-- ---------- Inventar (eingedampft: Node / OS / Rolle / Bemerkungen) ---------- -->
+                    <table class="hw-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>OS</th>
+                                <th>RAM</th>
+                                <th>Rolle</th>
+                                <th>Bemerkungen</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>winterfell</strong></td>
+                                <td>Raspberry Pi OS</td>
+                                <td>8 GB</td>
+                                <td>control-plane</td>
+                                <td>
+                                    <span class="tag">etcd auf USB-NVMe</span>
+                                    <span class="tag">XFS</span>
+                                </td>
+                                <td><span class="tag">running</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>worker01</strong></td>
+                                <td>Raspberry Pi OS</td>
+                                <td>1 GB</td>
+                                <td>worker node</td>
+                                <td>—</td>
+                                <td><span class="tag">running</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>worker02</strong></td>
+                                <td>Raspberry Pi OS</td>
+                                <td>1 GB</td>
+                                <td>worker node</td>
+                                <td>—</td>
+                                <td><span class="tag">running</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>worker03</strong></td>
+                                <td>Raspberry Pi OS</td>
+                                <td>2 GB</td>
+                                <td>worker node</td>
+                                <td>—</td>
+                                <td><span class="tag">running</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>watcher</strong></td>
+                                <td>Raspberry Pi OS</td>
+                                <td>512 MB</td>
+                                <td>nights watch</td>
+                                <td>
+                                    <span class="tag">Unbound</span>
+                                    <span class="tag">Caddy</span>
+                                    <span class="tag">Dynacat</span>
+                                </td>
+                                <td><span class="watcher-badge" id="watcher-status">watcher: lade…</span>
+                                <span class="right" id="refresh-info">auto-refresh · 5 min</span></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>NixOS</td>
+                                <td>2 GB</td>
+                                <td>Testsystem</td>
+                                <td>Evaluierung NixOS vs. Raspberry Pi OS</td>
+                                <td><span class="tag">WIP / EVAL</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- ---------- Erklärtexte (ersetzen die alten Platzhalter-hw-notes) ---------- -->
+                    <div class="hw-note">
+                        <strong>Warum zusätzlich eine USB-SSD?</strong>
+                        SD-Karten sind für Lese-Last gebaut, nicht für permanente Schreibarbeit. Kubernetes schreibt kontinuierlich in seine Datenbank (etcd) — genau das Muster, das SD-Karten korrupt werden lässt. Deshalb werden alle Daten auf einer USB-SSD mit XFS gespeichert. Die SD-Karte beherbergt nur das Betriebssystem, keine Cluster- oder Workload-Daten.
+                    </div>
+
+                    <div class="hw-note">
+                        <strong>Warum Raspberry Pis statt einem Homeserver?</strong>
+                        Weil verteilte Systeme nur verteilte Probleme offenlegen. Ein einzelner Server lehrt dich Linux; vier Nodes zwingen dich, über Scheduling, Netzwerk, Quorum und Storage-Entscheidungen nachzudenken — allesamt Fragen, die in einem produktiven Kubernetes-Umfeld täglich anstehen. Und der Cluster ist nicht statisch: Nodes lassen sich jederzeit hinzufügen oder entfernen, und der nächste Ausbauschritt ist bereits geplant — zusätzliche Control-Plane-Nodes, damit der Cluster einen Node-Ausfall ohne Downtime übersteht (High Availability).
+                    </div>
+                </section>
+
+                <h2><span style="color: var(--accent)">/hardware</span></h2>
+                <section>
+                    <div class="section-header">
+                        <span>kubectl get nodes -o wide</span>
+                        <span class="right" id="refresh-info"
+                            >auto-refresh · 5 min</span
+                        >
                         <span class="watcher-badge" id="watcher-status">watcher: lade…</span>
-<span class="right" id="refresh-info">auto-refresh · 5 min</span>
+                        <span class="right" id="refresh-info">auto-refresh · 5 min</span>
                     </div>
 
                     <table class="hw-table">
@@ -96,7 +221,10 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td><strong>winterfell</strong> <span class="ic ic-winterfell"></span></td>
+                                <td>
+                                    <strong>winterfell</strong>
+                                    <span class="ic ic-winterfell"></span>
+                                </td>
                                 <td>Raspberry Pi 4</td>
                                 <td>8 GB</td>
                                 <td>Raspberry Pi OS</td>
@@ -112,9 +240,7 @@
                                 <td>1 GB</td>
                                 <td>Raspberry Pi OS</td>
                                 <td>worker</td>
-                                <td>
-
-                                </td>
+                                <td></td>
                             </tr>
                             <tr>
                                 <td><strong>worker02</strong></td>
@@ -122,9 +248,7 @@
                                 <td>1 GB</td>
                                 <td>Raspberry Pi OS</td>
                                 <td>worker</td>
-                                <td>
-
-                                </td>
+                                <td></td>
                             </tr>
                             <tr>
                                 <td><strong>worker03</strong></td>
@@ -132,12 +256,13 @@
                                 <td>2 GB</td>
                                 <td>Raspberry Pi OS</td>
                                 <td>worker</td>
-                                <td>
-
-                                </td>
+                                <td></td>
                             </tr>
                             <tr>
-                                <td><strong>watcher</strong> <span class="ic ic-nightswatch"></span></td>
+                                <td>
+                                    <strong>watcher</strong>
+                                    <span class="ic ic-nightswatch"></span>
+                                </td>
                                 <td>Raspberry Pi Zero 2W</td>
                                 <td>512 MB</td>
                                 <td>Raspberry Pi OS</td>
@@ -152,44 +277,57 @@
                     </table>
 
                     <div class="hw-note">
-                        <strong>Warum USB-SSD statt SD-Karte?</strong> warum zusätzlich usb-ssd
+                        <strong>Warum USB-SSD statt SD-Karte?</strong> warum
+                        zusätzlich usb-ssd
                     </div>
 
                     <div class="hw-note">
-                        <strong>Raspberry Pis statt Homeserver:</strong> hier fehlt text
+                        <strong>Raspberry Pis statt Homeserver:</strong> hier
+                        fehlt text
                     </div>
-
                 </section>
 
                 <h2 id="software">
                     <span style="color: var(--accent)">/software & tools</span>
                 </h2>
                 <section>
-                <div class="section-header">
+                    <div class="section-header">
                         <span>kubectl get namespace</span>
-                        <span class="right" id="refresh-info">auto-refresh · 5 min</span>
+                        <span class="right" id="refresh-info"
+                            >auto-refresh · 5 min</span
+                        >
                     </div>
                     <h3 class="category-heading">Ingress & DNS</h3>
                     <div class="tool-grid">
                         <div class="tool-card">
                             <div class="tool-name">Traefik</div>
-                            <div class="tool-desc">Ingress-Controller für alle internen Dienste (grafana.local, forgejo.local)</div>
+                            <div class="tool-desc">
+                                Ingress-Controller für alle internen Dienste
+                                (grafana.local, forgejo.local)
+                            </div>
                             <div class="tool-reason">
-                                "k3s bringt Traefik mit, nginx-ingress wäre eine zusätzliche Schicht gewesen."
+                                "Nur k3s eigener Traefik."
                             </div>
                         </div>
                         <div class="tool-card">
                             <div class="tool-name">Unbound</div>
-                            <div class="tool-desc">Recursive DNS Resolver auf Raspberry Pi Zero</div>
+                            <div class="tool-desc">
+                                Recursive DNS Resolver auf Raspberry Pi Zero
+                            </div>
                             <div class="tool-reason">
-                                "Router erlaubt keine eigenen DNS-Einträge. Unbound löst *.local auf Cluster-IPs."
+                                "Router erlaubt keine eigenen DNS-Einträge.
+                                Unbound löst *.local auf Cluster-IPs."
                             </div>
                         </div>
                         <div class="tool-card">
                             <div class="tool-name">Caddy</div>
-                            <div class="tool-desc">Reverse Proxy auf Raspberry Pi Zero (Dynacat exposure)</div>
+                            <div class="tool-desc">
+                                Reverse Proxy auf Raspberry Pi Zero (Dynacat
+                                exposure)
+                            </div>
                             <div class="tool-reason">
-                                "Automatische TLS-Zertifikate für watcher.local, leichter als Nginx für einen Proxy."
+                                "Automatische TLS-Zertifikate für watcher.local,
+                                sehr Ressourcen schonend und perfekt für ein Pi Zero."
                             </div>
                         </div>
                     </div>
@@ -198,16 +336,24 @@
                     <div class="tool-grid">
                         <div class="tool-card">
                             <div class="tool-name">Prometheus + Grafana</div>
-                            <div class="tool-desc">Node Exporter, kube-state-metrics, custom ServiceMonitors</div>
+                            <div class="tool-desc">
+                                Node Exporter, kube-state-metrics, custom
+                                ServiceMonitors
+                            </div>
                             <div class="tool-reason">
-                                "Standard-Stack mit Helm chart kube-prometheus-stack. Eigene Dashboards für Velero-Metriken."
+                                "Standard-Stack mit Helm chart
+                                kube-prometheus-stack. Eigene Dashboards für
+                                Velero-Metriken."
                             </div>
                         </div>
                         <div class="tool-card">
                             <div class="tool-name">Dynacat</div>
-                            <div class="tool-desc">Dashboard auf Raspberry Pi Zero (Podman)</div>
+                            <div class="tool-desc">
+                                Dashboard auf Raspberry Pi Zero (Podman)
+                            </div>
                             <div class="tool-reason">
-                                "Leichtgewichtig, SSH-basiert, zeigt Node-Metriken ohne Kubernetes-API zu benötigen."
+                                "Leichtgewichtiges aber sehr anpassbares Dashboard.
+                                Node-Metriken werden via Agent übermittelt."
                             </div>
                         </div>
                     </div>
@@ -216,16 +362,22 @@
                     <div class="tool-grid">
                         <div class="tool-card">
                             <div class="tool-name">Forgejo</div>
-                            <div class="tool-desc">Git Hosting (Fork von Gitea)</div>
+                            <div class="tool-desc">
+                                Git Hosting (Fork von Gitea)
+                            </div>
                             <div class="tool-reason">
-                                "GitHub ist öffentlich. Forgejo lokal für private Repos, kein Internet-Zugriff nötig."
+                                "Forgejo für lokale, private Repos und Backup für GitHub / Codeberg."
                             </div>
                         </div>
                         <div class="tool-card">
                             <div class="tool-name">Ansible</div>
-                            <div class="tool-desc">Configuration Management, Paket-Synchronisierung</div>
+                            <div class="tool-desc">
+                                Configuration Management, Paket-Synchronisierung
+                            </div>
                             <div class="tool-reason">
-                                "Playbooks vergleichen Pakete auf workers, installieren fehlende, exportieren Specs als JSON."
+                                "Playbooks vergleichen Pakete auf workers,
+                                installieren fehlende, exportieren Specs als
+                                JSON."
                             </div>
                         </div>
                     </div>
@@ -234,16 +386,25 @@
                     <div class="tool-grid">
                         <div class="tool-card">
                             <div class="tool-name">Velero + MinIO</div>
-                            <div class="tool-desc">Kubernetes Backup/Restore auf lokales S3-kompatibles Ziel</div>
+                            <div class="tool-desc">
+                                Kubernetes Backup/Restore auf lokales
+                                S3-kompatibles Ziel
+                            </div>
                             <div class="tool-reason">
-                                "Backup von Metadaten + PVs. Restore getestet. MinIO läuft in Docker auf Desktop, nicht im Cluster."
+                                "Backup von Metadaten + PVs. Restore getestet.
+                                MinIO läuft in Docker auf Desktop, nicht im
+                                Cluster."
                             </div>
                         </div>
                         <div class="tool-card">
                             <div class="tool-name">NFS Subdir Provisioner</div>
-                            <div class="tool-desc">Dynamische PersistentVolumes über NFS</div>
+                            <div class="tool-desc">
+                                Dynamische PersistentVolumes über NFS
+                            </div>
                             <div class="tool-reason">
-                                "Statt local-path: Daten bleiben erhalten, wenn Pod neu geplant wird. Performance ausreichend für kleine DBs."
+                                "Statt local-path: Daten bleiben erhalten, wenn
+                                Pod neu geplant wird. Performance ausreichend
+                                für kleine DBs."
                             </div>
                         </div>
                     </div>
