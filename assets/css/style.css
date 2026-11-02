@@ -6,8 +6,13 @@
     padding: 0;
 }
 
+/* ---------- Theme tokens ----------
+ *   Base colours plus RGB-channel variants, so translucent shades can use
+ *   var(): rgba(var(--accent-rgb), 0.1) etc. Switching the palette means
+ *   editing ONLY this block. */
 :root {
-    --bg: #0d1117;
+    /*--bg: #0d1117;*/
+    --bg: #2e3440;
     --card: #161b22;
     --card-alt: #21262d;
     --surface: #1c2128;
@@ -16,11 +21,17 @@
     --faint: #6e7681;
     --accent: #58a6ff;
     --accent-hover: #79c0ff;
-    --border: #30363d;
+    --accent-rgb: 88, 166, 255;
     --green: #7ee787;
+    --green-rgb: 126, 231, 135;
     --amber: #d29922;
+    --amber-rgb: 210, 153, 34;
     --red: #f85149;
+    --red-rgb: 248, 81, 73;
     --purple: #a371f7;
+    --purple-rgb: 163, 113, 247;
+    --border: #30363d;
+    --track: #262c36; /* idle ring of the gauges / dash-pattern fills */
     --mono:
         ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
         "Liberation Mono", monospace;
@@ -30,7 +41,7 @@ body {
     background:
         radial-gradient(
             1200px 600px at 50% -12%,
-            rgba(88, 166, 255, 0.075),
+            rgba(var(--accent-rgb), 0.075),
             transparent 70%
         ),
         var(--bg);
@@ -93,9 +104,6 @@ a:hover {
 }
 .ic-pods {
     --i: url("../icons/pods.svg");
-}
-.ic-worker {
-    --i: url("../icons/worker.svg");
 }
 .ic-cpu {
     --i: url("../icons/cpu.svg");
@@ -167,10 +175,10 @@ header {
     border-radius: 50%;
 }
 .dotleft {
-    background: #58a6ff;
+    background: var(--accent);
 }
 .dotmiddle {
-    background: #79c0ff;
+    background: var(--accent-hover);
 }
 .dotright {
     background: #33658a;
@@ -202,7 +210,7 @@ nav.top a:hover {
 nav.top a.active {
     border-color: var(--accent);
     color: var(--accent);
-    background: rgba(88, 166, 255, 0.1);
+    background: rgba(var(--accent-rgb), 0.1);
 }
 
 h1 {
@@ -304,8 +312,8 @@ section:last-child {
     border-radius: 11px;
     background: linear-gradient(
         180deg,
-        rgba(88, 166, 255, 0.055),
-        rgba(88, 166, 255, 0.012)
+        rgba(var(--accent-rgb), 0.055),
+        rgba(var(--accent-rgb), 0.012)
     );
     overflow: hidden;
     transition:
@@ -332,7 +340,7 @@ section:last-child {
 .node-card:hover {
     transform: translateY(-3px);
     border-color: var(--accent);
-    box-shadow: 0 14px 30px -16px rgba(88, 166, 255, 0.55);
+    box-shadow: 0 14px 30px -16px rgba(var(--accent-rgb), 0.55);
 }
 
 .node-head {
@@ -383,13 +391,13 @@ section:last-child {
 }
 @keyframes pulse {
     0% {
-        box-shadow: 0 0 0 0 rgba(126, 231, 135, 0.55);
+        box-shadow: 0 0 0 0 rgba(var(--green-rgb), 0.55);
     }
     70% {
-        box-shadow: 0 0 0 8px rgba(126, 231, 135, 0);
+        box-shadow: 0 0 0 8px rgba(var(--green-rgb), 0);
     }
     100% {
-        box-shadow: 0 0 0 0 rgba(126, 231, 135, 0);
+        box-shadow: 0 0 0 0 rgba(var(--green-rgb), 0);
     }
 }
 
@@ -428,15 +436,15 @@ section:last-child {
 }
 .node-status.ready {
     color: var(--green);
-    border-color: rgba(126, 231, 135, 0.35);
-    background: rgba(126, 231, 135, 0.12);
+    border-color: rgba(var(--green-rgb), 0.35);
+    background: rgba(var(--green-rgb), 0.12);
 }
 .node-status.notready {
     color: var(--red);
-    border-color: rgba(248, 81, 73, 0.35);
-    background: rgba(248, 81, 73, 0.12);
+    border-color: rgba(var(--red-rgb), 0.35);
+    background: rgba(var(--red-rgb), 0.12);
 }
-/* Temperatur-/Disk-Warnung */
+/* Temperature warning */
 .node-spec.stat-warn {
     color: var(--amber);
 }
@@ -461,7 +469,10 @@ section:last-child {
     display: grid;
     place-items: center;
     margin-bottom: 0.4rem;
-    background: conic-gradient(var(--ring) calc(var(--pct) * 1%), #262c36 0);
+    background: conic-gradient(
+        var(--ring) calc(var(--pct) * 1%),
+        var(--track) 0
+    );
 }
 .gauge span {
     grid-area: 1/1;
@@ -485,7 +496,7 @@ section:last-child {
     --ring: var(--red);
 }
 .gauge.na {
-    background: #262c36;
+    background: var(--track);
 }
 .gauge.na span {
     color: var(--faint);
@@ -506,8 +517,8 @@ section:last-child {
     margin-left: 0.35rem;
 }
 .footer-icons .ic {
-    width: 14px;
-    height: 14px;
+    width: 20px;
+    height: 20px;
     color: var(--faint);
     transition: color 0.15s ease;
 }
@@ -521,8 +532,8 @@ section:last-child {
     margin-top: 1.5rem;
     font-size: 0.78rem;
     color: var(--amber);
-    background: rgba(210, 153, 34, 0.08);
-    border: 1px solid rgba(210, 153, 34, 0.3);
+    background: rgba(var(--amber-rgb), 0.08);
+    border: 1px solid rgba(var(--amber-rgb), 0.3);
     border-radius: 8px;
     padding: 0.7rem 0.95rem;
 }
@@ -540,182 +551,7 @@ footer {
     background: var(--card-alt);
 }
 
-/* ---------- Responsive ----------
- *   Was previously INVERTED (@media min-width): desktop got the compact
- *   styles, phones got the full-size defaults. Now correctly max-width. */
-@media (max-width: 740px) {
-    body {
-        padding: 1rem 0.75rem 2rem;
-        font-size: 15px;
-    }
-    .container {
-        border-radius: 10px;
-    }
-    main {
-        padding: 1.75rem 1rem;
-    }
-    h1 {
-        font-size: 1.65rem;
-    }
-    .subtitle {
-        font-size: 0.92rem;
-        margin-bottom: 1.75rem;
-    }
-    header {
-        padding: 0.8rem 1rem;
-    }
-    .term-title {
-        font-size: 0.78rem;
-    }
-    nav.top {
-        gap: 0.45rem;
-        margin-bottom: 1.75rem;
-    }
-    nav.top a {
-        font-size: 0.78rem;
-        padding: 0.35rem 0.6rem;
-    }
-    .section-header {
-        flex-wrap: wrap;
-    }
-    .stat .v {
-        font-size: 1.45rem;
-    }
-    .stats {
-        gap: 0.75rem;
-    }
-    .stat {
-        padding: 0.9rem 1rem;
-    }
-
-    /* One node card per row on phones */
-    .node-grid {
-        /*grid-template-columns: 1fr;
-        gap: 0.9rem;*/
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));
-    }
-    .node-card {
-        padding: 1rem 1rem 1.1rem 1.2rem;
-    }
-    .node-card:hover {
-        transform: none;
-    }
-    .node-name {
-        font-size: 1.15rem;
-    }
-    .gauges {
-        gap: 1rem;
-        padding-top: 1rem;
-    }
-    .gauge {
-        width: 58px;
-        height: 58px;
-    }
-    .gauge span {
-        width: 44px;
-        height: 44px;
-        font-size: 0.7rem;
-    }
-
-    /* Tool cards stacked full-width */
-    .tool-grid {
-        grid-template-columns: 1fr;
-    }
-
-    /* Hardware table scrolls sideways instead of overflowing the layout */
-    .hw-table {
-        display: block;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .incident-card {
-        padding: 1rem;
-    }
-    .resolution-list {
-        margin-left: 1.1rem;
-    }
-}
-
-/* Extra-small phones: shrink gauges a bit more so three still fit */
-@media (max-width: 400px) {
-    .gauges {
-        gap: 0.7rem;
-    }
-    .gauge {
-        width: 52px;
-        height: 52px;
-    }
-    .gauge span {
-        width: 40px;
-        height: 40px;
-        font-size: 0.62rem;
-    }
-    .stat .v {
-        font-size: 1.3rem;
-    }
-}
-
-/* incidents */
-.incident-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1.2rem;
-    margin-bottom: 1.25rem;
-    border-left: 3px solid var(--amber);
-}
-.incident-severity {
-    display: inline-block;
-    font-size: 0.85rem;
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
-    text-transform: uppercase;
-    margin-bottom: 0.75rem;
-}
-.severity-high {
-    background: rgba(248, 81, 73, 0.15);
-    color: var(--red);
-}
-.severity-medium {
-    background: rgba(210, 153, 34, 0.15);
-    color: var(--amber);
-}
-.severity-low {
-    background: rgba(88, 166, 255, 0.15);
-    color: var(--accent);
-}
-.incident-title {
-    font-size: 1.15rem;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 0.5rem;
-}
-.incident-meta {
-    font-size: 0.95rem;
-    color: var(--faint);
-    margin-bottom: 0.75rem;
-}
-.resolution-list {
-    margin-left: 1.5rem;
-    font-size: 0.9rem;
-    color: var(--dim);
-    margin-top: 0.75rem;
-}
-.automation-item {
-    background: var(--card-alt);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 1rem;
-    margin-bottom: 0.75rem;
-    font-size: 0.9rem;
-}
-.automation-title {
-    font-weight: 600;
-    color: var(--accent);
-    margin-bottom: 0.5rem;
-}
-/* Software */
+/* ---------- Software & tools ---------- */
 .tool-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -774,10 +610,10 @@ footer {
     color: var(--accent);
 }
 .hw-table tr:hover {
-    background: rgba(88, 166, 255, 0.05);
+    background: rgba(var(--accent-rgb), 0.05);
 }
 .hw-note {
-    background: rgba(88, 166, 255, 0.05);
+    background: rgba(var(--accent-rgb), 0.05);
     border-left: 3px solid var(--accent);
     padding: 1rem 1.25rem;
     margin: 1.5rem 0;
@@ -786,14 +622,6 @@ footer {
 }
 .hw-note strong {
     color: var(--text);
-}
-.power-meter {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.75rem;
-    color: var(--faint);
-    margin-left: 0.5rem;
 }
 .tag {
     display: inline-block;
@@ -806,14 +634,6 @@ footer {
     margin-right: 0.4rem;
 }
 
-footer {
-    padding: 1.4rem;
-    text-align: center;
-    font-size: 0.8rem;
-    color: var(--faint);
-    border-top: 1px solid var(--border);
-    background: var(--card-alt);
-}
 /* ---------- Projects page ---------- */
 .project-grid {
     display: grid;
@@ -870,58 +690,7 @@ footer {
     font-size: 0.85rem;
 }
 
-/* ---------- Incidents page ---------- */
-.incident-stat {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-.stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 1rem 1.1rem;
-    text-align: center;
-}
-.stat-value {
-    font-size: 1.6rem;
-    font-weight: 600;
-    color: var(--text);
-    font-variant-numeric: tabular-nums;
-}
-.stat-label {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.09em;
-    color: var(--faint);
-    margin-top: 0.3rem;
-}
-.incident-header {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 0.5rem;
-}
-.incident-lesson {
-    background: rgba(163, 113, 247, 0.07);
-    border-left: 3px solid var(--purple);
-    padding: 0.75rem 1rem;
-    margin-top: 0.75rem;
-    font-size: 0.85rem;
-    color: var(--dim);
-}
-.incident-lesson strong {
-    color: var(--purple);
-}
-
-/* Responsive */
-@media (max-width: 740px) {
-    .project-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
+/* ---------- Watcher badge ---------- */
 .watcher-badge {
     font-size: 0.75rem;
     padding: 0.25rem 0.6rem;
@@ -931,13 +700,13 @@ footer {
 }
 .watcher-badge.online {
     color: var(--green);
-    border-color: rgba(126, 231, 135, 0.35);
-    background: rgba(126, 231, 135, 0.12);
+    border-color: rgba(var(--green-rgb), 0.35);
+    background: rgba(var(--green-rgb), 0.12);
 }
 .watcher-badge.offline {
     color: var(--red);
-    border-color: rgba(248, 81, 73, 0.35);
-    background: rgba(248, 81, 73, 0.12);
+    border-color: rgba(var(--red-rgb), 0.35);
+    background: rgba(var(--red-rgb), 0.12);
 }
 
 /* ---------- Photo gallery ---------- */
@@ -971,28 +740,8 @@ footer {
     border-top: 1px solid var(--border);
     line-height: 1.55;
 }
-.photo-wide {
-    grid-column: 1 / -1;
-}
-.photo-wide img {
-    height: 380px;
-}
 
-@media (max-width: 640px) {
-    .photo-grid {
-        grid-template-columns: 1fr;
-    }
-    .photo img,
-    .photo-wide img {
-        height: 240px;
-    }
-}
-
-/* ============================================================
-   USB-SSD storage card
-   Add this to assets/css/style.css
-   ============================================================ */
-
+/* ---------- USB-SSD storage card ---------- */
 .storage-card {
     border: 1px solid var(--border);
     border-left: 3px solid var(--dim);
@@ -1002,8 +751,6 @@ footer {
     font-family: var(--mono);
     transition: border-color 0.2s ease;
 }
-
-/* Colour states, applied by renderStorageUsage() */
 .storage-card.ok {
     border-left-color: var(--green);
 }
@@ -1021,19 +768,16 @@ footer {
     gap: 1rem;
     margin-bottom: 0.625rem;
 }
-
 .storage-header .label {
     font-size: 0.8125rem;
     color: var(--dim);
     letter-spacing: 0.02em;
 }
-
 .storage-header .percent {
     font-size: 1.25rem;
     font-weight: 600;
     color: var(--text);
 }
-
 .storage-card.ok .storage-header .percent {
     color: var(--green);
 }
@@ -1050,14 +794,12 @@ footer {
     background: var(--card-alt);
     overflow: hidden;
 }
-
 .diskbar-fill {
     height: 100%;
     border-radius: 3px;
     background: var(--dim);
     transition: width 0.6s ease;
 }
-
 .storage-card.ok .diskbar-fill {
     background: var(--green);
 }
@@ -1067,7 +809,6 @@ footer {
 .storage-card.crit .diskbar-fill {
     background: var(--red);
 }
-
 /* Placeholder state while data is missing */
 .diskbar-fill.na {
     width: 100%;
@@ -1079,12 +820,12 @@ footer {
         var(--border) 12px
     );
 }
-
 .storage-detail {
     margin-top: 0.5rem;
     font-size: 0.6875rem;
     color: var(--faint);
 }
+
 /* ---------- Lightbox ---------- */
 #lightbox {
     position: fixed;
@@ -1120,4 +861,122 @@ footer {
     line-height: 1;
     padding: 0.3rem 0.6rem;
     cursor: pointer;
+}
+
+/* ---------- Responsive ----------
+ *   Was previously INVERTED (@media min-width): desktop got the compact
+ *   styles, phones got the full-size defaults. Now correctly max-width. */
+@media (max-width: 740px) {
+    body {
+        padding: 1rem 0.75rem 2rem;
+        font-size: 15px;
+    }
+    .container {
+        border-radius: 10px;
+    }
+    main {
+        padding: 1.75rem 1rem;
+    }
+    h1 {
+        font-size: 1.65rem;
+    }
+    .subtitle {
+        font-size: 0.92rem;
+        margin-bottom: 1.75rem;
+    }
+    header {
+        padding: 0.8rem 1rem;
+    }
+    .term-title {
+        font-size: 0.78rem;
+    }
+    nav.top {
+        gap: 0.45rem;
+        margin-bottom: 1.75rem;
+    }
+    nav.top a {
+        font-size: 0.78rem;
+        padding: 0.35rem 0.6rem;
+    }
+    .section-header {
+        flex-wrap: wrap;
+    }
+    .stat .v {
+        font-size: 1.45rem;
+    }
+    .stats {
+        gap: 0.75rem;
+    }
+    .stat {
+        padding: 0.9rem 1rem;
+    }
+
+    /* One node card per row on phones */
+    .node-grid {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));
+    }
+    .node-card {
+        padding: 1rem 1rem 1.1rem 1.2rem;
+    }
+    .node-card:hover {
+        transform: none;
+    }
+    .node-name {
+        font-size: 1.15rem;
+    }
+    .gauges {
+        gap: 1rem;
+        padding-top: 1rem;
+    }
+    .gauge {
+        width: 58px;
+        height: 58px;
+    }
+    .gauge span {
+        width: 44px;
+        height: 44px;
+        font-size: 0.7rem;
+    }
+
+    /* Cards/grids stack full-width on phones */
+    .tool-grid,
+    .project-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Hardware table scrolls sideways instead of overflowing the layout */
+    .hw-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* Extra-small phones: shrink gauges a bit more so three still fit */
+@media (max-width: 400px) {
+    .gauges {
+        gap: 0.7rem;
+    }
+    .gauge {
+        width: 52px;
+        height: 52px;
+    }
+    .gauge span {
+        width: 40px;
+        height: 40px;
+        font-size: 0.62rem;
+    }
+    .stat .v {
+        font-size: 1.3rem;
+    }
+}
+
+/* Photos drop to a single column on small screens */
+@media (max-width: 640px) {
+    .photo-grid {
+        grid-template-columns: 1fr;
+    }
+    .photo img {
+        height: 240px;
+    }
 }

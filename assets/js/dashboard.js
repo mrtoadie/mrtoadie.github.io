@@ -190,11 +190,8 @@
   }
 
   var SPEC_ICONS = [
-    [/ram|memory|arbeitsspeicher/, "cpu"],
-    [
-      /ssd|hdd|usb|nvme|disk|festplatte|karte|xfs|ext4|btrfs|storage|speicher/,
-      "disk",
-    ],
+    [/ram|memory/, "cpu"],
+    [/ssd|hdd|usb|nvme|disk|card|xfs|ext4|btrfs|storage/, "disk"],
   ];
 
   function specIcon(text) {
@@ -394,7 +391,7 @@
         (d.deployments != null ? d.deployments : "–") +
         "</div></div>";
     }
-
+    fillHardwareAges(nodes);
     var metricsEl = document.getElementById("node-metrics");
     if (metricsEl) {
       metricsEl.innerHTML = nodes.length
@@ -430,7 +427,7 @@
         render(data, false);
       })
       .catch(function (err) {
-        console.warn("cluster.json nicht ladbar:", err.message);
+        console.warn("cluster.json not found:", err.message);
         render(DEMO, true);
       });
   }
@@ -520,3 +517,14 @@
   }
   // --- ENDE EINFÜGUNG ---
 })();
+
+/* Fill the node-age cells in the static hardware table. */
+function fillHardwareAges(nodes) {
+  var map = {};
+  nodes.forEach(function (n) {
+    if (n.age) map[n.name] = n.age;
+  });
+  document.querySelectorAll("[data-age]").forEach(function (cell) {
+    cell.textContent = map[cell.dataset.age] || "–";
+  });
+}
