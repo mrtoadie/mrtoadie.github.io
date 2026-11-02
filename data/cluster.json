@@ -1,6 +1,5 @@
 {
-  "timestamp": "2026-11-01T22:27:31Z",
-  "collector_error": "Kubernetes API Server (192.168.178.210:6443) unreachable (TCP)",
+  "timestamp": "2026-11-02T08:57:17Z",
   "nodes": [],
   "resource_usage": {},
   "pods": {
