@@ -124,7 +124,7 @@
                 <section>
                     <div class="section-header">
                         <span>cat inventory.json | jq</span>
-                        <span class="right">Stand: Oktober 2026</span>
+                        <span class="right">Last updated: October 2026</span>
                     </div>
 
                     <table class="hw-table">
@@ -134,8 +134,9 @@
                                 <th>Board</th>
                                 <th>RAM</th>
                                 <th>OS</th>
-                                <th>Rolle</th>
-                                <th>Bemerkungen</th>
+                                <th>Role</th>
+                                <th>Node Age</th>
+                                <th>Notes</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -146,10 +147,11 @@
                                 </td>
                                 <td>Raspberry Pi 4</td>
                                 <td>8 GB</td>
-                                <td>Raspberry Pi OS</td>
+                                <td>Pi OS</td>
                                 <td>control-plane</td>
+                                <td data-age="winterfell">–</td>
                                 <td>
-                                    <span class="tag">etcd @ USB-NVMe</span>
+                                    <span class="tag">etcd on USB-NVMe</span>
                                     <span class="tag">XFS</span>
                                 </td>
                             </tr>
@@ -157,25 +159,28 @@
                                 <td><strong>worker01</strong></td>
                                 <td>Raspberry Pi 4</td>
                                 <td>1 GB</td>
-                                <td>Raspberry Pi OS</td>
+                                <td>Pi OS</td>
                                 <td>worker</td>
-                                <td>—</td>
+                                <td data-age="worker01">–</td>
+                                <td>-</td>
                             </tr>
                             <tr>
                                 <td><strong>worker02</strong></td>
                                 <td>Raspberry Pi 4</td>
                                 <td>1 GB</td>
-                                <td>Raspberry Pi OS</td>
+                                <td>Pi OS</td>
                                 <td>worker</td>
-                                <td>—</td>
+                                <td data-age="worker02">–</td>
+                                <td>-</td>
                             </tr>
                             <tr>
                                 <td><strong>worker03</strong></td>
                                 <td>Raspberry Pi 4</td>
                                 <td>2 GB</td>
-                                <td>Raspberry Pi OS</td>
+                                <td>Pi OS</td>
                                 <td>worker</td>
-                                <td>—</td>
+                                <td data-age="worker03">–</td>
+                                <td>-</td>
                             </tr>
                             <tr>
                                 <td>
@@ -184,8 +189,9 @@
                                 </td>
                                 <td>Raspberry Pi Zero 2W</td>
                                 <td>512 MB</td>
-                                <td>Raspberry Pi OS</td>
-                                <td>nights watch</td>
+                                <td>Pi OS</td>
+                                <td>night's watch</td>
+                                <td>-</td>
                                 <td>
                                     <span class="tag">Unbound</span>
                                     <span class="tag">Caddy</span>
@@ -197,8 +203,9 @@
                                 <td>Raspberry Pi 4</td>
                                 <td>2 GB</td>
                                 <td>NixOS</td>
-                                <td>Testsystem</td>
-                                <td>Evaluierung NixOS vs. Raspberry Pi OS</td>
+                                <td>test system</td>
+                                <td>-</td>
+                                <td>evaluating NixOS vs. Pi OS</td>
                             </tr>
                         </tbody>
                     </table>
@@ -337,27 +344,31 @@
 
             <footer>
                 <p>
-                    © 2026 MrToadie · built with
+                    © 2026 <a href="https://github.com/mrtoadie" title="MrToadie @ GitHub" aria-label="MrToadie @ GitHub" target="_blank" rel="noopener noreferrer">MrToadie</a> · built with
                     <span class="footer-icons">
                         <span
                             class="ic ic-linux"
                             role="img"
                             aria-label="Linux"
+                            title="Linux"
                         ></span>
                         <span
                             class="ic ic-music"
                             role="img"
-                            aria-label="Musik"
+                            aria-label="Music"
+                            title="Music"
                         ></span>
                         <span
                             class="ic ic-guitar"
                             role="img"
-                            aria-label="Gitarre"
+                            aria-label="Guitar"
+                            title="Guitar"
                         ></span>
                         <span
                             class="ic ic-coffee"
                             role="img"
-                            aria-label="Kaffee"
+                            aria-label="Coffee"
+                            title="Coffee"
                         ></span>
                     </span>
                 </p>
