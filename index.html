@@ -17,8 +17,8 @@
                 </div>
                 <nav class="top">
                     <a href="index.html" class="active">/homelab</a>
-                    <!--<a href="projects.html">/projects</a>-->
-                    <!--<a href="skills.html">/skills</a>-->
+                    <!--<a href="projects.html">/projects</a>
+                    <a href="skills.html">/skills</a>-->
                 </nav>
                 <div class="dots">
                     <div class="dot dotleft"></div>
@@ -110,13 +110,13 @@
                     </div>
                     <!-- Notes -->
                     <div class="hw-note">
-                        <strong>Warum zusätzlich eine USB-SSD?</strong>
-                        SD-Karten sind für Lese-Last gebaut, nicht für permanente Schreibarbeit. Kubernetes schreibt kontinuierlich in seine Datenbank (etcd) — genau das Muster, das SD-Karten korrupt werden lässt. Deshalb werden alle Daten auf einer USB-SSD mit XFS gespeichert. Die SD-Karte beherbergt nur das Betriebssystem, keine Cluster- oder Workload-Daten.
+                        <strong>Why use a additinal USB-SSD?</strong>
+                        SD cards are designed for read-heavy workloads, not for continuous writing. Kubernetes writes continuously to its database (etcd) — precisely the kind of usage that causes SD cards to become corrupted. That is why all data is stored on a USB SSD using XFS. The SD card only hosts the operating system; it does not contain any cluster or workload data.
                     </div>
 
                     <div class="hw-note">
-                        <strong>Warum Raspberry Pis statt einem Homeserver?</strong>
-                        Weil verteilte Systeme nur verteilte Probleme offenlegen. Ein einzelner Server lehrt dich Linux; vier Nodes zwingen dich, über Scheduling, Netzwerk, Quorum und Storage-Entscheidungen nachzudenken — allesamt Fragen, die in einem produktiven Kubernetes-Umfeld täglich anstehen. Und der Cluster ist nicht statisch: Nodes lassen sich jederzeit hinzufügen oder entfernen, und der nächste Ausbauschritt ist bereits geplant — zusätzliche Control-Plane-Nodes, damit der Cluster einen Node-Ausfall ohne Downtime übersteht (High Availability).
+                        <strong>Why use Raspberry Pis instead of a home server?</strong>
+                        Because distributed systems merely reveal distributed problems. A single server teaches you Linux; four nodes force you to think about scheduling, networking, quorum and storage decisions — all issues that arise on a daily basis in a production Kubernetes environment. And the cluster isn’t static: nodes can be added or removed at any time, and the next expansion phase is already planned — additional control-plane nodes to ensure the cluster can withstand a node failure without downtime (high availability).
                     </div>
                 </section>
                 <!-- Hardware -->
@@ -226,32 +226,31 @@
                         <div class="tool-card">
                             <div class="tool-name">Traefik</div>
                             <div class="tool-desc">
-                                Ingress-Controller für alle internen Dienste
+                                Ingress controller for all internal services
                                 (grafana.local, forgejo.local)
                             </div>
                             <div class="tool-reason">
-                                "Der mit k3s mitgelieferte Standard — läuft unauffällig seit Tag eins."
+                                "The default one supplied with k3s — has been running smoothly since day one."
                             </div>
                         </div>
                         <div class="tool-card">
                             <div class="tool-name">Unbound</div>
                             <div class="tool-desc">
-                                Recursive DNS Resolver auf Raspberry Pi Zero
+                                Recursive DNS resolver on a Raspberry Pi Zero
                             </div>
                             <div class="tool-reason">
-                                "Router erlaubt keine eigenen DNS-Einträge.
-                                Unbound löst *.local auf Cluster-IPs."
+                                "The existing router does not allow custom DNS entries.
+                                Unbound resolves *.local to cluster IPs."
                             </div>
                         </div>
                         <div class="tool-card">
                             <div class="tool-name">Caddy</div>
                             <div class="tool-desc">
-                                Reverse Proxy auf Raspberry Pi Zero (Dynacat
+                                Reverse Proxy on a Raspberry Pi Zero (Dynacat
                                 exposure)
                             </div>
                             <div class="tool-reason">
-                                „Für lokale Domains wie watcher.local nutzt Caddy selbstsignierte Zertifikate.
-                                Sehr Ressourcen schonend und perfekt für ein Pi Zero."
+                                "For local domains such as watcher.local, Caddy uses self-signed certificates. This is very resource-efficient and perfect for a Pi Zero."
                             </div>
                         </div>
                     </div>

@@ -11,7 +11,6 @@
  *   var(): rgba(var(--accent-rgb), 0.1) etc. Switching the palette means
  *   editing ONLY this block. */
 :root {
-    /*--bg: #0d1117;*/
     --bg: #2e3440;
     --card: #161b22;
     --card-alt: #21262d;
@@ -19,6 +18,7 @@
     --text: #e6edf3;
     --dim: #8b949e;
     --faint: #6e7681;
+    --blue: #33658a;
     --accent: #58a6ff;
     --accent-hover: #79c0ff;
     --accent-rgb: 88, 166, 255;
@@ -69,7 +69,10 @@ a:hover {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 14px;
-    overflow: hidden;
+    /* clip (NOT hidden!): overflow:hidden would create a scroll container
+       and kill position:sticky in the header. clip cuts just the same,
+       keeps the rounded corners, but lets the header stick. */
+    overflow: clip;
     box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.85);
 }
 
@@ -86,14 +89,8 @@ a:hover {
     flex: none;
     vertical-align: -0.125em;
     background-color: currentColor;
-    -webkit-mask-image: var(--i);
-    mask-image: var(--i);
-    -webkit-mask-position: center;
-    mask-position: center;
-    -webkit-mask-size: contain;
-    mask-size: contain;
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
+    -webkit-mask: var(--i) center / contain no-repeat;
+    mask: var(--i) center / contain no-repeat;
 }
 
 .ic-crown {
@@ -110,6 +107,12 @@ a:hover {
 }
 .ic-disk {
     --i: url("../icons/disk.svg");
+}
+.ic-database {
+    --i: url("../icons/database.svg");
+}
+.ic-microchip {
+    --i: url("../icons/microchip.svg");
 }
 .ic-tag {
     --i: url("../icons/tag.svg");
@@ -145,7 +148,7 @@ a:hover {
     --i: url("../icons/nightswatch.svg");
 }
 
-/* ---------- Terminal header ---------- */
+/* ---------- Terminal header (sticky) ---------- */
 header {
     display: flex;
     align-items: center;
@@ -154,6 +157,11 @@ header {
     padding: 1rem 1.5rem;
     background: var(--card-alt);
     border-bottom: 1px solid var(--border);
+    /* sticky within the scrollport; works only because .container uses
+       overflow:clip instead of overflow:hidden */
+    position: sticky;
+    top: 0;
+    z-index: 100; /* above node cards; below the lightbox (999) */
 }
 .term-title {
     font-size: 0.85rem;
@@ -161,6 +169,7 @@ header {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    flex: none;
 }
 .term-title .path {
     color: var(--faint);
@@ -181,7 +190,7 @@ header {
     background: var(--accent-hover);
 }
 .dotright {
-    background: #33658a;
+    background: var(--blue);
 }
 
 main {
@@ -189,11 +198,21 @@ main {
 }
 
 /* ---------- Nav ---------- */
+/* NOTE: nav.top lives INSIDE the header now. Two fixes vs. the old file:
+   1) margin-bottom: 0 - the old 2.5rem margin was meant for a nav under h1
+      in main. Inside the header, align-items:center centers the margin box,
+      so the menu floated visibly ABOVE the title line.
+   2) flex-shrink: 0 - without it the header squeezes the nav at medium
+      widths, the links wrap internally into two rows, the header grows
+      three lines tall and NOTHING looks vertically centered anymore.
+      Under 740px the media query below moves the nav to its own full row
+      instead. */
 nav.top {
     display: flex;
     flex-wrap: wrap;
     gap: 0.6rem;
-    margin-bottom: 2.5rem;
+    margin-bottom: 0;
+    flex-shrink: 0;
 }
 nav.top a {
     font-size: 0.85rem;
@@ -202,6 +221,7 @@ nav.top a {
     border: 1px solid var(--border);
     color: var(--dim);
     background: rgba(255, 255, 255, 0.02);
+    white-space: nowrap;
 }
 nav.top a:hover {
     border-color: var(--accent);
@@ -234,6 +254,11 @@ h1 {
     50% {
         opacity: 0;
     }
+}
+
+/* Section titles use an accented span instead of inline styles in the HTML */
+h2 span {
+    color: var(--accent);
 }
 
 section {
@@ -366,8 +391,7 @@ section:last-child {
 
 /* icon sizing inside the node cards */
 .node-role .ic,
-.node-spec .ic,
-.node-status .ic {
+.node-spec .ic {
     width: 13px;
     height: 13px;
 }
@@ -395,9 +419,6 @@ section:last-child {
     }
     70% {
         box-shadow: 0 0 0 8px rgba(var(--green-rgb), 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(var(--green-rgb), 0);
     }
 }
 
@@ -690,6 +711,41 @@ footer {
     font-size: 0.85rem;
 }
 
+/* ---------- Skills page ---------- */
+.intro-text {
+    font-size: 0.95rem;
+    color: var(--dim);
+    line-height: 1.75;
+    max-width: 75ch;
+}
+.skill-list {
+    display: grid;
+    gap: 0.75rem;
+}
+.skill-row {
+    display: grid;
+    grid-template-columns: minmax(180px, 240px) 1fr;
+    gap: 0.5rem 1.25rem;
+    padding: 0.9rem 1.1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+.skill-name {
+    font-weight: 600;
+    color: var(--accent);
+}
+.skill-evidence {
+    font-size: 0.88rem;
+    color: var(--dim);
+    line-height: 1.65;
+}
+.skill-evidence a {
+    margin-left: 0.35rem;
+    white-space: nowrap;
+    font-size: 0.85rem;
+}
+
 /* ---------- Watcher badge ---------- */
 .watcher-badge {
     font-size: 0.75rem;
@@ -864,8 +920,8 @@ footer {
 }
 
 /* ---------- Responsive ----------
- *   Was previously INVERTED (@media min-width): desktop got the compact
- *   styles, phones got the full-size defaults. Now correctly max-width. */
+ *   Mobile-first inverted logic fixed: desktop keeps the defaults, phones
+ *   get compact overrides below. */
 @media (max-width: 740px) {
     body {
         padding: 1rem 0.75rem 2rem;
@@ -886,13 +942,18 @@ footer {
     }
     header {
         padding: 0.8rem 1rem;
+        flex-wrap: wrap;
     }
     .term-title {
         font-size: 0.78rem;
     }
+    /* Nav gets its own full row below title + dots, instead of being
+       squeezed and wrapping internally. */
     nav.top {
+        order: 3;
+        flex-basis: 100%;
+        margin-left: 0;
         gap: 0.45rem;
-        margin-bottom: 1.75rem;
     }
     nav.top a {
         font-size: 0.78rem;
@@ -901,14 +962,14 @@ footer {
     .section-header {
         flex-wrap: wrap;
     }
-    .stat .v {
-        font-size: 1.45rem;
-    }
     .stats {
         gap: 0.75rem;
     }
     .stat {
         padding: 0.9rem 1rem;
+    }
+    .stat .v {
+        font-size: 1.45rem;
     }
 
     /* One node card per row on phones */
@@ -938,9 +999,15 @@ footer {
         font-size: 0.7rem;
     }
 
-    /* Cards/grids stack full-width on phones */
+    /* Cards/grids and photos stack full-width on phones */
     .tool-grid,
-    .project-grid {
+    .project-grid,
+    .photo-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Skill rows stack: name on top, evidence below */
+    .skill-row {
         grid-template-columns: 1fr;
     }
 
@@ -968,15 +1035,5 @@ footer {
     }
     .stat .v {
         font-size: 1.3rem;
-    }
-}
-
-/* Photos drop to a single column on small screens */
-@media (max-width: 640px) {
-    .photo-grid {
-        grid-template-columns: 1fr;
-    }
-    .photo img {
-        height: 240px;
     }
 }
