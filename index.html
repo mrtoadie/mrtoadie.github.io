@@ -15,6 +15,11 @@
                     <span>~/homelab</span>
                     <span class="path">· k3s cluster</span>
                 </div>
+                <nav class="top">
+                    <a href="index.html" class="active">/homelab</a>
+                    <a href="projects.html">/projects</a>
+                    <a href="skills.html">/skills</a>
+                </nav>
                 <div class="dots">
                     <div class="dot dotleft"></div>
                     <div class="dot dotmiddle"></div>
@@ -22,11 +27,6 @@
                 </div>
             </header>
             <main>
-                <nav class="top">
-                    <a href="index.html">/homelab</a>
-                    <!--<a href="incidents.html">/incidents</a>-->
-                    <a href="projects.html">/projects</a>
-                </nav>
                 <h1>/homelab</h1>
                 <div class="subtitle cursor">
                     k3s on Raspberry Pi · self-hosted, self-broken, self-fixed
@@ -38,7 +38,7 @@
                         <span>kubectl get nodes -o wide</span>
                         <span class="right" id="refresh-info">auto-refresh: 5 m</span>
                     </div>
-
+                    <!-- Cluster Stats -->
                     <div class="stats" id="stats">
                         <div class="stat">
                             <div class="k">Nodes ready</div>
@@ -119,7 +119,7 @@
                         Weil verteilte Systeme nur verteilte Probleme offenlegen. Ein einzelner Server lehrt dich Linux; vier Nodes zwingen dich, über Scheduling, Netzwerk, Quorum und Storage-Entscheidungen nachzudenken — allesamt Fragen, die in einem produktiven Kubernetes-Umfeld täglich anstehen. Und der Cluster ist nicht statisch: Nodes lassen sich jederzeit hinzufügen oder entfernen, und der nächste Ausbauschritt ist bereits geplant — zusätzliche Control-Plane-Nodes, damit der Cluster einen Node-Ausfall ohne Downtime übersteht (High Availability).
                     </div>
                 </section>
-
+                <!-- Hardware -->
                 <h2><span style="color: var(--accent)">/hardware</span></h2>
                 <section>
                     <div class="section-header">
@@ -210,7 +210,7 @@
                         </tbody>
                     </table>
                 </section>
-
+                <!-- Software -->
                 <h2 id="software">
                     <span style="color: var(--accent)">/software & tools</span>
                 </h2>
@@ -341,40 +341,19 @@
                     </div>
                 </section>
             </main>
-
+            <!-- Footer -->
             <footer>
                 <p>
-                    © 2026 <a href="https://github.com/mrtoadie" title="MrToadie @ GitHub" aria-label="MrToadie @ GitHub" target="_blank">MrToadie</a> · built with
+                    © 2026 <a href="https://github.com/mrtoadie" title="MrToadie @ GitHub" aria-label="MrToadie @ GitHub" target="_blank" rel="noopener noreferrer">MrToadie</a> · built with
                     <span class="footer-icons">
-                        <span
-                            class="ic ic-linux"
-                            role="img"
-                            aria-label="Linux"
-                            title="Linux"
-                        ></span>
-                        <span
-                            class="ic ic-music"
-                            role="img"
-                            aria-label="Music"
-                            title="Music"
-                        ></span>
-                        <span
-                            class="ic ic-guitar"
-                            role="img"
-                            aria-label="Guitar"
-                            title="Guitar"
-                        ></span>
-                        <span
-                            class="ic ic-coffee"
-                            role="img"
-                            aria-label="Coffee"
-                            title="Coffee"
-                        ></span>
+                        <span class="ic ic-linux" role="img" aria-label="Linux" title="Linux"></span>
+                        <span class="ic ic-music" role="img" aria-label="Music" title="Music"></span>
+                        <span class="ic ic-guitar" role="img" aria-label="Guitar" title="Guitar"></span>
+                        <span class="ic ic-coffee" role="img" aria-label="Coffee" title="Coffee"></span>
                     </span>
                 </p>
             </footer>
         </div>
-
         <script src="assets/js/dashboard.js" defer></script>
     </body>
 </html>

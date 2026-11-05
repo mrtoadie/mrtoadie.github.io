@@ -14,6 +14,11 @@
                     <span>~/projects</span>
                     <span class="path">· k3s cluster</span>
                 </div>
+                <nav class="top">
+                    <a href="index.html">/homelab</a>
+                    <a href="projects.html" class="active">/projects</a>
+                    <a href="skills.html">/skills</a>
+                </nav>
                 <div class="dots">
                     <div class="dot dotleft"></div>
                     <div class="dot dotmiddle"></div>
@@ -22,12 +27,6 @@
             </header>
 
             <main>
-                <nav class="top">
-                    <a href="index.html">/homelab</a>
-                    <!--<a href="incidents.html">/incidents</a>-->
-                    <a href="projects.html">/projects</a>
-                </nav>
-
                 <h1>/projects</h1>
                 <div class="subtitle cursor">
                     Open-Source Homelab & Automation Projects · self-hosted, self-broken, self-fixed
@@ -92,14 +91,17 @@
                                 </div>
                             </div>
                             <div class="project-desc">
-                                Selbst gehostetes k3s-Dashboard auf Raspberry Pi Zero 2W.
+                                Stark angepasstes Dashboard auf dem Raspberry Pi Zero 2W — Podman
+                                                                statt Docker, ~100 MB RAM Gesamtnutzung. Node-Metriken via
+                                                                SSH-Agent-Forwarding, eigene Assets, Themes und Health-Checks
+                                                                für alle Cluster-Dienste.
                             </div>
                             <div class="project-meta">
                                 <span><i class="ic ic-microchip"></i> Resources: ~100MB RAM</span>
                                 <span><i class="ic ic-check"></i> Auto-start</span>
                             </div>
                             <div class="project-links">
-                                <a href="https://github.com/mrtoadie/dynacat-custom" title="MrToadie @ GitHub" aria-label="MrToadie @ GitHub" target="_blank">GitHub ↗</a>
+                                <a href="https://github.com/mrtoadie/lab/tree/main/homelab/infra/docker/dynacat-watcher" title="MrToadie @ GitHub" aria-label="MrToadie @ GitHub" target="_blank">GitHub ↗</a>
                             </div>
                         </div>
 
@@ -115,7 +117,9 @@
                                 </div>
                             </div>
                             <div class="project-desc">
-
+                                Reine HTML/CSS/JS Website. Keine Datenbank, keine gespeicherten Daten.
+                                <a href="">homelab-collector</a> pusht alle 5 Minuten frische Cluster-Daten via GitHub API in das Repo.
+                                Die Cluster-Daten werden als "Dashboard" angezeigt.
                             </div>
                             <div class="project-meta">
                                 <span><i class="ic ic-server"></i> -</span>
@@ -133,43 +137,24 @@
                             </div>
                             <div class="project-desc">
                                 Nächste Ziele: Grafana Dashboard Templates,
-                Prometheus Alerting Rules als GitOps, NixOS für Raspberry Pis, zweite Control Plane...
+                                Prometheus Alerting Rules als GitOps, NixOS für Raspberry Pis, zweite Control Plane...
                             </div>
                         </div>
                     </div>
                 </section>
             </main>
-                <footer>
-                    <p>
-                        © 2026 <a href="https://github.com/mrtoadie" title="MrToadie @ GitHub" aria-label="MrToadie @ GitHub" target="_blank">MrToadie</a> · built with
-                        <span class="footer-icons">
-                            <span
-                                class="ic ic-linux"
-                                role="img"
-                                aria-label="Linux"
-                                title="Linux"
-                            ></span>
-                            <span
-                                class="ic ic-music"
-                                role="img"
-                                aria-label="Music"
-                                title="Music"
-                            ></span>
-                            <span
-                                class="ic ic-guitar"
-                                role="img"
-                                aria-label="Guitar"
-                                title="Guitar"
-                            ></span>
-                            <span
-                                class="ic ic-coffee"
-                                role="img"
-                                aria-label="Coffee"
-                                title="Coffee"
-                            ></span>
-                        </span>
-                    </p>
-                </footer>
+            <!-- Footer -->
+            <footer>
+                <p>
+                    © 2026 <a href="https://github.com/mrtoadie" title="MrToadie @ GitHub" aria-label="MrToadie @ GitHub" target="_blank" rel="noopener noreferrer">MrToadie</a> · built with
+                    <span class="footer-icons">
+                        <span class="ic ic-linux" role="img" aria-label="Linux" title="Linux"></span>
+                        <span class="ic ic-music" role="img" aria-label="Music" title="Music"></span>
+                        <span class="ic ic-guitar" role="img" aria-label="Guitar" title="Guitar"></span>
+                        <span class="ic ic-coffee" role="img" aria-label="Coffee" title="Coffee"></span>
+                    </span>
+                </p>
+            </footer>
             </div>
         </body>
     </html>
