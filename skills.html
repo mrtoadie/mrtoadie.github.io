@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Skills · MrToadie</title>
+        <link rel="stylesheet" href="assets/css/style.css" />
+        <link rel="icon" href="assets/favico.png" sizes="48x48" />
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <div class="term-title">
+                    <span>~/skills</span>
+                    <span class="path">· whoami</span>
+                </div>
+                <nav class="top">
+                    <a href="index.html">/homelab</a>
+                    <a href="projects.html">/projects</a>
+                    <a href="skills.html" class="active">/skills</a>
+                </nav>
+                <div class="dots">
+                    <div class="dot dotleft"></div>
+                    <div class="dot dotmiddle"></div>
+                    <div class="dot dotright"></div>
+                </div>
+            </header>
+            <main>
+                <h1>/skills</h1>
+                <div class="subtitle cursor">
+                    what I run · what I build · what I break and fix
+                </div>
+                <!-- Intro -->
+                <section>
+                    <div class="section-header">
+                        <span>cat README.md | head -5</span>
+                    </div>
+                    <p class="intro-text">
+                        Computing since the Intel 386 era. Cloud engineer with a Microsoft 365 background by day,
+                        Linux and open-source homelab operator by night. The
+                        homelab is not a hobby farm — it is where I practice
+                        the same problems production environments face:
+                        scheduling, storage, backup strategy, monitoring and
+                        incident recovery, just on Raspberry Pis and a
+                        tighter power budget.
+                    </p>
+                </section>
+                <!-- Infrastructure & Containers -->
+                <h2>
+                    <span style="color: var(--accent)">/infrastructure</span>
+                </h2>
+                <section>
+                    <div class="section-header">
+                        <span>kubectl get skills -o wide</span>
+                    </div>
+
+                    <div class="skill-list">
+                        <div class="skill-row">
+                            <div class="skill-name">Kubernetes / k3s</div>
+                            <div class="skill-evidence">
+                                4-node production-style cluster on Raspberry
+                                Pi: workloads, ingress, RBAC, ServiceAccounts,
+                                Pod Security Standards, PDBs, Node Affinity
+                                <a href="index.html">→ /homelab</a>
+                            </div>
+                        </div>
+
+                        <div class="skill-row">
+                            <div class="skill-name">Helm</div>
+                            <div class="skill-evidence">
+                                kube-prometheus-stack deployment, custom
+                                ServiceMonitors, template debugging (float64
+                                timestamp comparisons included)
+                            </div>
+                        </div>
+
+                        <div class="skill-row">
+                            <div class="skill-name">Velero</div>
+                            <div class="skill-evidence">
+                                Backup schedules, retention policies, tested
+                                restores, MinIO as S3 target
+                                <a href="projects.html">→ velero-manager</a>
+                            </div>
+                        </div>
+
+                        <div class="skill-row">
+                            <div class="skill-name">
+                                Docker &amp; Podman
+                            </div>
+                            <div class="skill-evidence">
+                                Compose stacks, buildx multi-platform builds,
+                                static Go binaries in containers, rootless
+                                Podman evaluation on constrained hardware
+                            </div>
+                        </div>
+
+                        <div class="skill-row">
+                            <div class="skill-name">NFS / Storage</div>
+                            <div class="skill-evidence">
+                                Dynamic PersistentVolumes via
+                                nfs-subdir-external-provisioner, XFS on
+                                USB-SSD, storage trade-off analysis
+                                (local-path vs. NFS)
+                            </div>
+                        </div>
+
+                        <div class="skill-row">
+                            <div class="skill-name">TLS &amp; Ingress</div>
+                            <div class="skill-evidence">
+                                Traefik ingress, cert-manager
+                                ClusterIssuers, internal CA vs. public CA
+                                decisions for *.local domains
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Development & Automation -->
+                <h2>
+                    <span style="color: var(--accent)">/development</span>
+                </h2>
+                <section>
+                    <div class="section-header">
+                        <span>#!/bin/bash</span>
+                    </div>
+
+                    <div class="skill-list">
+                        <div class="skill-row">
+                            <div class="skill-name">Go</div>
+                            <div class="skill-evidence">
+                                Interactive CLIs like a Velero backup manager, a certificate checker and an QEMU configuration tool
+                                <a href="projects.html">→ projects</a>
+                            </div>
+                        </div>
+
+                        <div class="skill-row">
+                            <div class="skill-name">Bash</div>
+                            <div class="skill-evidence">
+                                Production-ish scripts with set -euo
+                                pipefail, SSH orchestration, jq pipelines,
+                                GitHub REST API automation, systemd timers
+                                <a href="index.html">→ /watcher</a>
+                            </div>
+                        </div>
+
+                        <div class="skill-row">
+                            <div class="skill-name">Ansible</div>
+                            <div class="skill-evidence">
+                                Playbooks for cross-node package
+                                synchronization, fleet fact collection,
+                                Galaxy collection management
+                            </div>
+                        </div>
+
+                        <div class="skill-row">
+                            <div class="skill-name">
+                                HTML / CSS / JavaScript
+                            </div>
+                            <div class="skill-evidence">
+                                This site: zero frameworks, vanilla JS,
+                                responsive dark theme, live GitHub Pages
+                                dashboard fed by API-pushed JSON
+                                <a href="index.html">→ /homelab</a>
+                            </div>
+                        </div>
+
+                        <div class="skill-row">
+                            <div class="skill-name">Git</div>
+                            <div class="skill-evidence">
+                                Multi-provider workflow (GitHub, Codeberg,
+                                Forgejo), history rewriting with
+                                git-filter-repo, secret scanning response
+                            </div>
+                        </div>
+                        <div class="skill-row">
+                            <div class="skill-name">TUI &amp; CLIs</div>
+                            <div class="skill-evidence">
+                                k9s as daily driver for cluster introspection, Freelens for visualization, terminal-first workflows everywhere
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Operating Systems -->
+                <h2>
+                    <span style="color: var(--accent)">/operating systems</span>
+                </h2>
+                <section>
+                    <div class="section-header">
+                        <span>uname -a</span>
+                    </div>
+
+                    <div class="skill-list">
+                        <div class="skill-row">
+                            <div class="skill-name">Arch Linux</div>
+                            <div class="skill-evidence">
+                                Daily driver for years — rolling release, kernel pinning after regressions, pacman surgery when needed
+                            </div>
+                        </div>
+
+                        <div class="skill-row">
+                            <div class="skill-name">Raspberry Pi OS / Debian</div>
+                            <div class="skill-evidence">
+                                All cluster nodes, from /boot overlays to
+                                cgroup memory settings for Kubernetes
+                            </div>
+                        </div>
+
+                        <div class="skill-row">
+                            <div class="skill-name">NixOS</div>
+                            <div class="skill-evidence">
+                                Declarative configuration evaluation, ARM
+                                image deployment, immutable-OS comparison
+                                studies
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Virtualization & On-Prem -->
+                <h2>
+                    <span style="color: var(--accent)">/virtualization &amp; on-prem</span>
+                </h2>
+                <section>
+                    <div class="section-header">
+                        <span>virsh list --all</span>
+                    </div>
+
+                    <div class="skill-list">
+                        <div class="skill-row">
+                            <div class="skill-name">KVM / QEMU / libvirt</div>
+                            <div class="skill-evidence">
+                                VM lab for evaluation and testing: NixOS trials,
+                                distro comparisons, cluster experiments — snapshot,
+                                try, roll back, no production touched
+                            </div>
+                        </div>
+
+                        <div class="skill-row">
+                            <div class="skill-name">Windows Server</div>
+                            <div class="skill-evidence">
+                                On-prem experience from AD/DS, DNS/DHCP to classic
+                                file services — the ground floor under the M365 cloud
+                                world I work in daily
+                            </div>
+                        </div>
+
+                        <div class="skill-row">
+                            <div class="skill-name">Ubuntu Server</div>
+                            <div class="skill-evidence">
+                                Classic bare-metal Linux servers running NFS shares, backups, and monitoring (Zabbix)
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Professional background -->
+                <h2>
+                    <span style="color: var(--accent)">/day job</span>
+                </h2>
+                <section>
+                    <div class="section-header">
+                        <span>whoami --work</span>
+                    </div>
+                    <p class="intro-text">
+                        By day I work as a cloud engineer in the Microsoft 365
+                        ecosystem. The homelab is deliberately the opposite
+                        stack — and that combination is the point: I know
+                        both the managed-cloud world and what happens
+                        underneath it.
+                    </p>
+                </section>
+                <!-- Learning in public — incidents as credentials -->
+                <h2>
+                    <span style="color: var(--accent)">/battle scars</span>
+                </h2>
+                <section>
+                    <div class="section-header">
+                        <span>dmesg | grep -i lesson</span>
+                    </div>
+                    <p class="intro-text">
+                        Things that broke and what they taught me:
+                    </p>
+                    <div class="skill-list">
+                        <div class="skill-row">
+                            <div class="skill-name">etcd on SD cards</div>
+                            <div class="skill-evidence">
+                                Continuous writes corrupt consumer flash —
+                                moved cluster data to USB-SSD with XFS
+                            </div>
+                        </div>
+                        <div class="skill-row">
+                            <div class="skill-name">Node rejoins</div>
+                            <div class="skill-evidence">
+                                k3s token mismatches and config drift after
+                                updates — from re-registration to full
+                                reimaging as last resort
+                            </div>
+                        </div>
+                        <div class="skill-row">
+                            <div class="skill-name">Exposed secrets</div>
+                            <div class="skill-evidence">
+                                GitGuardian alert on a Kubernetes JWT —
+                                history rewrite, secret scanning, least-privilege ServiceAccounts since
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+            <!-- Footer -->
+            <footer>
+                <p>
+                    © 2026 <a href="https://github.com/mrtoadie" title="MrToadie @ GitHub" aria-label="MrToadie @ GitHub" target="_blank" rel="noopener noreferrer">MrToadie</a> · built with
+                    <span class="footer-icons">
+                        <span class="ic ic-linux" role="img" aria-label="Linux" title="Linux"></span>
+                        <span class="ic ic-music" role="img" aria-label="Music" title="Music"></span>
+                        <span class="ic ic-guitar" role="img" aria-label="Guitar" title="Guitar"></span>
+                        <span class="ic ic-coffee" role="img" aria-label="Coffee" title="Coffee"></span>
+                    </span>
+                </p>
+            </footer>
+        </div>
+    </body>
+</html>
