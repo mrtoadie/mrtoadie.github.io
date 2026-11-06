@@ -147,7 +147,24 @@ a:hover {
 .ic-nightswatch {
     --i: url("../icons/nightswatch.svg");
 }
-
+.ic-nixos {
+    --i: url("../icons/nixos.svg");
+}
+.ic-raspberry {
+    --i: url("../icons/raspberry.svg");
+}
+.ic-raspberrypi {
+    --i: url("../icons/raspberrypi.svg");
+}
+.ic-go {
+    --i: url("../icons/go.svg");
+}
+.ic-arch {
+    --i: url("../icons/arch.svg");
+}
+.ic-bash {
+    --i: url("../icons/bash.svg");
+}
 /* ---------- Terminal header (sticky) ---------- */
 header {
     display: flex;
