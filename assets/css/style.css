@@ -692,6 +692,18 @@ footer {
     opacity: 0.55;
     border-style: dashed;
 }
+.project-card ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.project-card ul li::before {
+    content: "$ ";
+    color: var(--green);
+}
+.project-card ul li::marker {
+    color: var(--accent);
+}
 .project-header {
     display: flex;
     justify-content: space-between;
