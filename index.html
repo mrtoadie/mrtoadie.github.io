@@ -35,6 +35,51 @@
                 <div class="subtitle cursor">
                     k3s on Raspberry Pi · self-hosted, self-broken, self-fixed
                 </div>
+                <h2><span style="color: var(--accent)">/k3s cluster</span></h2>
+                <section>
+                    <div class="section-header">
+                        <span>kubectl get nodes -o wide</span>
+                        <span class="right" id="refresh-info">auto-refresh: 5 m</span>
+                    </div>
+                    <!-- Cluster Stats -->
+                    <div class="stats" id="stats">
+                        <div class="stat">
+                            <div class="k">Nodes ready</div>
+                            <div class="v loading">lade…</div>
+                        </div>
+                        <div class="stat">
+                            <div class="k">Pods running</div>
+                            <div class="v">—</div>
+                        </div>
+                        <div class="stat">
+                            <div class="k">Namespaces</div>
+                            <div class="v">—</div>
+                        </div>
+                        <div class="stat">
+                            <div class="k">Deployments</div>
+                            <div class="v">—</div>
+                        </div>
+                    </div>
+
+                    <div class="node-grid" id="node-metrics">
+                        <p class="loading">Cluster-Daten werden geladen…</p>
+                    </div>
+
+                    <div class="demo-note" id="demo-note">
+                        Demo-Daten — <code>data/cluster.json</code> war nicht
+                        erreichbar. Auf der Live-Seite erscheinen hier die
+                        echten Cluster-Werte.
+                    </div>
+                </section>
+                <!-- Storage -->
+                <h2><span style="color: var(--accent)">/storage</span></h2>
+                <section>
+                    <div class="section-header">
+                        <span>df -h /mnt/clusterdata</span>
+                        <span class="right">XFS · USB-NVMe</span>
+                    </div>
+                    <div class="storage-card" id="usb-storage-card"></div>
+                </section>
                 <!-- Where does the data come from? -->
                 <h2><span style="color: var(--accent)">/data flow</span></h2>
                 <section>
@@ -98,51 +143,6 @@
                         </pre>
                     </div>
                 </section>
-                <h2><span style="color: var(--accent)">/k3s cluster</span></h2>
-                <section>
-                    <div class="section-header">
-                        <span>kubectl get nodes -o wide</span>
-                        <span class="right" id="refresh-info">auto-refresh: 5 m</span>
-                    </div>
-                    <!-- Cluster Stats -->
-                    <div class="stats" id="stats">
-                        <div class="stat">
-                            <div class="k">Nodes ready</div>
-                            <div class="v loading">lade…</div>
-                        </div>
-                        <div class="stat">
-                            <div class="k">Pods running</div>
-                            <div class="v">—</div>
-                        </div>
-                        <div class="stat">
-                            <div class="k">Namespaces</div>
-                            <div class="v">—</div>
-                        </div>
-                        <div class="stat">
-                            <div class="k">Deployments</div>
-                            <div class="v">—</div>
-                        </div>
-                    </div>
-
-                    <div class="node-grid" id="node-metrics">
-                        <p class="loading">Cluster-Daten werden geladen…</p>
-                    </div>
-
-                    <div class="demo-note" id="demo-note">
-                        Demo-Daten — <code>data/cluster.json</code> war nicht
-                        erreichbar. Auf der Live-Seite erscheinen hier die
-                        echten Cluster-Werte.
-                    </div>
-                </section>
-                <!-- Storage -->
-                <h2><span style="color: var(--accent)">/storage</span></h2>
-                <section>
-                    <div class="section-header">
-                        <span>df -h /mnt/clusterdata</span>
-                        <span class="right">XFS · USB-NVMe</span>
-                    </div>
-                    <div class="storage-card" id="usb-storage-card"></div>
-                </section>
                 <!-- Watcher -->
                 <h2><span style="color: var(--accent)">/watcher</span></h2>
                 <section>
@@ -176,12 +176,12 @@
                     </div>
                     <!-- Notes -->
                     <div class="hw-note">
-                        <strong>Why use a additinal USB-SSD?</strong>
+                        <strong>Why use an extra USB-SSD?</strong><br>
                         SD cards are designed for read-heavy workloads, not for continuous writing. Kubernetes writes continuously to its database (etcd) — precisely the kind of usage that causes SD cards to become corrupted. That is why all data is stored on a USB SSD using XFS. The SD card only hosts the operating system; it does not contain any cluster or workload data.
                     </div>
 
                     <div class="hw-note">
-                        <strong>Why use Raspberry Pis instead of a home server?</strong>
+                        <strong>Why use Raspberry Pis instead of a home server?</strong><br>
                         Because distributed systems merely reveal distributed problems. A single server teaches you Linux; four nodes force you to think about scheduling, networking, quorum and storage decisions — all issues that arise on a daily basis in a production Kubernetes environment. And the cluster isn’t static: nodes can be added or removed at any time, and the next expansion phase is already planned — additional control-plane nodes to ensure the cluster can withstand a node failure without downtime (high availability).
                     </div>
                 </section>
