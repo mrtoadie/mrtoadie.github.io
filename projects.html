@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -175,7 +175,7 @@
                             <div class="project-desc">
                                 Pure HTML/CSS/JS — no database, no stored data.
                                 <a href="https://github.com/mrtoadie/homelab-collector" target="_blank" rel="noopener noreferrer">homelab-collector</a>
-                                pushes fresh cluster data to the repository via the <b>GitHub API</b> every 5 minutes,
+                                pushes fresh cluster data to the repository via the <cide>GitHub API</cide> every 5 minutes,
                                 and the client renders it directly as a live dashboard.
                             </div>
                             <div class="project-meta">
@@ -196,7 +196,7 @@
                                 <ul>
                                     <li>Grafana dashboard templates</li>
                                     <li>Prometheus alerting rules</li>
-                                    <li><b>NixOS</b> for Raspberry Pis</li>
+                                    <li><code>NixOS</code> for Raspberry Pis</li>
                                     <li>Longhorn block storage</li>
                                     <li>second <b>control plane</b></li>
                                     <li>...</li>
@@ -214,11 +214,11 @@
                     </div>
                     <div class="hw-note">
                         <strong>Why use Podman rather than Docker for Dynacat?</strong><br>
-                            Docker comes with a central daemon that runs as root — on a device
+                            <code>Docker</code> comes with a central daemon that runs as root — on a device
                             with 512 MB of RAM, this is a complete waste, and the daemon also presents a
-                            vulnerability. <b>Podman</b> runs daemon-free and rootless: containers start as
+                            vulnerability. <code>Podman</code> runs daemon-free and rootless: containers start as
                             normal systemd user services, saving resources and isolating privileges. On a
-                            Pi Zero, every megabyte counts. There’s still enough headroom to run <b>Caddy and Unbound</b> on the Zero as well.
+                            Pi Zero, every megabyte counts. There’s still enough headroom to run <code>Caddy</code> and <code>Unbound</code> on the Zero as well.
                     </div>
                 </section>
 
@@ -230,12 +230,12 @@
                     </div>
                     <div class="hw-note">
                         <strong>Why velero-manager?</strong><br>
-                            <b>Velero</b> is powerful, but so is its CLI: creating schedules, distinguishing manual
+                            <code>Velero</code> is powerful, but so is its CLI: creating schedules, distinguishing manual
                             backups from scheduled ones, selecting the correct namespace —
-                            all of this requires <b>YAML</b> or long command-line flags. It is precisely these repetitive tasks that the
+                            all of this requires <code>YAML</code> or long command-line flags. It is precisely these repetitive tasks that the
                             Manager has banished to an interactive TUI: navigating menus instead of reading documentation,
-                            making selections instead of guessing flags. Built in <b>Go with Charm Huh</b> — deliberately chosen over
-                            <b>Bubble Tea</b>, because the dialogues are meant to feel like a native CLI,
+                            making selections instead of guessing flags. Built in <code>Go with Charm Huh</code> — deliberately chosen over
+                            <code>Bubble Tea</code>, because the dialogues are meant to feel like a native CLI,
                             not like an app in the terminal.
                     </div>
                 </section>
@@ -248,9 +248,9 @@
                     </div>
                     <div class="hw-note">
                         <strong>Why does the Collector publish via GitHub?</strong><br>
-                            Because <b>GitHub Pages</b> is the antithesis of a managed server: no
+                            Because <code>GitHub Pages</code> is the antithesis of a managed server: no
                             runtime, no database, nothing that needs patching. The cluster
-                            pushes a single <b>JSON file</b> via the API; the browser retrieves it using
+                            pushes a single <code>JSON file</code> via the API; the browser retrieves it using
                             <b>fetch</b> — static hosting as a live stream. If the cluster goes down,
                             the page still displays the last known state, complete with a timestamp.
                             The infrastructure that transports the data cannot crash,
