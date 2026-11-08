@@ -7,6 +7,10 @@
         <link rel="stylesheet" href="assets/css/style.css" />
         <script src="assets/js/lightbox.js" defer></script>
         <link rel="icon" href="assets/favico.png" sizes="48x48" />
+        <script type="module">
+            import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+            mermaid.initialize({ startOnLoad: true });
+        </script>
     </head>
     <body>
         <div class="container">
@@ -31,7 +35,69 @@
                 <div class="subtitle cursor">
                     k3s on Raspberry Pi · self-hosted, self-broken, self-fixed
                 </div>
+                <!-- Where does the data come from? -->
+                <h2><span style="color: var(--accent)">/data flow</span></h2>
+                <section>
+                    <div class="section-header">
+                        <span>curl -s data/cluster.json | jq '.timestamp'</span>
+                        <span class="right">refresh: every 5 min</span>
+                    </div>
 
+                    <div class="hw-note">
+                        <strong>Where does the dashboard get its data?</strong>
+                        No server, no database — this is a static site. A collector on the
+                        control-plane node queries the cluster via kubectl (nodes, pods,
+                        deployments) and polls each node's host metrics (disk, temperature,
+                        load) over SSH — then pushes a single JSON file to this repository
+                        through the GitHub API, every 5 minutes. Your browser fetches it and
+                        renders the cards above. If the cluster goes down, this page keeps
+                        showing the last known state — and the timestamp tells you how fresh
+                        it is.
+                        <a href="projects.html">More about the pipeline →</a>
+                    </div>
+
+                    <!-- Mermaid sequence diagram: the collection pipeline -->
+                    <div class="pipeline-diagram">
+                        <pre class="mermaid">
+                ---
+                config:
+                  theme: base
+                  themeVariables:
+                    background: 'transparent'
+                    actorBkg: '#161b22'
+                    actorBorder: '#58a6ff'
+                    actorTextColor: '#e6edf3'
+                    signalColor: '#e6edf3'
+                    signalTextColor: '#e6edf3'
+                    activationBkgColor: '#21262d'
+                    activationBorderColor: '#58a6ff'
+                    sequenceNumberColor: '#0d1117'
+                    loopTextColor: '#8b949e'
+                    noteBkgColor: '#21262d'
+                    noteTextColor: '#e6edf3'
+                    noteBorderColor: '#30363d'
+                ---
+                sequenceDiagram
+                    autonumber
+                    participant W as control plane<br>(collector)
+                    participant N as nodes
+                    participant GH as GitHub API
+                    participant B as browser
+
+                    loop every 5 minutes
+                        W->>W: kubectl - nodes, pods, deployments
+                        W->>N: SSH - disk, temp, load, uptime
+                        N-->>W: host metrics
+                        W->>W: build cluster.json
+                        W->>GH: PUT data/cluster.json
+                    end
+
+                    GH-->>B: static file via GitHub Pages
+                    B->>B: fetch + render dashboard
+                    Note over W,B: If the cluster dies,<br>the last known state stays online
+                        </pre>
+                    </div>
+                </section>
                 <h2><span style="color: var(--accent)">/k3s cluster</span></h2>
                 <section>
                     <div class="section-header">
@@ -73,7 +139,7 @@
                 <section>
                     <div class="section-header">
                         <span>df -h /mnt/clusterdata</span>
-                        <span class="right">XFS · USB-NVMe an winterfell</span>
+                        <span class="right">XFS · USB-NVMe</span>
                     </div>
                     <div class="storage-card" id="usb-storage-card"></div>
                 </section>
@@ -246,8 +312,7 @@
                         <div class="tool-card">
                             <div class="tool-name">Caddy</div>
                             <div class="tool-desc">
-                                Reverse Proxy on a Raspberry Pi Zero (Dynacat
-                                exposure)
+                                Reverse Proxy on a Raspberry Pi Zero (Dynacat exposure)
                             </div>
                             <div class="tool-reason">
                                 "For local domains such as watcher.local, Caddy uses self-signed certificates. This is very resource-efficient and perfect for a Pi Zero."
@@ -264,28 +329,26 @@
                                 ServiceMonitors
                             </div>
                             <div class="tool-reason">
-                                "kube-prometheus-stack via Helm. Eigene Dashboards für Velero-Metriken."
+                                "kube-prometheus-stack deployed via Helm. Custom dashboards for Velero metrics.""
                             </div>
                         </div>
                         <div class="tool-card">
                             <div class="tool-name">Dynacat</div>
                             <div class="tool-desc">
-                                Dashboard auf Raspberry Pi Zero (Podman)
+                                Dashboard on Raspberry Pi Zero (Podman)
                             </div>
                             <div class="tool-reason">
-                                "Leichtgewichtiges aber sehr anpassbares Dashboard.
-                                Node-Metriken werden via Agent übermittelt."
+                                "A lightweight yet highly customisable dashboard.
+                                Node metrics are transmitted via an agent."
                             </div>
                         </div>
                         <div class="tool-card">
                             <div class="tool-name">Watcher Heartbeat</div>
                             <div class="tool-desc">
-                                Eigenes Heartbeat-Script, pusht alle 5 Minuten
-                                 Watcher-Status
+                                Custom heartbeat script, sends a signal every 5 minutes Watcher status.
                             </div>
                             <div class="tool-reason">
-                                "Wer überwacht den Wächter? Ein systemd-Timer
-                                und ein JSON-File auf GitHub."
+                                "Who watches the watchman? A systemd timer and a JSON file on GitHub."
                             </div>
                         </div>
                     </div>
@@ -298,7 +361,7 @@
                                 Git Hosting
                             </div>
                             <div class="tool-reason">
-                                "Forgejo für lokale, private Repos und Backup für GitHub / Codeberg."
+                                "Forgejo for local, private repositories and backups for GitHub / Codeberg."
                             </div>
                         </div>
                         <div class="tool-card">
@@ -307,7 +370,7 @@
                                 Playbooks / Configuration Management
                             </div>
                             <div class="tool-reason">
-                                "System-Updates, abgleich von Git-Repos, Analysen und Maintenance."
+                                "System updates, synchronising Git repositories, analyses and maintenance."
                             </div>
                         </div>
                     </div>
@@ -317,24 +380,23 @@
                         <div class="tool-card">
                             <div class="tool-name">Velero + MinIO</div>
                             <div class="tool-desc">
-                                Kubernetes Backup/Restore auf lokales
-                                S3-kompatibles Ziel
+                                Kubernetes backup/restore to a local
+                                S3-compatible destination
                             </div>
                             <div class="tool-reason">
-                                "Backup von Metadaten + PVs. Restore getestet.
-                                MinIO läuft in Docker auf Desktop, nicht im
-                                Cluster."
+                                "Backup of metadata and PVs. Restore tested.
+                                MinIO is running in Docker on a desktop, not in a cluster."
                             </div>
                         </div>
                         <div class="tool-card">
                             <div class="tool-name">NFS Subdir Provisioner</div>
                             <div class="tool-desc">
-                                Dynamische PersistentVolumes über NFS
+                                Dynamic PersistentVolumes via NFS
                             </div>
                             <div class="tool-reason">
-                                "Statt local-path: Daten bleiben erhalten, wenn
-                                Pod neu geplant wird. Performance ausreichend
-                                für kleine DBs."
+                                "Instead of <b>local-path</b>: Data is retained when
+                                the <b>pod</b> is rescheduled. Performance is adequate
+                                for small databases."
                             </div>
                         </div>
                     </div>

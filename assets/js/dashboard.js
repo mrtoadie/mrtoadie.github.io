@@ -331,9 +331,9 @@
 
     var detail =
       percent === null
-        ? "keine Daten im Feed"
+        ? "No data in the feed"
         : Math.round(percent) +
-          "% belegt · NFS export aktiv" +
+          "% in use" +
           (isFallback ? " (Rootfs-Fallback)" : "");
 
     el.innerHTML =
