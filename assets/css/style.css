@@ -970,6 +970,47 @@ footer {
 pre.mermaid:not([data-processed]) {
     visibility: hidden;
 }
+/* LIVE Badge */
+.feed-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid #30363d;
+}
+.feed-badge .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+.feed-badge.live {
+    color: #3fb950;
+    border-color: rgba(63, 185, 80, 0.4);
+}
+.feed-badge.live .dot {
+    background: #3fb950;
+    animation: pulse 2s infinite;
+}
+.feed-badge.demo {
+    color: #d29922;
+    border-color: rgba(210, 153, 34, 0.4);
+}
+.feed-badge.demo .dot {
+    background: #d29922;
+}
+@keyframes pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.35;
+    }
+}
 /* ---------- Responsive ----------
  *   Mobile-first inverted logic fixed: desktop keeps the defaults, phones
  *   get compact overrides below. */

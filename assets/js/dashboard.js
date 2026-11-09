@@ -4,7 +4,7 @@
   /* Data contract for data/cluster.json:
      {
        timestamp: "2026-10-24T08:12:00Z",
-       nodes: [{ name, role, status, version }],
+       nodes: [{ name, role, status, version, age }],
        resource_usage: { "winterfell": {
          cpu_percent, cpu_millicores,
          mem_percent, mem_mib,
@@ -13,13 +13,13 @@
          temp_c, load1, uptime_s, pods
        }},
        pods: { total, running, pending },
-       namespaces, deployments, services
+       namespaces, deployments, services,
+       collector_error  <- set when collect.sh could not reach the API
      }
 
-     Everything lives in one IIFE on purpose: the previous version declared
-     load() twice (inside and outside the closure), and the outer copy could
-     not see SOURCE / REFRESH_MS. Same trap hit loadWatcherStatus(), which
-     called the closure-local ago(). Keeping one scope removes both bugs. */
+     Everything lives in one IIFE on purpose: previous versions declared
+     load() twice (inside and outside the closure), and the outer copy
+     could not see SOURCE / REFRESH_MS. Keeping one scope removes that. */
 
   var SOURCE = "data/cluster.json";
   var WATCHER_SOURCE = "data/watcher.json";
@@ -155,26 +155,6 @@
     return m + " Min.";
   }
 
-  function gauge(p, label) {
-    var c = ringClass(p);
-    var txt = p === null ? "–" : p.toFixed(0) + "%";
-    var pct = p === null ? 0 : Math.max(0, Math.min(100, p));
-    return (
-      '<div class="gauge-wrap">' +
-      '<div class="gauge ' +
-      c +
-      '" style="--pct:' +
-      pct +
-      '"><span>' +
-      txt +
-      "</span></div>" +
-      "<small>" +
-      label +
-      "</small>" +
-      "</div>"
-    );
-  }
-
   function ago(iso) {
     var d = new Date(iso);
     if (isNaN(d.getTime())) return "–";
@@ -229,6 +209,20 @@
       };
     }
     return { lines: [], isStatic: false };
+  }
+
+  /* --------------------------- live/demo badge -------------------------- */
+
+  /* Sets the LIVE / DEMO DATA pill in the top bar. feedNote (optional)
+     goes into the title attribute, so hovering shows the failure reason
+     even when the banner below is scrolled out of view. */
+  function setFeedBadge(isDemo, feedNote) {
+    var el = document.getElementById("feed-badge");
+    if (!el) return;
+    el.className = "feed-badge " + (isDemo ? "demo" : "live");
+    el.innerHTML =
+      '<span class="dot"></span>' + (isDemo ? "DEMO DATA" : "LIVE");
+    el.title = feedNote || "";
   }
 
   /* ---------------------------- node cards ---------------------------- */
@@ -296,6 +290,26 @@
     );
   }
 
+  function gauge(p, label) {
+    var c = ringClass(p);
+    var txt = p === null ? "–" : p.toFixed(0) + "%";
+    var pct = p === null ? 0 : Math.max(0, Math.min(100, p));
+    return (
+      '<div class="gauge-wrap">' +
+      '<div class="gauge ' +
+      c +
+      '" style="--pct:' +
+      pct +
+      '"><span>' +
+      txt +
+      "</span></div>" +
+      "<small>" +
+      label +
+      "</small>" +
+      "</div>"
+    );
+  }
+
   /* --------------------------- storage card --------------------------- */
 
   /* Renders the USB-SSD block from winterfell's disk_usb value.
@@ -347,18 +361,6 @@
       '<div class="storage-detail">' +
       esc(detail) +
       "</div>";
-  }
-
-  /* --------------------------- watcher badge -------------------------- */
-
-  function renderWatcher(w) {
-    var el = document.getElementById("watcher-status");
-    if (!el) return;
-    var age = Date.now() - new Date(w.timestamp).getTime();
-    var online = age < WATCHER_MAX_AGE_MS;
-    el.className = "watcher-badge " + (online ? "online" : "offline");
-    el.textContent =
-      "watcher " + (online ? "online" : "offline (" + ago(w.timestamp) + ")");
   }
 
   /* ------------------------------ render ------------------------------ */
@@ -415,6 +417,7 @@
       if (feedNote) note.textContent = feedNote;
     }
 
+    setFeedBadge(isDemo, feedNote);
     renderStorageUsage(d);
   }
 
@@ -428,9 +431,16 @@
       })
       .then(function (data) {
         /* Feed written by collect.sh in error mode: collector_error is set
-           and nodes is empty. Treat it exactly like a missing file. */
+           and nodes is empty. Treat it exactly like a missing file.
+           The feed timestamp tells the visitor how long the outage has
+           been visible in the feed. */
         if (data && data.collector_error) {
-          throw new Error("collector: " + data.collector_error);
+          throw new Error(
+            "collector: " +
+              data.collector_error +
+              " · no live data since " +
+              ago(data.timestamp),
+          );
         }
         if (!data || !Array.isArray(data.nodes) || data.nodes.length === 0) {
           throw new Error("empty feed");
@@ -447,25 +457,9 @@
       });
   }
 
-  function loadWatcherStatus() {
-    fetch(WATCHER_SOURCE + "?t=" + Date.now(), { cache: "no-store" })
-      .then(function (r) {
-        if (!r.ok) throw new Error("HTTP " + r.status);
-        return r.json();
-      })
-      .then(renderWatcherCard) // <-- ÄNDERN: statt renderWatcher
-      .catch(function () {
-        /* keep the previous badge state */
-      });
-  }
-
-  load();
-  loadWatcherStatus();
-  setInterval(load, REFRESH_MS);
-  setInterval(loadWatcherStatus, REFRESH_MS);
+  /* --------------------------- watcher card --------------------------- */
 
   var WATCHER_SPECS = ["Raspberry Pi Zero 2W · 512 MB RAM"];
-  var WATCHER_MAX_AGE_MS = 30 * 60 * 1000;
 
   function watcherCard(w) {
     var age = Date.now() - new Date(w.timestamp).getTime();
@@ -530,7 +524,25 @@
     if (!el) return;
     el.innerHTML = watcherCard(w);
   }
-  // --- ENDE EINFÜGUNG ---
+
+  function loadWatcherStatus() {
+    fetch(WATCHER_SOURCE + "?t=" + Date.now(), { cache: "no-store" })
+      .then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
+      .then(renderWatcherCard)
+      .catch(function () {
+        /* keep the previous badge state */
+      });
+  }
+
+  /* ------------------------------ start ------------------------------- */
+
+  load();
+  loadWatcherStatus();
+  setInterval(load, REFRESH_MS);
+  setInterval(loadWatcherStatus, REFRESH_MS);
 })();
 
 /* Fill the node-age cells in the static hardware table. */
