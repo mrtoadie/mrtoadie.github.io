@@ -801,7 +801,6 @@ footer {
     white-space: nowrap;
     font-size: 0.85rem;
 }
-
 /* ---------- Watcher badge ---------- */
 .watcher-badge {
     font-size: 0.75rem;
@@ -820,7 +819,6 @@ footer {
     border-color: rgba(var(--red-rgb), 0.35);
     background: rgba(var(--red-rgb), 0.12);
 }
-
 /* ---------- Photo gallery ---------- */
 .photo-grid {
     display: grid;
@@ -852,7 +850,6 @@ footer {
     border-top: 1px solid var(--border);
     line-height: 1.55;
 }
-
 /* ---------- USB-SSD storage card ---------- */
 .storage-card {
     border: 1px solid var(--border);
