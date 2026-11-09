@@ -21,7 +21,7 @@ flowchart LR
     C["k3s cluster<br/>winterfell + workers"]
     F["JSON feed<br/>data/cluster.json"]
     G["GitHub repo<br/>Pages = free CDN"]
-    B["browser<br/>vanilla JS"]
+    B["browser"]
 
     C -- "collect.sh<br/>kubectl · jq · /sys/thermal" --> F
     F -- "git push<br/>via GitHub API" --> G
@@ -51,6 +51,7 @@ The site stays fully functional even when the whole lab is powered off. That is 
 | ---------- | ---------------------------------------------------------------------------------------- |
 | Hosting    | GitHub Pages (static)                                                                    |
 | Frontend   | Vanilla HTML / CSS / JavaScript, GitHub-dark inspired theme                              |
+| Diagrams   | Mermaid.js (data flow, rendered client-side)                                             |
 | Data       | Plain JSON files in `data/`                                                              |
 | Collection | `collect.sh` — kubectl + jq + shell, systemd timers                                      |
 | Transport  | GitHub REST API commits (token auth)                                                     |
