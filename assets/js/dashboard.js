@@ -59,13 +59,12 @@
        collector_error  <- set when collect.sh could not reach the API
      }
      The watcher feed (data/watcher.json) carries host, timestamp,
-     cpu_percent, mem_percent, disk_percent, temp_c, load1, uptime_s. */
+     cpu_percent, mem_percent, disk_percent, temp_c, load1, uptime_s.
 
-<<<<<<< Updated upstream
      Everything lives in one IIFE on purpose: previous versions declared
      load() twice (inside and outside the closure), and the outer copy
      could not see SOURCE / REFRESH_MS. Keeping one scope removes that. */
-=======
+
   /*
     Helpers
   */
@@ -81,7 +80,6 @@
       }[c];
     });
   }
->>>>>>> Stashed changes
 
   /* Value -> number or null (accepts "42%" from older feeds). */
   function num(v) {
@@ -254,7 +252,6 @@
     deployments: 18,
     services: 9,
   };
-<<<<<<< Updated upstream
 
   /* ----------------------------- helpers ----------------------------- */
 
@@ -373,7 +370,6 @@
 
   /* ---------------------------- node cards ---------------------------- */
 
-=======
   /*
     Ring Gauge
   */
@@ -399,7 +395,7 @@
   /*
     Node Card
   */
->>>>>>> Stashed changes
+
   function nodeCard(n, usage) {
     var u = usage[n.name] || {};
     var cpu = num(u.cpu_percent !== undefined ? u.cpu_percent : u.cpu);
@@ -461,7 +457,6 @@
       "</article>"
     );
   }
-<<<<<<< Updated upstream
 
   function gauge(p, label) {
     var c = ringClass(p);
@@ -489,11 +484,11 @@
      Falls back to disk_percent (rootfs) when disk_usb is absent, so the
      card still shows something meaningful before collect.sh is patched.
      Bails out silently if the container is not in the markup. */
-=======
+
   /*
     Storage Card
   */
->>>>>>> Stashed changes
+
   function renderStorageUsage(data) {
     var el = document.getElementById("usb-storage-card");
     if (!el) return;
@@ -540,7 +535,6 @@
       esc(detail) +
       "</div>";
   }
-<<<<<<< Updated upstream
 
   /* ------------------------------ render ------------------------------ */
 
@@ -640,11 +634,10 @@
 
   var WATCHER_SPECS = ["Raspberry Pi Zero 2W · 512 MB RAM"];
 
-=======
   /*
     Watcher Card
   */
->>>>>>> Stashed changes
+
   function watcherCard(w) {
     var age = Date.now() - new Date(w.timestamp).getTime();
     var online = age < WATCHER_MAX_AGE_MS;
@@ -703,8 +696,7 @@
     if (!el) return;
     el.innerHTML = watcherCard(w);
   }
-<<<<<<< Updated upstream
-=======
+
   /*
     Fills the node-age cells in the static hardware table via the
     data-age attribute (name-based lookup, order-independent).
@@ -791,7 +783,6 @@
         render(DEMO, true);
       });
   }
->>>>>>> Stashed changes
 
   function loadWatcherStatus() {
     fetch(WATCHER_SOURCE + "?t=" + Date.now(), { cache: "no-store" })
@@ -805,11 +796,8 @@
       });
   }
 
-<<<<<<< Updated upstream
   /* ------------------------------ start ------------------------------- */
 
-=======
->>>>>>> Stashed changes
   load();
   loadWatcherStatus();
   setInterval(load, REFRESH_MS);
