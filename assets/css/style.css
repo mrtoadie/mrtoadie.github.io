@@ -1,3 +1,18 @@
+/* Sticky Navigation */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-radius: 14px 14px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: var(--card-alt);
+    border-bottom: 1px solid var(--border);
+}
+
 *,
 *::before,
 *::after {
@@ -69,10 +84,14 @@ a:hover {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 14px;
+<<<<<<< Updated upstream
     /* clip (NOT hidden!): overflow:hidden would create a scroll container
        and kill position:sticky in the header. clip cuts just the same,
        keeps the rounded corners, but lets the header stick. */
     overflow: clip;
+=======
+    /*overflow: hidden;*/
+>>>>>>> Stashed changes
     box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.85);
 }
 
@@ -147,6 +166,7 @@ a:hover {
 .ic-nightswatch {
     --i: url("../icons/nightswatch.svg");
 }
+<<<<<<< Updated upstream
 .ic-nixos {
     --i: url("../icons/nixos.svg");
 }
@@ -180,6 +200,10 @@ header {
     top: 0;
     z-index: 100; /* above node cards; below the lightbox (999) */
 }
+=======
+
+/* ---------- Terminal header ---------- */
+>>>>>>> Stashed changes
 .term-title {
     font-size: 0.85rem;
     color: var(--dim);
@@ -248,6 +272,11 @@ nav.top a.active {
     border-color: var(--accent);
     color: var(--accent);
     background: rgba(var(--accent-rgb), 0.1);
+}
+
+header nav.top {
+    margin: 0 0 0 auto;
+    margin-bottom: 0;
 }
 
 h1 {
@@ -1033,8 +1062,26 @@ pre.mermaid:not([data-processed]) {
         margin-bottom: 1.75rem;
     }
     header {
+        flex-wrap: wrap;
+        gap: 0.75rem 0.6rem; /* Zeilen-/Spaltenabstand im Wrap */
         padding: 0.8rem 1rem;
         flex-wrap: wrap;
+    }
+    /* Navi zwingt den Umbruch und rutscht in Zeile 2 */
+    header nav.top {
+        order: 1; /* sortiert hinter Titel + Dots */
+        flex-basis: 100%; /* volle Breite → eigene Zeile */
+        margin-left: 0; /* Desktop-Rechtsausrichtung außer Kraft */
+    }
+    /* Buttons als gleichbreite Tabs über die volle Zeile */
+    header nav.top a {
+        flex: 1;
+        text-align: center;
+        padding: 0.4rem 0.25rem;
+        font-size: 0.78rem;
+    }
+    header nav.top a:last-child {
+        margin-right: 0;
     }
     .term-title {
         font-size: 0.78rem;
@@ -1129,3 +1176,48 @@ pre.mermaid:not([data-processed]) {
         font-size: 1.3rem;
     }
 }
+<<<<<<< Updated upstream
+=======
+
+/* Photos drop to a single column on small screens */
+@media (max-width: 640px) {
+    .photo-grid {
+        grid-template-columns: 1fr;
+    }
+    .photo img {
+        height: 240px;
+    }
+}
+/* ---------- Skills page ---------- */
+.intro-text {
+    color: var(--dim);
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+}
+.skill-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.skill-row {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 0.9rem 1.1rem;
+}
+.skill-name {
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 0.3rem;
+}
+.skill-evidence {
+    font-size: 0.9rem;
+    color: var(--dim);
+    line-height: 1.55;
+}
+.skill-evidence a {
+    margin-left: 0.4rem;
+    font-size: 0.8rem;
+}
+>>>>>>> Stashed changes
