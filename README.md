@@ -1,6 +1,8 @@
 # mrtoadie.github.io
 
-> K8s on Raspberry Pi — self-hosted, self-built, self-fixed.
+![GitHub License](https://img.shields.io/github/license/mrtoadie/mrtoadie.github.io) [![Site status](https://img.shields.io/website?url=https%3A%2F%2Fmrtoadie.github.io&label=site&logo=github&logoColor=white)](https://mrtoadie.github.io) [![Last feed push](https://img.shields.io/github/last-commit/mrtoadie/mrtoadie.github.io/main?label=last%20feed%20push)](https://github.com/mrtoadie/mrtoadie.github.io/commits/main) [![Repo size](https://img.shields.io/github/repo-size/mrtoadie/mrtoadie.github.io)](https://github.com/mrtoadie/mrtoadie.github.io) [![Cluster data](https://img.shields.io/badge/data-live%20JSON-blue)](data/cluster.json) ![GitHub Repo stars](https://img.shields.io/github/stars/mrtoadie/mrtoadie.github.io?style=flat&label=Stars)
+
+# k3s on Raspberry Pi · self-hosted, self-broken, self-fixed
 
 A personal portfolio and **live homelab dashboard**, served as a fully static site on GitHub Pages — no backend, no database, no framework. Real cluster metrics from a 4-node k3s cluster are collected on-site, pushed to this repository, and rendered client-side.
 
@@ -18,7 +20,7 @@ The trick is a **push-based data pipeline**:
 ┌──────────────┐   collect.sh    ┌────────────┐   git push    ┌─────────────┐   fetch   ┌─────────┐
 │ k3s cluster  │ ──────────────► │ JSON feed  │ ────────────► │ GitHub repo │ ────────► │ browser │
 │ (winterfell  │   (jq, kubectl, │cluster.json│  (via GitHub  │  (Pages =   │           │ (vanilla │
-│  + workers)   │    /sys/thermal)│            │   API)       │  free CDN)  │           │    JS)   │
+│  + workers)   │    /sys/thermal)│            │   API)       │  )  │           │    JS)   │
 └──────────────┘                 └────────────┘               └─────────────┘           └─────────┘
 ```
 
@@ -43,7 +45,7 @@ The site stays fully functional even when the whole lab is powered off. That is 
 
 | Layer      | Choice                                                                                   |
 | ---------- | ---------------------------------------------------------------------------------------- |
-| Hosting    | GitHub Pages (static, free CDN)                                                          |
+| Hosting    | GitHub Pages (static)                                                                    |
 | Frontend   | Vanilla HTML / CSS / JavaScript, GitHub-dark inspired theme                              |
 | Data       | Plain JSON files in `data/`                                                              |
 | Collection | `collect.sh` — kubectl + jq + shell, systemd timers                                      |
