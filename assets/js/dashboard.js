@@ -363,7 +363,7 @@
 
   /* ------------------------------ render ------------------------------ */
 
-  function render(d, isDemo) {
+  function render(d, isDemo, feedNote) {
     var nodes = Array.isArray(d.nodes) ? d.nodes : [];
     var pods = d.pods || {};
     var usage = d.resource_usage || {};
@@ -410,7 +410,10 @@
     }
 
     var note = document.getElementById("demo-note");
-    if (note) note.style.display = isDemo ? "block" : "none";
+    if (note) {
+      note.style.display = isDemo ? "block" : "none";
+      if (feedNote) note.textContent = feedNote;
+    }
 
     renderStorageUsage(d);
   }
@@ -424,11 +427,23 @@
         return r.json();
       })
       .then(function (data) {
+        /* Feed written by collect.sh in error mode: collector_error is set
+           and nodes is empty. Treat it exactly like a missing file. */
+        if (data && data.collector_error) {
+          throw new Error("collector: " + data.collector_error);
+        }
+        if (!data || !Array.isArray(data.nodes) || data.nodes.length === 0) {
+          throw new Error("empty feed");
+        }
         render(data, false);
       })
       .catch(function (err) {
-        console.warn("cluster.json not found:", err.message);
-        render(DEMO, true);
+        console.warn("cluster.json unusable:", err.message);
+        render(
+          DEMO,
+          true,
+          "Live feed unavailable — showing demo data (" + err.message + ")",
+        );
       });
   }
 
