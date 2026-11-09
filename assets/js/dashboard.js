@@ -7,15 +7,16 @@
    *  Fetches data/cluster.json (published by collect.sh on the
    *  control-plane) and data/watcher.json (heartbeat pushed by the
    *  watcher Pi) and renders stats, node cards, the storage card and
-   *  the watcher card. Falls back to demo data when the feed is not
-   *  reachable (e.g. local preview or GitHub Pages cold start).
+   *  the watcher card. Falls back to demo data when the live feed is
+   *  unreachable, empty, or written in collector-error mode.
    *
    *  Layout of this file:
    *    1.  Constants & configuration
    *    2.  Helpers (escaping, formatting, icons)
    *    3.  Demo data
-   *    4.  Renderers (stats, node cards, storage, watcher, hardware)
-   *    5.  Bootstrap & polling
+   *    4.  Renderers (badge, gauges, node cards, storage, watcher)
+   *    5.  Render & load
+   *    6.  Bootstrap & polling
    *
    *  Everything lives in one IIFE on purpose: an earlier version had
    *  load() declared twice (inside and outside the closure) and the
@@ -46,7 +47,7 @@
   /* Data contract for data/cluster.json:
      {
        timestamp: "2026-10-24T08:12:00Z",
-       nodes: [{ name, role, status, version, age }],
+       nodes: [{ name, role, status, version, age, specs? }],
        resource_usage: { "winterfell": {
          cpu_percent, cpu_millicores,
          mem_percent, mem_mib,
@@ -59,15 +60,12 @@
        collector_error  <- set when collect.sh could not reach the API
      }
      The watcher feed (data/watcher.json) carries host, timestamp,
-     cpu_percent, mem_percent, disk_percent, temp_c, load1, uptime_s.
+     cpu_percent, mem_percent, disk_percent, temp_c, load1, uptime_s. */
 
-     Everything lives in one IIFE on purpose: previous versions declared
-     load() twice (inside and outside the closure), and the outer copy
-     could not see SOURCE / REFRESH_MS. Keeping one scope removes that. */
+  /* ================================================================
+   *  2. Helpers
+   * ================================================================ */
 
-  /*
-    Helpers
-  */
   /* HTML-escape anything that came from a JSON feed. */
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
@@ -174,9 +172,11 @@
     }
     return { lines: [], isStatic: false };
   }
-  /*
-    Demo data (used when the live feed is unreachable)
-  */
+
+  /* ================================================================
+   *  3. Demo data (used when the live feed is unusable)
+   * ================================================================ */
+
   var DEMO = {
     timestamp: new Date().toISOString(),
     nodes: [
@@ -253,112 +253,13 @@
     services: 9,
   };
 
-  /* ----------------------------- helpers ----------------------------- */
+  /* ================================================================
+   *  4. Renderers
+   * ================================================================ */
 
-  function esc(s) {
-    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
-      return {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;",
-      }[c];
-    });
-  }
-
-  function num(v) {
-    if (v === undefined || v === null) return null;
-    var n = parseFloat(String(v).replace("%", ""));
-    return isNaN(n) ? null : n;
-  }
-
-  function ringClass(p) {
-    if (p === null) return "na";
-    if (p >= 85) return "crit";
-    if (p >= 65) return "warn";
-    return "ok";
-  }
-
-  /* Temperature: 70 C+ critical, 60 C+ warning */
-  function tempClass(t) {
-    if (t === null) return "";
-    if (t >= 60) return "stat-warn";
-    return "";
-  }
-
-  /* Seconds -> compact string: "3 d 4 h" / "14 h 36 m" / "42 Min." */
-  function fmtUptime(sec) {
-    if (sec === null || sec < 0) return null;
-    var d = Math.floor(sec / 86400);
-    var h = Math.floor((sec % 86400) / 3600);
-    var m = Math.floor((sec % 3600) / 60);
-    if (d > 0) return d + " d " + h + " h";
-    if (h > 0) return h + " h " + m + " m";
-    return m + " Min.";
-  }
-
-  function ago(iso) {
-    var d = new Date(iso);
-    if (isNaN(d.getTime())) return "–";
-    var s = Math.floor((Date.now() - d.getTime()) / 1000);
-    if (s < 60) return "just now";
-    if (s < 3600) return Math.floor(s / 60) + " m";
-    if (s < 86400) return Math.floor(s / 3600) + " h";
-    return d.toLocaleDateString("de-DE");
-  }
-
-  function icon(id) {
-    return '<span class="ic ic-' + id + '" aria-hidden="true"></span>';
-  }
-
-  var SPEC_ICONS = [
-    [/ram|memory/, "cpu"],
-    [/ssd|hdd|usb|nvme|disk|card|xfs|ext4|btrfs|storage/, "disk"],
-  ];
-
-  function specIcon(text) {
-    var t = String(text).toLowerCase();
-    for (var i = 0; i < SPEC_ICONS.length; i++) {
-      if (SPEC_ICONS[i][0].test(t)) return SPEC_ICONS[i][1];
-    }
-    return "tag";
-  }
-
-  function specLine(iconId, text, extraClass) {
-    return (
-      '<div class="node-spec ' +
-      (extraClass || "") +
-      '">' +
-      icon(iconId) +
-      "<span>" +
-      esc(text) +
-      "</span></div>"
-    );
-  }
-
-  function resolveSpecs(n) {
-    if (Array.isArray(n.specs) && n.specs.length) {
-      return { lines: n.specs, isStatic: false };
-    }
-    var fb = SPEC_FALLBACK[n.name] || SPEC_FALLBACK["*"];
-    if (Array.isArray(fb) && fb.length) {
-      return { lines: fb, isStatic: true };
-    }
-    if (n.arch || n.os) {
-      return {
-        lines: [[n.arch, n.os].filter(Boolean).join(" · ")],
-        isStatic: false,
-      };
-    }
-    return { lines: [], isStatic: false };
-  }
-
-  /* --------------------------- live/demo badge -------------------------- */
-
-  /* Sets the LIVE / DEMO DATA pill in the top bar. feedNote (optional)
-     goes into the title attribute, so hovering shows the failure reason
-     even when the banner below is scrolled out of view. */
+  /* -------- LIVE / DEMO DATA badge in the top bar --------
+     feedNote (optional) goes into the title attribute, so hovering
+     shows the failure reason even when the banner is scrolled away. */
   function setFeedBadge(isDemo, feedNote) {
     var el = document.getElementById("feed-badge");
     if (!el) return;
@@ -368,11 +269,7 @@
     el.title = feedNote || "";
   }
 
-  /* ---------------------------- node cards ---------------------------- */
-
-  /*
-    Ring Gauge
-  */
+  /* -------- Ring gauge -------- */
   function gauge(p, label) {
     var c = ringClass(p);
     var txt = p === null ? "–" : p.toFixed(0) + "%";
@@ -392,10 +289,8 @@
       "</div>"
     );
   }
-  /*
-    Node Card
-  */
 
+  /* -------- Node card -------- */
   function nodeCard(n, usage) {
     var u = usage[n.name] || {};
     var cpu = num(u.cpu_percent !== undefined ? u.cpu_percent : u.cpu);
@@ -413,6 +308,7 @@
       specHtml += specLine(specIcon(s), s);
     });
 
+    /* Disk is deliberately NOT a text line here - it has its own gauge. */
     if (temp !== null) {
       specHtml += specLine(
         "thermometer",
@@ -458,37 +354,10 @@
     );
   }
 
-  function gauge(p, label) {
-    var c = ringClass(p);
-    var txt = p === null ? "–" : p.toFixed(0) + "%";
-    var pct = p === null ? 0 : Math.max(0, Math.min(100, p));
-    return (
-      '<div class="gauge-wrap">' +
-      '<div class="gauge ' +
-      c +
-      '" style="--pct:' +
-      pct +
-      '"><span>' +
-      txt +
-      "</span></div>" +
-      "<small>" +
-      label +
-      "</small>" +
-      "</div>"
-    );
-  }
-
-  /* --------------------------- storage card --------------------------- */
-
-  /* Renders the USB-SSD block from winterfell's disk_usb value.
-     Falls back to disk_percent (rootfs) when disk_usb is absent, so the
-     card still shows something meaningful before collect.sh is patched.
-     Bails out silently if the container is not in the markup. */
-
-  /*
-    Storage Card
-  */
-
+  /* -------- USB-SSD storage card --------
+     Renders from winterfell's disk_usb value. Falls back to
+     disk_percent (rootfs) when disk_usb is absent. Bails out
+     silently if the container is not in the markup. */
   function renderStorageUsage(data) {
     var el = document.getElementById("usb-storage-card");
     if (!el) return;
@@ -536,108 +405,7 @@
       "</div>";
   }
 
-  /* ------------------------------ render ------------------------------ */
-
-  function render(d, isDemo, feedNote) {
-    var nodes = Array.isArray(d.nodes) ? d.nodes : [];
-    var pods = d.pods || {};
-    var usage = d.resource_usage || {};
-    var ready = nodes.filter(function (n) {
-      return n.status === "True";
-    }).length;
-
-    var statsEl = document.getElementById("stats");
-    if (statsEl) {
-      statsEl.innerHTML =
-        '<div class="stat"><div class="k">Nodes ready</div><div class="v">' +
-        ready +
-        "<small> / " +
-        nodes.length +
-        "</small></div></div>" +
-        '<div class="stat"><div class="k">Pods running</div><div class="v">' +
-        (pods.running != null ? pods.running : "–") +
-        "<small> / " +
-        (pods.total != null ? pods.total : "–") +
-        "</small></div></div>" +
-        '<div class="stat"><div class="k">Namespaces</div><div class="v">' +
-        (d.namespaces != null ? d.namespaces : "–") +
-        "</div></div>" +
-        '<div class="stat"><div class="k">Deployments</div><div class="v">' +
-        (d.deployments != null ? d.deployments : "–") +
-        "</div></div>";
-    }
-    fillHardwareAges(nodes);
-    var metricsEl = document.getElementById("node-metrics");
-    if (metricsEl) {
-      metricsEl.innerHTML = nodes.length
-        ? nodes
-            .map(function (n) {
-              return nodeCard(n, usage);
-            })
-            .join("")
-        : '<p class="loading">Keine Node-Daten im Feed.</p>';
-    }
-
-    var info = document.getElementById("refresh-info");
-    if (info) {
-      info.textContent =
-        "auto-refresh: 5 m · last updated: " + ago(d.timestamp);
-    }
-
-    var note = document.getElementById("demo-note");
-    if (note) {
-      note.style.display = isDemo ? "block" : "none";
-      if (feedNote) note.textContent = feedNote;
-    }
-
-    setFeedBadge(isDemo, feedNote);
-    renderStorageUsage(d);
-  }
-
-  /* ------------------------------- load ------------------------------- */
-
-  function load() {
-    fetch(SOURCE + "?t=" + Date.now(), { cache: "no-store" })
-      .then(function (r) {
-        if (!r.ok) throw new Error("HTTP " + r.status);
-        return r.json();
-      })
-      .then(function (data) {
-        /* Feed written by collect.sh in error mode: collector_error is set
-           and nodes is empty. Treat it exactly like a missing file.
-           The feed timestamp tells the visitor how long the outage has
-           been visible in the feed. */
-        if (data && data.collector_error) {
-          throw new Error(
-            "collector: " +
-              data.collector_error +
-              " · no live data since " +
-              ago(data.timestamp),
-          );
-        }
-        if (!data || !Array.isArray(data.nodes) || data.nodes.length === 0) {
-          throw new Error("empty feed");
-        }
-        render(data, false);
-      })
-      .catch(function (err) {
-        console.warn("cluster.json unusable:", err.message);
-        render(
-          DEMO,
-          true,
-          "Live feed unavailable — showing demo data (" + err.message + ")",
-        );
-      });
-  }
-
-  /* --------------------------- watcher card --------------------------- */
-
-  var WATCHER_SPECS = ["Raspberry Pi Zero 2W · 512 MB RAM"];
-
-  /*
-    Watcher Card
-  */
-
+  /* -------- Watcher card -------- */
   function watcherCard(w) {
     var age = Date.now() - new Date(w.timestamp).getTime();
     var online = age < WATCHER_MAX_AGE_MS;
@@ -697,10 +465,8 @@
     el.innerHTML = watcherCard(w);
   }
 
-  /*
-    Fills the node-age cells in the static hardware table via the
-    data-age attribute (name-based lookup, order-independent).
-  */
+  /* -------- Node-age cells in the static hardware table --------
+     Name-based lookup via the data-age attribute, order-independent. */
   function fillHardwareAges(nodes) {
     var map = {};
     nodes.forEach(function (n) {
@@ -710,10 +476,12 @@
       cell.textContent = map[cell.dataset.age] || "–";
     });
   }
-  /*
-    Render
-  */
-  function render(d, isDemo) {
+
+  /* ================================================================
+   *  5. Render & load
+   * ================================================================ */
+
+  function render(d, isDemo, feedNote) {
     var nodes = Array.isArray(d.nodes) ? d.nodes : [];
     var pods = d.pods || {};
     var usage = d.resource_usage || {};
@@ -762,13 +530,15 @@
     }
 
     var note = document.getElementById("demo-note");
-    if (note) note.style.display = isDemo ? "block" : "none";
+    if (note) {
+      note.style.display = isDemo ? "block" : "none";
+      if (feedNote) note.textContent = feedNote;
+    }
 
+    setFeedBadge(isDemo, feedNote);
     renderStorageUsage(d);
   }
-  /*
-    Bootstrap & polling
-  */
+
   function load() {
     fetch(SOURCE + "?t=" + Date.now(), { cache: "no-store" })
       .then(function (r) {
@@ -776,11 +546,30 @@
         return r.json();
       })
       .then(function (data) {
+        /* Feed written by collect.sh in error mode: collector_error is
+           set and nodes is empty. Treat it exactly like a missing file.
+           The feed timestamp tells the visitor how long the outage has
+           been visible in the feed. */
+        if (data && data.collector_error) {
+          throw new Error(
+            "collector: " +
+              data.collector_error +
+              " · no live data since " +
+              ago(data.timestamp),
+          );
+        }
+        if (!data || !Array.isArray(data.nodes) || data.nodes.length === 0) {
+          throw new Error("empty feed");
+        }
         render(data, false);
       })
       .catch(function (err) {
-        console.warn("cluster.json not found:", err.message);
-        render(DEMO, true);
+        console.warn("cluster.json unusable:", err.message);
+        render(
+          DEMO,
+          true,
+          "Live feed unavailable — showing demo data (" + err.message + ")",
+        );
       });
   }
 
@@ -796,40 +585,12 @@
       });
   }
 
-  /* ------------------------------ start ------------------------------- */
+  /* ================================================================
+   *  6. Bootstrap & polling
+   * ================================================================ */
 
   load();
   loadWatcherStatus();
   setInterval(load, REFRESH_MS);
   setInterval(loadWatcherStatus, REFRESH_MS);
 })();
-
-// Easter egg: Greetings curious visitor!
-const styleTitle = "font-size:24px; font-weight:bold; color:#1793D1;";
-const styleHint = "color:#434C5E; font-style:italic;";
-const styleDim = "color:#434C5E;";
-const stylePenguin = "font-size:18px; color:#1793D1; line-height:1.1;";
-
-console.log(
-  "%c~/mrtoadie%c — curious mind detected \uD83D\uDC40\n" +
-    "%cYou inspect things. I like that.\n" +
-    "This dashboard is fed by a real k3s cluster:\n" +
-    "4x Raspberry Pi + 1 Pi Zero watcher, collecting every 5 min.\n" +
-    "%c\uD83D\uDC49 https://github.com/mrtoadie",
-  styleTitle,
-  styleHint,
-  styleDim,
-  styleHint,
-);
-
-console.log(
-  "%c        .--.\n" +
-    "       |o_o |\n" +
-    "       |:_/ |\n" +
-    "      //   \\ \\\n" +
-    "     (|     | )\n" +
-    "    /'_   _/'\\\n" +
-    "    \\___)=(___/\n" +
-    "     mr.toad says hi",
-  stylePenguin,
-);
