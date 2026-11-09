@@ -166,7 +166,6 @@ a:hover {
 .ic-nightswatch {
     --i: url("../icons/nightswatch.svg");
 }
-<<<<<<< Updated upstream
 .ic-nixos {
     --i: url("../icons/nixos.svg");
 }
@@ -203,7 +202,6 @@ header {
 =======
 
 /* ---------- Terminal header ---------- */
->>>>>>> Stashed changes
 .term-title {
     font-size: 0.85rem;
     color: var(--dim);
@@ -1176,9 +1174,6 @@ pre.mermaid:not([data-processed]) {
         font-size: 1.3rem;
     }
 }
-<<<<<<< Updated upstream
-=======
-
 /* Photos drop to a single column on small screens */
 @media (max-width: 640px) {
     .photo-grid {
@@ -1220,4 +1215,3 @@ pre.mermaid:not([data-processed]) {
     margin-left: 0.4rem;
     font-size: 0.8rem;
 }
->>>>>>> Stashed changes
