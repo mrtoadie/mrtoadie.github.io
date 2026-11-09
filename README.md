@@ -16,12 +16,16 @@ Most portfolio sites are static. This one is static _and_ live: the k3s cluster 
 
 The trick is a **push-based data pipeline**:
 
-```
-┌──────────────┐   collect.sh    ┌────────────┐   git push    ┌─────────────┐   fetch   ┌─────────┐
-│ k3s cluster  │ ──────────────► │ JSON feed  │ ────────────► │ GitHub repo │ ────────► │ browser │
-│ (winterfell  │   (jq, kubectl, │cluster.json│  (via GitHub  │  (Pages =   │           │ (vanilla │
-│  + workers)   │    /sys/thermal)│            │   API)       │  )  │           │    JS)   │
-└──────────────┘                 └────────────┘               └─────────────┘           └─────────┘
+```mermaid
+flowchart LR
+    C["k3s cluster<br/>winterfell + workers"]
+    F["JSON feed<br/>data/cluster.json"]
+    G["GitHub repo<br/>Pages = free CDN"]
+    B["browser<br/>vanilla JS"]
+
+    C -- "collect.sh<br/>kubectl · jq · /sys/thermal" --> F
+    F -- "git push<br/>via GitHub API" --> G
+    G -- "fetch every 5 min" --> B
 ```
 
 1. A collector script runs on the control-plane node (`collect.sh` + systemd timer). It queries the Kubernetes API, parses node specs, resource usage and pod counts with `jq`, and writes `data/cluster.json`.
