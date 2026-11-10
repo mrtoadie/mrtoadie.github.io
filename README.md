@@ -59,12 +59,6 @@ _Cluster fully offline, collector reports `collector_error` in the feed: the amb
 
 The watcher heartbeat follows the same philosophy: older than 30 minutes (two missed beats) → watcher counts as offline. The site stays fully functional even when the whole lab is powered off. That is deliberate: a portfolio dashboard that breaks whenever the Raspberry Pi does would not be much of a portfolio.
 
-<<<<<<< HEAD
-![dashboard_01.webp](assets/img/dashboard_01.webp)
-![dashboard_03.webp](assets/img/dashboard_02.webp)
-![dashboard_03.webp](assets/img/dashboard_03.webp)
-=======
->>>>>>> f72c915 (update repo)
 ---
 
 ## Tech stack
