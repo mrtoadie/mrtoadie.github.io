@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-11-10T07:20:24Z",
+  "timestamp": "2026-11-10T07:25:24Z",
   "collected_on": "winterfell",
-  "nodes": [{"name":"winterfell","role":"control-plane","status":"True","version":"v1.36.3+k3s1","age":"132d"},{"name":"worker01","role":"worker","status":"Unknown","version":"v1.36.2+k3s1","age":"112d"},{"name":"worker02","role":"worker","status":"Unknown","version":"v1.36.3+k3s1","age":"78d"},{"name":"worker03","role":"worker","status":"True","version":"v1.36.3+k3s1","age":"80d"}],
-  "resource_usage": {"winterfell":{"cpu_percent":17,"cpu_millicores":710,"mem_percent":62,"mem_mib":4916,"disk_percent":39,"disk_usb":6,"temp_c":34.1,"load1":2.86,"uptime_s":246,"pods":18},"worker01":{"cpu_percent":null,"cpu_millicores":null,"mem_percent":null,"mem_mib":null,"disk_percent":null,"disk_usb":null,"temp_c":null,"load1":null,"uptime_s":null,"pods":3},"worker02":{"cpu_percent":null,"cpu_millicores":null,"mem_percent":null,"mem_mib":null,"disk_percent":null,"disk_usb":null,"temp_c":null,"load1":null,"uptime_s":null,"pods":3},"worker03":{"cpu_percent":2,"cpu_millicores":83,"mem_percent":44,"mem_mib":826,"disk_percent":51,"disk_usb":null,"temp_c":39.4,"load1":0.60,"uptime_s":253,"pods":3}},
+  "nodes": [{"name":"winterfell","role":"control-plane","status":"True","version":"v1.36.3+k3s1","age":"132d"},{"name":"worker01","role":"worker","status":"True","version":"v1.36.2+k3s1","age":"112d"},{"name":"worker02","role":"worker","status":"True","version":"v1.36.3+k3s1","age":"78d"},{"name":"worker03","role":"worker","status":"True","version":"v1.36.3+k3s1","age":"80d"}],
+  "resource_usage": {"winterfell":{"cpu_percent":11,"cpu_millicores":456,"mem_percent":63,"mem_mib":4999,"disk_percent":39,"disk_usb":6,"temp_c":36.0,"load1":1.19,"uptime_s":545,"pods":18},"worker01":{"cpu_percent":2,"cpu_millicores":87,"mem_percent":42,"mem_mib":386,"disk_percent":49,"disk_usb":null,"temp_c":29.2,"load1":0.88,"uptime_s":96,"pods":3},"worker02":{"cpu_percent":2,"cpu_millicores":104,"mem_percent":53,"mem_mib":487,"disk_percent":49,"disk_usb":null,"temp_c":29.2,"load1":1.16,"uptime_s":95,"pods":3},"worker03":{"cpu_percent":2,"cpu_millicores":87,"mem_percent":44,"mem_mib":820,"disk_percent":51,"disk_usb":null,"temp_c":38.5,"load1":0.21,"uptime_s":551,"pods":3}},
   "pods": {
     "total": 27,
     "running": 27,
