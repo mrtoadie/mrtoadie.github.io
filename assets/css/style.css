@@ -186,7 +186,7 @@ header {
 }
 
 .term-title {
-    font-size: 1.05rem;
+    font-size: 1.25rem;
     color: var(--dim);
     display: flex;
     align-items: center;
