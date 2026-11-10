@@ -43,6 +43,7 @@ The dashboard never lies to its visitors. When the collector cannot reach the AP
 
 The site stays fully functional even when the whole lab is powered off. That is deliberate: a portfolio dashboard that breaks whenever the Raspberry Pi does would not be much of a portfolio.
 
+![daschboard_01.webp](img/daschboard_01.webp)
 ---
 
 ## Tech stack
