@@ -28,14 +28,14 @@ flowchart LR
     G -- "fetch every 5 min" --> B
 ```
 
-1. A collector script runs on the control-plane node (`collect.sh` + systemd timer). It queries the Kubernetes API, parses node specs, resource usage and pod counts with `jq`, and writes `data/cluster.json`.
+1. A collector script runs on the control-plane node (`collect.sh` + systemd timer, every 5 minutes). It queries the Kubernetes API, parses node specs, resource usage and pod counts with `jq`, and writes `data/cluster.json`.
 2. The feed is pushed to this repository via the GitHub API — no runner, no webhook, no inbound traffic.
 3. The static page fetches the JSON client-side and renders gauges, node cards and cluster stats — pure HTML, CSS and vanilla JavaScript.
-4. A dedicated **watcher device** (Raspberry Pi Zero 2W, fittingly named _watcher_) sits outside the cluster. It checks the API server independently and pushes its own heartbeat (`data/watcher.json`), so the dashboard can tell whether the cluster is down _or the collector itself_.
+4. A dedicated **watcher device** (Raspberry Pi Zero 2W, fittingly named _watcher_) sits outside the cluster. It checks the API server's reachability every 15 minutes and publishes cluster-state changes (error / recovery) to `data/cluster.json`; it also pushes its own heartbeat (`data/watcher.json`) every 15 minutes, so the dashboard can tell whether the cluster is down or the collector itself.
 
 ### Graceful degradation by design
 
-The dashboard never lies to its visitors. When the collector cannot reach the API server, it writes the failure reason into the feed — and the frontend reacts accordingly. The three states below are real: all of them have occurred in production, and the dashboard handled each one exactly as designed.
+The dashboard never lies to its visitors. When the cluster goes down, the external watcher detects it and writes the failure reason into the feed — and the frontend reacts accordingly. The three states below are real: all of them have occurred in production, and the dashboard handled each one exactly as designed.
 
 #### 1. Live — all nodes healthy
 
@@ -53,7 +53,7 @@ _Still live, still honest: two workers went dark, but the remaining nodes keep p
 
 [![Demo mode: cluster offline](assets/img/demo-mode.webp)](assets/img/demo-mode.webp)
 
-_Cluster fully offline, collector reports `collector_error` in the feed: the amber **DEMO DATA** badge takes over, bundled sample data keeps the page complete, and the banner says why and for how long — e.g. `no live data since 10 h`._
+_Cluster fully offline, the watcher reports `collector_error` in the feed: the amber **DEMO DATA** badge takes over, bundled sample data keeps the page complete, and the banner says why and for how long — e.g. `no live data since 10 h`._
 
 ---
 

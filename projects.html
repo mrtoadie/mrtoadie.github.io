@@ -57,7 +57,7 @@
                                 for a native CLI experience.
                             </div>
                             <div class="project-meta">
-                                <span><i class="ic ic-clock" role="img" aria-label="Build time"></i> Build: 3 Wochen</span>
+                                <span><i class="ic ic-clock" role="img" aria-label="Build time"></i> Build: 3 weeks</span>
                                 <span><i class="ic ic-disk" role="img" aria-label="MinIO S3"></i> MinIO S3</span>
                             </div>
                             <div class="project-links">
@@ -79,8 +79,8 @@
                                 Expiry date, issuer and SANs at a glance — can be used both online and offline.
                             </div>
                             <div class="project-meta">
-                                <span><i class="ic ic-check" role="img" aria-label="Zertifikate"></i> Zertifikate</span>
-                                <span><i class="ic ic-alert" role="img" aria-label="Expiry-Warnung"></i> Expiry-Warnung</span>
+                                <span><i class="ic ic-check" role="img" aria-label="Certificates"></i> Certificates</span>
+                                <span><i class="ic ic-alert" role="img" aria-label="Expiry warning"></i> Expiry warning</span>
                             </div>
                             <div class="project-links">
                                 <a href="https://github.com/mrtoadie/go-check-cert" title="go-check-cert @ GitHub" aria-label="go-check-cert @ GitHub" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
@@ -128,11 +128,11 @@
                                 single offline node does not bring down the entire pipeline.
                             </div>
                             <div class="project-meta">
-                                <span><i class="ic ic-crown" role="img" aria-label="Runtime"></i> Runtime: 6+ Monate</span>
+                                <span><i class="ic ic-crown" role="img" aria-label="Runtime"></i> Runtime: 6+ months</span>
                                 <span><i class="ic ic-server" role="img" aria-label="Nodes"></i> 4 Nodes</span>
                             </div>
                             <div class="project-links">
-                                <a href="https://github.com/mrtoadie/homelab-collector" title="homelab-collector @ GitHub" aria-label="homelab-collector @ GitHub" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+                                <a href="https://github.com/mrtoadie/lab/tree/main/homelab/homelab-collector" title="homelab-collector @ GitHub" aria-label="homelab-collector @ GitHub" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
                             </div>
                         </div>
 
@@ -173,8 +173,8 @@
                             </div>
                             <div class="project-desc">
                                 Pure HTML/CSS/JS — no database, no stored data.
-                                <a href="https://github.com/mrtoadie/homelab-collector" target="_blank" rel="noopener noreferrer">homelab-collector</a>
-                                pushes fresh cluster data to the repository via the <cide>GitHub API</cide> every 5 minutes,
+                                <a href="https://github.com/mrtoadie/lab/tree/main/homelab/homelab-collector" target="_blank" rel="noopener noreferrer">homelab-collector</a>
+                                pushes fresh cluster data to the repository via the <code>GitHub API</code> every 5 minutes,
                                 and the client renders it directly as a live dashboard.
                             </div>
                             <div class="project-meta">
@@ -250,8 +250,7 @@
                             Because <code>GitHub Pages</code> is the antithesis of a managed server: no
                             runtime, no database, nothing that needs patching. The cluster
                             pushes a single <code>JSON file</code> via the API; the browser retrieves it using
-                            <b>fetch</b> — static hosting as a live stream. If the cluster goes down,
-                            the page still displays the last known state, complete with a timestamp.
+                            <b>fetch</b> — static hosting as a live stream. If the cluster goes down, the page switches to demo data and shows why — the demo banner includes a timestamp.
                             The infrastructure that transports the data cannot crash,
                             because it simply does not exist.
                     </div>

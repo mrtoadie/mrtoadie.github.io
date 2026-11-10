@@ -99,9 +99,7 @@
                         deployments) and polls each node's host metrics (disk, temperature,
                         load) over SSH — then pushes a single JSON file to this repository
                         through the GitHub API, every 5 minutes. Your browser fetches it and
-                        renders the cards above. If the cluster goes down, this page keeps
-                        showing the last known state — and the timestamp tells you how fresh
-                        it is.
+                        renders the cards above. If the cluster goes down, the external watcher flags the feed and the page switches to bundled demo data — the banner tells you why and for how long.
                         <a href="projects.html">More about the pipeline →</a>
                     </div>
 
@@ -143,7 +141,7 @@
 
                     GH-->>B: static file via GitHub Pages
                     B->>B: fetch + render dashboard
-                    Note over W,B: If the cluster dies,<br>the last known state stays online
+                    Note over W,B: If the cluster dies,<br>the external watcher flags the feed,<br>the page switches to demo data
                         </pre>
                     </div>
                 </section>
