@@ -62,7 +62,7 @@
                                 4-node production-style cluster on Raspberry
                                 Pi: workloads, ingress, RBAC, ServiceAccounts,
                                 Pod Security Standards, PDBs, Node Affinity
-                                <a href="index.html">→ /homelab</a>
+                                <a href="index.html">↪ /homelab</a>
                             </div>
                         </div>
 
@@ -80,7 +80,7 @@
                             <div class="skill-evidence">
                                 Backup schedules, retention policies, tested
                                 restores, MinIO as S3 target
-                                <a href="projects.html">→ velero-manager</a>
+                                <a href="projects.html">↪ velero-manager</a>
                             </div>
                         </div>
 
@@ -129,7 +129,7 @@
                             <div class="skill-name">Go</div>
                             <div class="skill-evidence">
                                 Interactive CLIs like a Velero backup manager, a certificate checker and an QEMU configuration tool
-                                <a href="projects.html">→ projects</a>
+                                <a href="projects.html">↪ projects</a>
                             </div>
                         </div>
 
@@ -139,7 +139,7 @@
                                 Production-ish scripts with set -euo
                                 pipefail, SSH orchestration, jq pipelines,
                                 GitHub REST API automation, systemd timers
-                                <a href="index.html">→ /watcher</a>
+                                <a href="index.html">↪ /watcher</a>
                             </div>
                         </div>
 
@@ -160,7 +160,7 @@
                                 This site: zero frameworks, vanilla JS,
                                 responsive dark theme, live GitHub Pages
                                 dashboard fed by API-pushed JSON
-                                <a href="index.html">→ /homelab</a>
+                                <a href="index.html">↪ /homelab</a>
                             </div>
                         </div>
 
@@ -299,6 +299,27 @@
                             <div class="skill-evidence">
                                 GitGuardian alert on a Kubernetes JWT —
                                 history rewrite, secret scanning, least-privilege ServiceAccounts since
+                            </div>
+                        </div>
+                        <div class="skill-row">
+                            <div class="skill-name">Git: split-brain repository</div>
+                            <div class="skill-evidence">
+                                Two writers, one repo: the collector pushes every 5 minutes
+                                via API while the desktop checkout went stale — non-fast-forward
+                                rejections, failed rebases on dirty trees, detached HEAD.
+                                Lesson: know which host you are on before you push, and check
+                                git status before blaming the network
+                            </div>
+                        </div>
+                        <div class="skill-row">
+                            <div class="skill-name">Git: silent merge damage</div>
+                            <div class="skill-evidence">
+                                A stash-pop merge left duplicate function declarations in
+                                dashboard.js and conflict markers in style.css — the last
+                                declaration silently wins in JS, so the broken version ran
+                                without a single error. Shipped to prod, found via screenshot.
+                                Lesson: after resolving conflicts, verify the file, not just
+                                the diff
                             </div>
                         </div>
                     </div>

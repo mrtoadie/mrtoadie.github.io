@@ -23,7 +23,7 @@
                 <nav class="top">
                     <a href="index.html" class="active">/homelab</a>
                     <a href="projects.html">/projects</a>
-                    <!--<a href="skills.html">/skills</a>-->
+                    <a href="skills.html">/skills</a>
                 </nav>
                 <span id="feed-badge" class="feed-badge">
                   <span class="dot"></span>LIVE
@@ -100,7 +100,7 @@
                         load) over SSH — then pushes a single JSON file to this repository
                         through the GitHub API, every 5 minutes. Your browser fetches it and
                         renders the cards above. If the cluster goes down, the external watcher flags the feed and the page switches to bundled demo data — the banner tells you why and for how long.
-                        <a href="projects.html">More about the pipeline →</a>
+                        <a href="projects.html">↪ More about the pipeline</a>
                     </div>
 
                     <!-- Mermaid sequence diagram: the collection pipeline -->
@@ -299,6 +299,18 @@
                             </div>
                         </div>
                         <div class="tool-card">
+                            <div class="tool-name">cert-manager</div>
+                            <div class="tool-desc">
+                                TLS certificates for internal services
+                                (grafana.local, forgejo.local)
+                            </div>
+                            <div class="tool-reason">
+                                "Configured without Helm charts — ClusterIssuers supply the
+                                Traefik ingresses with certificates, so internal cluster
+                                traffic is encrypted as well."
+                            </div>
+                        </div>
+                        <div class="tool-card">
                             <div class="tool-name">Unbound</div>
                             <div class="tool-desc">
                                 Recursive DNS resolver on a Raspberry Pi Zero
@@ -398,6 +410,22 @@
                                 for small databases."
                             </div>
                         </div>
+                    </div>
+                </section>
+                <!-- Contact -->
+                <h2 id="contact"><span style="color: var(--accent)">/contact</span></h2>
+                <section>
+                    <div class="section-header">
+                        <span>whois toadie | grep -i contact</span>
+                        <span class="right">no forms, no trackers</span>
+                    </div>
+                    <div class="hw-note">
+                        <strong>Want to get in touch?</strong><br>
+                        No contact form, no newsletter — the fastest route is GitHub:
+                        <a href="https://github.com/mrtoadie" target="_blank" rel="noopener noreferrer">↪ my profile</a>.
+                        Feedback, questions or idle chatter about k3s on Raspberry Pis:
+                        <a href="https://github.com/mrtoadie/mrtoadie.github.io/discussions" target="_blank" rel="noopener noreferrer">↪ Discussions</a> on this site's repo —
+                        or just open an issue if something looks broken.
                     </div>
                 </section>
             </main>
