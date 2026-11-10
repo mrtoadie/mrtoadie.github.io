@@ -1,3 +1,6 @@
+// assets/js/lightbox.js
+// Simple LightBox Script
+
 (function () {
   "use strict";
 

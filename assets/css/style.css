@@ -1,17 +1,8 @@
-/* Sticky Navigation */
-header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    border-radius: 14px 14px 0 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 1rem 1.5rem;
-    background: var(--card-alt);
-    border-bottom: 1px solid var(--border);
-}
+/* style.css — GitHub-dark terminal theme for mrtoadie.github.io
+   Theme switch = edit the :root block only. Structure of this file:
+   reset → tokens → base → icons → header/nav → sections → cards → pages
+   (projects, skills) → components (watcher, photos, storage, lightbox,
+   pipeline, feed badge) → responsive overrides. */
 
 *,
 *::before,
@@ -21,10 +12,7 @@ header {
     padding: 0;
 }
 
-/* ---------- Theme tokens ----------
- *   Base colours plus RGB-channel variants, so translucent shades can use
- *   var(): rgba(var(--accent-rgb), 0.1) etc. Switching the palette means
- *   editing ONLY this block. */
+/* ---------- Theme tokens ---------- */
 :root {
     --bg: #2e3440;
     --card: #161b22;
@@ -84,23 +72,18 @@ a:hover {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 14px;
-<<<<<<< Updated upstream
     /* clip (NOT hidden!): overflow:hidden would create a scroll container
        and kill position:sticky in the header. clip cuts just the same,
        keeps the rounded corners, but lets the header stick. */
     overflow: clip;
-=======
-    /*overflow: hidden;*/
->>>>>>> Stashed changes
     box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.85);
 }
 
 /* ---------- Icons ----------
- *   Local SVG files from assets/icons/, drawn as a CSS mask. That makes them
- *   behave like the icon font they replace: colour comes from currentColor,
- *   size from width/height. Pull the files with scripts/fetch-icons.sh.
- *   Only monochrome icons work here - a colourful icon would be flattened to
- *   a solid silhouette. */
+ *   Local SVG files from assets/icons/, drawn as a CSS mask. Colour comes
+ *   from currentColor, size from width/height — like an icon font without
+ *   one. Only monochrome icons work here. Pull files with
+ *   scripts/fetch-icons.sh. */
 .ic {
     display: inline-block;
     width: 1em;
@@ -184,8 +167,12 @@ a:hover {
 .ic-bash {
     --i: url("../icons/bash.svg");
 }
+
 /* ---------- Terminal header (sticky) ---------- */
 header {
+    position: sticky;
+    top: 0;
+    z-index: 100; /* above node cards; below the lightbox (999) */
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -193,17 +180,13 @@ header {
     padding: 1rem 1.5rem;
     background: var(--card-alt);
     border-bottom: 1px solid var(--border);
+    border-radius: 14px 14px 0 0;
     /* sticky within the scrollport; works only because .container uses
        overflow:clip instead of overflow:hidden */
-    position: sticky;
-    top: 0;
-    z-index: 100; /* above node cards; below the lightbox (999) */
 }
-=======
 
-/* ---------- Terminal header ---------- */
 .term-title {
-    font-size: 0.85rem;
+    font-size: 1.05rem;
     color: var(--dim);
     display: flex;
     align-items: center;
@@ -213,6 +196,7 @@ header {
 .term-title .path {
     color: var(--faint);
 }
+
 .dots {
     display: flex;
     gap: 7px;
@@ -236,22 +220,20 @@ main {
     padding: 2.75rem 2rem;
 }
 
-/* ---------- Nav ---------- */
-/* NOTE: nav.top lives INSIDE the header now. Two fixes vs. the old file:
-   1) margin-bottom: 0 - the old 2.5rem margin was meant for a nav under h1
-      in main. Inside the header, align-items:center centers the margin box,
-      so the menu floated visibly ABOVE the title line.
-   2) flex-shrink: 0 - without it the header squeezes the nav at medium
-      widths, the links wrap internally into two rows, the header grows
-      three lines tall and NOTHING looks vertically centered anymore.
-      Under 740px the media query below moves the nav to its own full row
-      instead. */
+/* ---------- Nav ----------
+   nav.top lives INSIDE the header. Two historical gotchas, kept as comments:
+   1) margin-bottom: 0 — a margin meant for a nav under h1 would float the
+      menu above the title line here, because align-items:center centers
+      the margin box.
+   2) flex-shrink: 0 — without it the header squeezes the nav at medium
+      widths and the links wrap internally. Under 740px the media query
+      gives the nav its own full row instead. */
 nav.top {
     display: flex;
     flex-wrap: wrap;
     gap: 0.6rem;
-    margin-bottom: 0;
     flex-shrink: 0;
+    margin: 0 0 0 auto; /* right-aligned inside the header */
 }
 nav.top a {
     font-size: 0.85rem;
@@ -261,6 +243,9 @@ nav.top a {
     color: var(--dim);
     background: rgba(255, 255, 255, 0.02);
     white-space: nowrap;
+    transition:
+        color 0.15s ease,
+        border-color 0.15s ease;
 }
 nav.top a:hover {
     border-color: var(--accent);
@@ -270,11 +255,6 @@ nav.top a.active {
     border-color: var(--accent);
     color: var(--accent);
     background: rgba(var(--accent-rgb), 0.1);
-}
-
-header nav.top {
-    margin: 0 0 0 auto;
-    margin-bottom: 0;
 }
 
 h1 {
@@ -452,12 +432,13 @@ section:last-child {
     background: var(--green);
 }
 .node-card.ready .led {
-    animation: pulse 2.2s ease-out infinite;
+    animation: pulse-ring 2.2s ease-out infinite;
 }
 .node-card.notready .led {
     background: var(--red);
 }
-@keyframes pulse {
+/* expanding halo around the ready-LED */
+@keyframes pulse-ring {
     0% {
         box-shadow: 0 0 0 0 rgba(var(--green-rgb), 0.55);
     }
@@ -509,6 +490,7 @@ section:last-child {
     border-color: rgba(var(--red-rgb), 0.35);
     background: rgba(var(--red-rgb), 0.12);
 }
+
 /* Temperature warning */
 .node-spec.stat-warn {
     color: var(--amber);
@@ -573,24 +555,6 @@ section:last-child {
     color: var(--faint);
 }
 
-/* ---------- Footer icons ---------- */
-.footer-icons {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    vertical-align: -0.15em;
-    margin-left: 0.35rem;
-}
-.footer-icons .ic {
-    width: 20px;
-    height: 20px;
-    color: var(--faint);
-    transition: color 0.15s ease;
-}
-.footer-icons .ic:hover {
-    color: var(--accent);
-}
-
 /* ---------- Misc ---------- */
 .demo-note {
     display: none;
@@ -614,6 +578,22 @@ footer {
     color: var(--faint);
     border-top: 1px solid var(--border);
     background: var(--card-alt);
+}
+.footer-icons {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    vertical-align: -0.15em;
+    margin-left: 0.35rem;
+}
+.footer-icons .ic {
+    width: 20px;
+    height: 20px;
+    color: var(--faint);
+    transition: color 0.15s ease;
+}
+.footer-icons .ic:hover {
+    color: var(--accent);
 }
 
 /* ---------- Software & tools ---------- */
@@ -677,6 +657,7 @@ footer {
 .hw-table tr:hover {
     background: rgba(var(--accent-rgb), 0.05);
 }
+
 .hw-note {
     background: rgba(var(--accent-rgb), 0.05);
     border-left: 3px solid var(--accent);
@@ -688,6 +669,7 @@ footer {
 .hw-note strong {
     color: var(--text);
 }
+
 .tag {
     display: inline-block;
     padding: 0.2rem 0.5rem;
@@ -728,9 +710,6 @@ footer {
     content: "$ ";
     color: var(--green);
 }
-.project-card ul li::marker {
-    color: var(--accent);
-}
 .project-header {
     display: flex;
     justify-content: space-between;
@@ -767,12 +746,16 @@ footer {
     font-size: 0.85rem;
 }
 
-/* ---------- Skills page ---------- */
+/* ---------- Skills page ----------
+   Two-column rows on desktop (name | evidence), stacked on phones.
+   The duplicate flex-based block that lived at the end of the old file
+   has been merged away — this is the surviving design. */
 .intro-text {
     font-size: 0.95rem;
     color: var(--dim);
     line-height: 1.75;
     max-width: 75ch;
+    margin-bottom: 1rem;
 }
 .skill-list {
     display: grid;
@@ -785,22 +768,25 @@ footer {
     padding: 0.9rem 1.1rem;
     background: var(--surface);
     border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
     border-radius: 8px;
 }
 .skill-name {
     font-weight: 600;
     color: var(--accent);
+    margin-bottom: 0.3rem;
 }
 .skill-evidence {
-    font-size: 0.88rem;
+    font-size: 0.9rem;
     color: var(--dim);
     line-height: 1.65;
 }
 .skill-evidence a {
-    margin-left: 0.35rem;
+    margin-left: 0.4rem;
     white-space: nowrap;
     font-size: 0.85rem;
 }
+
 /* ---------- Watcher badge ---------- */
 .watcher-badge {
     font-size: 0.75rem;
@@ -819,6 +805,7 @@ footer {
     border-color: rgba(var(--red-rgb), 0.35);
     background: rgba(var(--red-rgb), 0.12);
 }
+
 /* ---------- Photo gallery ---------- */
 .photo-grid {
     display: grid;
@@ -850,6 +837,7 @@ footer {
     border-top: 1px solid var(--border);
     line-height: 1.55;
 }
+
 /* ---------- USB-SSD storage card ---------- */
 .storage-card {
     border: 1px solid var(--border);
@@ -918,6 +906,7 @@ footer {
 .storage-card.crit .diskbar-fill {
     background: var(--red);
 }
+
 /* Placeholder state while data is missing */
 .diskbar-fill.na {
     width: 100%;
@@ -971,6 +960,7 @@ footer {
     padding: 0.3rem 0.6rem;
     cursor: pointer;
 }
+
 /* ---------- Data flow / pipeline diagram ---------- */
 .pipeline-diagram {
     margin-top: 1.25rem;
@@ -994,7 +984,8 @@ footer {
 pre.mermaid:not([data-processed]) {
     visibility: hidden;
 }
-/* LIVE Badge */
+
+/* ---------- LIVE / DEMO badge ---------- */
 .feed-badge {
     display: inline-flex;
     align-items: center;
@@ -1017,7 +1008,7 @@ pre.mermaid:not([data-processed]) {
 }
 .feed-badge.live .dot {
     background: #3fb950;
-    animation: pulse 2s infinite;
+    animation: pulse-dot 2s infinite;
 }
 .feed-badge.demo {
     color: #d29922;
@@ -1026,7 +1017,8 @@ pre.mermaid:not([data-processed]) {
 .feed-badge.demo .dot {
     background: #d29922;
 }
-@keyframes pulse {
+/* blinking badge dot — deliberately NOT the same keyframe as the LED halo */
+@keyframes pulse-dot {
     0%,
     100% {
         opacity: 1;
@@ -1035,9 +1027,9 @@ pre.mermaid:not([data-processed]) {
         opacity: 0.35;
     }
 }
+
 /* ---------- Responsive ----------
- *   Mobile-first inverted logic fixed: desktop keeps the defaults, phones
- *   get compact overrides below. */
+   Desktop keeps the defaults, phones get compact overrides below. */
 @media (max-width: 740px) {
     body {
         padding: 1rem 0.75rem 2rem;
@@ -1056,43 +1048,30 @@ pre.mermaid:not([data-processed]) {
         font-size: 0.92rem;
         margin-bottom: 1.75rem;
     }
+
+    /* header wraps: title + dots stay in row 1, nav drops to its own
+       full-width row below them, links become equal-width tabs */
     header {
         flex-wrap: wrap;
-        gap: 0.75rem 0.6rem; /* Zeilen-/Spaltenabstand im Wrap */
+        gap: 0.75rem 0.6rem;
         padding: 0.8rem 1rem;
-        flex-wrap: wrap;
     }
-    /* Navi zwingt den Umbruch und rutscht in Zeile 2 */
     header nav.top {
-        order: 1; /* sortiert hinter Titel + Dots */
-        flex-basis: 100%; /* volle Breite → eigene Zeile */
-        margin-left: 0; /* Desktop-Rechtsausrichtung außer Kraft */
+        order: 1; /* sorted behind title + dots */
+        flex-basis: 100%; /* full width → own row */
+        margin-left: 0; /* cancels the desktop right-alignment */
+        gap: 0.45rem;
     }
-    /* Buttons als gleichbreite Tabs über die volle Zeile */
     header nav.top a {
-        flex: 1;
+        flex: 1; /* equal-width tab buttons */
         text-align: center;
-        padding: 0.4rem 0.25rem;
+        padding: 0.35rem 0.6rem;
         font-size: 0.78rem;
-    }
-    header nav.top a:last-child {
-        margin-right: 0;
     }
     .term-title {
         font-size: 0.78rem;
     }
-    /* Nav gets its own full row below title + dots, instead of being
-       squeezed and wrapping internally. */
-    nav.top {
-        order: 3;
-        flex-basis: 100%;
-        margin-left: 0;
-        gap: 0.45rem;
-    }
-    nav.top a {
-        font-size: 0.78rem;
-        padding: 0.35rem 0.6rem;
-    }
+
     .section-header {
         flex-wrap: wrap;
     }
@@ -1170,45 +1149,4 @@ pre.mermaid:not([data-processed]) {
     .stat .v {
         font-size: 1.3rem;
     }
-}
-/* Photos drop to a single column on small screens */
-@media (max-width: 640px) {
-    .photo-grid {
-        grid-template-columns: 1fr;
-    }
-    .photo img {
-        height: 240px;
-    }
-}
-/* ---------- Skills page ---------- */
-.intro-text {
-    color: var(--dim);
-    font-size: 1.05rem;
-    margin-bottom: 1rem;
-}
-.skill-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-.skill-row {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--accent);
-    border-radius: 8px;
-    padding: 0.9rem 1.1rem;
-}
-.skill-name {
-    font-weight: 600;
-    color: var(--accent);
-    margin-bottom: 0.3rem;
-}
-.skill-evidence {
-    font-size: 0.9rem;
-    color: var(--dim);
-    line-height: 1.55;
-}
-.skill-evidence a {
-    margin-left: 0.4rem;
-    font-size: 0.8rem;
 }

@@ -1,4 +1,5 @@
 // assets/js/easter-eggs.js
+// Easter egg: Greeting curious visitors (DevTools)
 
 (function () {
   // Styles
@@ -8,7 +9,7 @@
   const stylePenguin = "font-size:14px; line-height:1.1; color:#1793D1;";
   const styleGreen = "color:#7ee787;";
 
-  // Easter egg 1: Greeting curious visitors (DevTools)
+  // Console output
   console.log(
     "%c~/mrtoadie%c curious mind detected 👀\n" +
       "%cYou inspect things. I like that.\n" +
