@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-11-10T20:50:04Z",
+  "timestamp": "2026-11-10T20:55:24Z",
   "collected_on": "winterfell",
   "nodes": [{"name":"winterfell","role":"control-plane","status":"True","version":"v1.36.3+k3s1","age":"133d"},{"name":"worker01","role":"worker","status":"True","version":"v1.36.2+k3s1","age":"113d"},{"name":"worker02","role":"worker","status":"True","version":"v1.36.3+k3s1","age":"79d"},{"name":"worker03","role":"worker","status":"True","version":"v1.36.3+k3s1","age":"81d"}],
-  "resource_usage": {"winterfell":{"cpu_percent":14,"cpu_millicores":582,"mem_percent":44,"mem_mib":3469,"disk_percent":39,"disk_usb":6,"temp_c":36.5,"load1":1.16,"uptime_s":48826,"pods":18},"worker01":{"cpu_percent":1,"cpu_millicores":68,"mem_percent":43,"mem_mib":396,"disk_percent":49,"disk_usb":null,"temp_c":31.6,"load1":0.15,"uptime_s":48376,"pods":3},"worker02":{"cpu_percent":1,"cpu_millicores":78,"mem_percent":44,"mem_mib":400,"disk_percent":49,"disk_usb":null,"temp_c":32.6,"load1":0.09,"uptime_s":48375,"pods":3},"worker03":{"cpu_percent":1,"cpu_millicores":70,"mem_percent":45,"mem_mib":842,"disk_percent":51,"disk_usb":null,"temp_c":38.9,"load1":0.02,"uptime_s":48831,"pods":3}},
+  "resource_usage": {"winterfell":{"cpu_percent":14,"cpu_millicores":563,"mem_percent":44,"mem_mib":3447,"disk_percent":39,"disk_usb":6,"temp_c":36.0,"load1":1.38,"uptime_s":49145,"pods":18},"worker01":{"cpu_percent":1,"cpu_millicores":75,"mem_percent":43,"mem_mib":395,"disk_percent":49,"disk_usb":null,"temp_c":31.6,"load1":0.09,"uptime_s":48696,"pods":3},"worker02":{"cpu_percent":1,"cpu_millicores":75,"mem_percent":44,"mem_mib":400,"disk_percent":49,"disk_usb":null,"temp_c":32.6,"load1":0.31,"uptime_s":48695,"pods":3},"worker03":{"cpu_percent":1,"cpu_millicores":63,"mem_percent":45,"mem_mib":846,"disk_percent":51,"disk_usb":null,"temp_c":39.4,"load1":0.08,"uptime_s":49151,"pods":3}},
   "pods": {
     "total": 27,
     "running": 27,
