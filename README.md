@@ -35,17 +35,36 @@ flowchart LR
 
 ### Graceful degradation by design
 
-The dashboard never lies to its visitors. When the collector cannot reach the API server, it writes the failure reason into the feed — and the frontend reacts:
+The dashboard never lies to its visitors. When the collector cannot reach the API server, it writes the failure reason into the feed — and the frontend reacts accordingly. The three states below are real: all of them have occurred in production, and the dashboard handled each one exactly as designed.
 
-- **LIVE badge** (green, pulsing): data comes straight from the cluster.
-- **DEMO DATA badge** (amber): the feed carries a `collector_error` or is empty/stale; the page switches to bundled demo data and shows _why_ and _for how long_ — e.g. `no live data since 10 h`.
-- **Watcher heartbeat**: older than 30 minutes (two missed beats) → watcher counts as offline.
+#### 1. Live — all nodes healthy
 
-The site stays fully functional even when the whole lab is powered off. That is deliberate: a portfolio dashboard that breaks whenever the Raspberry Pi does would not be much of a portfolio.
+[![Live: all 4 nodes healthy](assets/img/live-full.webp)](assets/img/live-full.webp)
 
+_Live mode, green pulsing badge: data comes straight from the cluster. All 4 nodes reporting, gauges filled, nothing degrades. This is the default state._
+
+#### 2. Live, degraded — two workers down
+
+[![Degraded: two workers offline](assets/img/live-degraded.webp)](assets/img/live-degraded.webp)
+
+_Still live, still honest: two workers went dark, but the remaining nodes keep pushing real data. The dashboard reflects the reduced cluster instead of pretending everything is fine._
+
+#### 3. Demo mode — cluster unreachable
+
+[![Demo mode: cluster offline](assets/img/demo-mode.webp)](assets/img/demo-mode.webp)
+
+_Cluster fully offline, collector reports `collector_error` in the feed: the amber **DEMO DATA** badge takes over, bundled sample data keeps the page complete, and the banner says why and for how long — e.g. `no live data since 10 h`._
+
+---
+
+The watcher heartbeat follows the same philosophy: older than 30 minutes (two missed beats) → watcher counts as offline. The site stays fully functional even when the whole lab is powered off. That is deliberate: a portfolio dashboard that breaks whenever the Raspberry Pi does would not be much of a portfolio.
+
+<<<<<<< HEAD
 ![dashboard_01.webp](assets/img/dashboard_01.webp)
 ![dashboard_03.webp](assets/img/dashboard_02.webp)
 ![dashboard_03.webp](assets/img/dashboard_03.webp)
+=======
+>>>>>>> f72c915 (update repo)
 ---
 
 ## Tech stack
