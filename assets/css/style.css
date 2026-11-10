@@ -85,10 +85,14 @@ a:hover {
     border: 1px solid var(--border);
     border-radius: 14px;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     /* clip (NOT hidden!): overflow:hidden would create a scroll container
        and kill position:sticky in the header. clip cuts just the same,
        keeps the rounded corners, but lets the header stick. */
     overflow: clip;
+=======
+    /*overflow: hidden;*/
+>>>>>>> Stashed changes
 =======
     /*overflow: hidden;*/
 >>>>>>> Stashed changes
@@ -166,6 +170,7 @@ a:hover {
 .ic-nightswatch {
     --i: url("../icons/nightswatch.svg");
 }
+<<<<<<< Updated upstream
 .ic-nixos {
     --i: url("../icons/nixos.svg");
 }
@@ -200,6 +205,8 @@ header {
     z-index: 100; /* above node cards; below the lightbox (999) */
 }
 =======
+=======
+>>>>>>> Stashed changes
 
 /* ---------- Terminal header ---------- */
 .term-title {
@@ -1061,6 +1068,22 @@ pre.mermaid:not([data-processed]) {
         gap: 0.75rem 0.6rem; /* Zeilen-/Spaltenabstand im Wrap */
         padding: 0.8rem 1rem;
         flex-wrap: wrap;
+    }
+    /* Navi zwingt den Umbruch und rutscht in Zeile 2 */
+    header nav.top {
+        order: 1; /* sortiert hinter Titel + Dots */
+        flex-basis: 100%; /* volle Breite → eigene Zeile */
+        margin-left: 0; /* Desktop-Rechtsausrichtung außer Kraft */
+    }
+    /* Buttons als gleichbreite Tabs über die volle Zeile */
+    header nav.top a {
+        flex: 1;
+        text-align: center;
+        padding: 0.4rem 0.25rem;
+        font-size: 0.78rem;
+    }
+    header nav.top a:last-child {
+        margin-right: 0;
     }
     /* Navi zwingt den Umbruch und rutscht in Zeile 2 */
     header nav.top {
