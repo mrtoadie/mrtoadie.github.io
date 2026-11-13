@@ -6,15 +6,17 @@
    *
    *  Fetches data/cluster.json (published by collect.sh on the
    *  control-plane) and data/watcher.json (heartbeat pushed by the
-   *  watcher Pi) and renders stats, node cards, the storage card and
-   *  the watcher card. Falls back to demo data when the live feed is
-   *  unreachable, empty, or written in collector-error mode.
+   *  watcher Pi) and renders stats, the cluster overview card, node
+   *  cards, the storage card and the watcher card. Falls back to
+   *  demo data when the live feed is unreachable, empty, or written
+   *  in collector-error mode.
    *
    *  Layout of this file:
    *    1.  Constants & configuration
    *    2.  Helpers (escaping, formatting, icons)
    *    3.  Demo data
-   *    4.  Renderers (badge, gauges, node cards, storage, watcher)
+   *    4.  Renderers (badge, gauges, bars, cluster card, node cards,
+   *        storage, watcher, hardware ages)
    *    5.  Render & load
    *    6.  Bootstrap & polling
    *
@@ -32,26 +34,18 @@
   var REFRESH_MS = 5 * 60 * 1000; // poll interval
   var WATCHER_MAX_AGE_MS = 30 * 60 * 1000; // two missed heartbeats = offline
 
-  /* Static hardware info per node, used when cluster.json does not
-     carry specs of its own. Collect.sh fills it in if it wants to. */
-  var SPEC_FALLBACK = {
-    winterfell: ["Raspberry Pi 4 · 8 GB RAM"],
-    worker01: ["Raspberry Pi 4 · 1 GB RAM"],
-    worker02: ["Raspberry Pi 4 · 1 GB RAM"],
-    worker03: ["Raspberry Pi 4 · 2 GB RAM"],
-    "*": [],
-  };
-
+  /* Static spec line for the watcher card. The cluster nodes show
+     specs in the hardware table on the index page instead. */
   var WATCHER_SPECS = ["Raspberry Pi Zero 2W · 512 MB RAM"];
 
   /* Data contract for data/cluster.json:
      {
        timestamp: "2026-10-24T08:12:00Z",
-       nodes: [{ name, role, status, version, age, specs? }],
+       nodes: [{ name, role, status, version, age }],
        resource_usage: { "winterfell": {
          cpu_percent, cpu_millicores,
          mem_percent, mem_mib,
-         disk_percent,        <- rootfs, feeds the DISK gauge
+         disk_percent,        <- rootfs, feeds the DISK bar
          disk_usb,            <- USB-SSD mount, feeds the storage card
          temp_c, load1, uptime_s, pods
        }},
@@ -86,7 +80,8 @@
     return isNaN(n) ? null : n;
   }
 
-  /* Gauge thresholds: 65+ warn, 85+ crit. */
+  /* Thresholds: 65+ warn, 85+ crit — shared by gauges AND bars,
+     so both representations speak the same colour vocabulary. */
   function ringClass(p) {
     if (p === null) return "na";
     if (p >= 85) return "crit";
@@ -128,20 +123,6 @@
     return '<span class="ic ic-' + id + '" aria-hidden="true"></span>';
   }
 
-  /* Pick an icon for a spec line based on keywords in the text. */
-  var SPEC_ICONS = [
-    [/ram|memory/, "cpu"],
-    [/ssd|hdd|usb|nvme|disk|card|xfs|ext4|btrfs|storage/, "disk"],
-  ];
-
-  function specIcon(text) {
-    var t = String(text).toLowerCase();
-    for (var i = 0; i < SPEC_ICONS.length; i++) {
-      if (SPEC_ICONS[i][0].test(t)) return SPEC_ICONS[i][1];
-    }
-    return "tag";
-  }
-
   function specLine(iconId, text, extraClass) {
     return (
       '<div class="node-spec ' +
@@ -152,25 +133,6 @@
       esc(text) +
       "</span></div>"
     );
-  }
-
-  /* Spec lines come from the feed, the fallback table or node
-     metadata — in that order. */
-  function resolveSpecs(n) {
-    if (Array.isArray(n.specs) && n.specs.length) {
-      return { lines: n.specs, isStatic: false };
-    }
-    var fb = SPEC_FALLBACK[n.name] || SPEC_FALLBACK["*"];
-    if (Array.isArray(fb) && fb.length) {
-      return { lines: fb, isStatic: true };
-    }
-    if (n.arch || n.os) {
-      return {
-        lines: [[n.arch, n.os].filter(Boolean).join(" · ")],
-        isStatic: false,
-      };
-    }
-    return { lines: [], isStatic: false };
   }
 
   /* ================================================================
@@ -185,28 +147,24 @@
         role: "control-plane",
         status: "True",
         version: "v1.36.3+k3s1",
-        specs: ["Raspberry Pi 4 · 8 GB RAM"],
       },
       {
         name: "worker01",
         role: "worker",
         status: "True",
         version: "v1.36.2+k3s1",
-        specs: ["Raspberry Pi 4 · 1 GB RAM"],
       },
       {
         name: "worker02",
         role: "worker",
         status: "True",
         version: "v1.36.3+k3s1",
-        specs: ["Raspberry Pi 4 · 1 GB RAM"],
       },
       {
         name: "worker03",
         role: "worker",
         status: "True",
         version: "v1.36.3+k3s1",
-        specs: ["Raspberry Pi 4 · 2 GB RAM"],
       },
     ],
     resource_usage: {
@@ -269,20 +227,25 @@
     el.title = feedNote || "";
   }
 
-  /* -------- Ring gauge -------- */
+  /* -------- Gauge ring (cluster overview only) --------
+     The overview shows the state of the WHOLE cluster at a glance,
+     the node cards below carry the precise per-node values — hence
+     rings up top, bars below. Both use ringClass(), so thresholds
+     and colours are identical. Markup matches the existing
+     .gauge / .gauge-wrap / small CSS. */
   function gauge(p, label) {
-    var c = ringClass(p);
-    var txt = p === null ? "–" : p.toFixed(0) + "%";
     var pct = p === null ? 0 : Math.max(0, Math.min(100, p));
     return (
       '<div class="gauge-wrap">' +
       '<div class="gauge ' +
-      c +
+      ringClass(p) +
       '" style="--pct:' +
       pct +
-      '"><span>' +
-      txt +
-      "</span></div>" +
+      '">' +
+      "<span>" +
+      (p === null ? "–" : p.toFixed(0) + "%") +
+      "</span>" +
+      "</div>" +
       "<small>" +
       label +
       "</small>" +
@@ -290,7 +253,113 @@
     );
   }
 
-  /* -------- Node card -------- */
+  /* -------- Metric bar (node cards) --------
+     Colour = state (ok / warn / crit / na), consistent across
+     every card. Never colour per metric — colour is the vocabulary. */
+  function bar(p, label) {
+    var c = ringClass(p); // keeps the 65/85 thresholds
+    var pct = p === null ? 0 : Math.max(0, Math.min(100, p));
+    return (
+      '<div class="metric">' +
+      '<div class="metric-top">' +
+      "<span>" +
+      label +
+      '</span><span class="metric-val">' +
+      (p === null ? "–" : p.toFixed(0) + "%") +
+      "</span></div>" +
+      '<div class="metric-track"><div class="metric-fill ' +
+      c +
+      '" style="width:' +
+      pct +
+      '%"></div></div>' +
+      "</div>"
+    );
+  }
+
+  /* -------- Temperature bar (absolute scale, not a percentage) -------- */
+  function tempBar(t) {
+    var MAX_C = 80; // scale ceiling: 80 °C = full bar
+    var c = t === null ? "na" : t >= 70 ? "crit" : t >= 60 ? "warn" : "ok";
+    var pct = t === null ? 0 : Math.max(0, Math.min(100, (t / MAX_C) * 100));
+    return (
+      '<div class="metric">' +
+      '<div class="metric-top"><span>Temp</span>' +
+      '<span class="metric-val">' +
+      (t === null ? "–" : t.toFixed(0) + " °C") +
+      "</span></div>" +
+      '<div class="metric-track"><div class="metric-fill ' +
+      c +
+      '" style="width:' +
+      pct +
+      '%"></div></div>' +
+      "</div>"
+    );
+  }
+
+  /* -------- Cluster-wide aggregate (avg of Ready nodes only) --------
+     Nodes without data are skipped per metric, NotReady nodes are
+     excluded entirely — no fake zeros ever enter an average. */
+  function clusterTotals(usage, nodes) {
+    var vals = { cpu: [], mem: [], disk: [] };
+    nodes.forEach(function (n) {
+      if (n.status !== "True") return;
+      var u = usage[n.name] || {};
+      var c = num(u.cpu_percent !== undefined ? u.cpu_percent : u.cpu);
+      var m = num(u.mem_percent !== undefined ? u.mem_percent : u.mem);
+      var d = num(u.disk_percent);
+      if (c !== null) vals.cpu.push(c);
+      if (m !== null) vals.mem.push(m);
+      if (d !== null) vals.disk.push(d);
+    });
+    function avg(a) {
+      return a.length
+        ? a.reduce(function (x, y) {
+            return x + y;
+          }, 0) / a.length
+        : null;
+    }
+    return { cpu: avg(vals.cpu), mem: avg(vals.mem), disk: avg(vals.disk) };
+  }
+
+  /* -------- Cluster overview: one tile per metric, matching the
+     stats row above. Rings = cluster at a glance, bars = per-node
+     precision in the cards below. */
+  /* -------- Cluster overview: tiles + legend -------- */
+  function clusterCard(t, readyCount, totalCount) {
+    var caption =
+      "Cluster Overview — average across " +
+      readyCount +
+      " ready node" +
+      (readyCount === 1 ? "" : "s") +
+      " of " +
+      totalCount;
+    return (
+      '<p class="cluster-caption">' +
+      caption +
+      "</p>" +
+      '<div class="cluster-grid">' +
+      '<article class="cluster-tile">' +
+      gauge(t.cpu, "CPU ø") +
+      "</article>" +
+      '<article class="cluster-tile">' +
+      gauge(t.mem, "RAM ø") +
+      "</article>" +
+      '<article class="cluster-tile">' +
+      gauge(t.disk, "DISK ø") +
+      "</article>" +
+      "</div>" +
+      '<div class="cluster-legend">' +
+      '<span title="under 65%"><i class="lg lg-ok"></i>Healthy</span>' +
+      '<span title="65–84%"><i class="lg lg-warn"></i>Warning</span>' +
+      '<span title="85% and above"><i class="lg lg-crit"></i>Critical</span>' +
+      "</div>"
+    );
+  }
+
+  /* -------- Node card --------
+     Structure: head (role/status) -> name -> uptime -> four bars ->
+     footer (version, pods). Board/RAM/OS live in the hardware
+     table on the index page, not here — one home per information. */
   function nodeCard(n, usage) {
     var u = usage[n.name] || {};
     var cpu = num(u.cpu_percent !== undefined ? u.cpu_percent : u.cpu);
@@ -301,26 +370,18 @@
     var uptime = fmtUptime(num(u.uptime_s));
     var isReady = n.status === "True";
     var isCp = /control/i.test(n.role || "");
-    var resolved = resolveSpecs(n);
 
-    var specHtml = n.version ? specLine("tag", n.version) : "";
-    resolved.lines.forEach(function (s) {
-      specHtml += specLine(specIcon(s), s);
-    });
-
-    /* Disk is deliberately NOT a text line here - it has its own gauge. */
-    if (temp !== null) {
-      specHtml += specLine(
-        "thermometer",
-        "Temp " + temp.toFixed(0) + " °C",
-        tempClass(temp),
-      );
-    }
-    if (pods !== null) {
-      specHtml += specLine("pods", "Pods " + pods.toFixed(0));
-    }
+    /* Uptime — visible above the bars */
+    var uptimeHtml = "";
     if (uptime !== null) {
-      specHtml += specLine("clock", "Uptime " + uptime);
+      uptimeHtml = specLine("clock", "Uptime " + uptime);
+    }
+
+    /* Footer below the bars: version + pods */
+    var footerHtml = "";
+    if (n.version) footerHtml += specLine("tag", esc(n.version));
+    if (pods !== null) {
+      footerHtml += specLine("pods", "Pods " + pods.toFixed(0));
     }
 
     return (
@@ -344,11 +405,15 @@
       '<div class="node-name">' +
       esc(n.name) +
       "</div>" +
-      specHtml +
-      '<div class="gauges">' +
-      gauge(cpu, "CPU") +
-      gauge(mem, "RAM") +
-      gauge(disk, "DISK") +
+      uptimeHtml +
+      '<div class="metrics">' +
+      bar(cpu, "CPU") +
+      bar(mem, "RAM") +
+      bar(disk, "DISK") +
+      tempBar(temp) +
+      "</div>" +
+      '<div class="node-footer">' +
+      footerHtml +
       "</div>" +
       "</article>"
     );
@@ -405,7 +470,10 @@
       "</div>";
   }
 
-  /* -------- Watcher card -------- */
+  /* -------- Watcher card --------
+     Offline = no heartbeat for two 15-minute intervals (30 min).
+     The watcher Pi sleeps at night, so an offline badge after dark
+     is expected behaviour, not an error. */
   function watcherCard(w) {
     var age = Date.now() - new Date(w.timestamp).getTime();
     var online = age < WATCHER_MAX_AGE_MS;
@@ -416,7 +484,7 @@
 
     var specHtml = specLine("tag", "nights watch");
     WATCHER_SPECS.forEach(function (s) {
-      specHtml += specLine(specIcon(s), s);
+      specHtml += specLine("tag", s);
     });
 
     if (temp !== null) {
@@ -488,7 +556,9 @@
     var ready = nodes.filter(function (n) {
       return n.status === "True";
     }).length;
+    var totals = clusterTotals(usage, nodes);
 
+    /* Stats tiles: what runs (counts) */
     var statsEl = document.getElementById("stats");
     if (statsEl) {
       statsEl.innerHTML =
@@ -510,8 +580,14 @@
         "</div></div>";
     }
 
-    fillHardwareAges(nodes);
+    /* Cluster overview card: how loaded the cluster is */
+    var clusterEl = document.getElementById("cluster-overview");
+    if (clusterEl) {
+      clusterEl.innerHTML = clusterCard(totals, ready, nodes.length);
+    }
 
+    /* Per-node cards */
+    fillHardwareAges(nodes);
     var metricsEl = document.getElementById("node-metrics");
     if (metricsEl) {
       metricsEl.innerHTML = nodes.length
@@ -594,3 +670,62 @@
   setInterval(load, REFRESH_MS);
   setInterval(loadWatcherStatus, REFRESH_MS);
 })();
+
+/* ================================================================
+ *  REMINDER — style.css needs these blocks IN THE MAIN SCOPE
+ *  (not inside a media query):
+ *
+ *  .cluster-card {
+ *      margin: 1.5rem 0;
+ *  }
+ *  .cluster-card-inner {
+ *      border: 1px solid var(--accent);
+ *      border-radius: 6px;
+ *      background: var(--card);
+ *      padding: 1rem 1.25rem;
+ *  }
+ *  .cluster-head {
+ *      display: flex;
+ *      justify-content: space-between;
+ *      align-items: baseline;
+ *      flex-wrap: wrap;
+ *      gap: 0.25rem 1rem;
+ *      padding-bottom: 0.75rem;
+ *      margin-bottom: 1rem;
+ *      border-bottom: 1px solid var(--border);
+ *  }
+ *  .cluster-head .label {
+ *      color: var(--accent);
+ *      font-weight: 600;
+ *      letter-spacing: 0.04em;
+ *      text-transform: uppercase;
+ *      font-size: 0.85rem;
+ *  }
+ *  .cluster-caption {
+ *      font-size: 0.78rem;
+ *      color: var(--faint);
+ *  }
+ *
+ *  Cluster gauges scaled up for the wide card (desktop):
+ *  .cluster-gauges {
+ *      margin-top: 0.75rem;
+ *      padding-top: 0;
+ *      justify-content: space-evenly;
+ *      gap: 1rem;
+ *  }
+ *  .cluster-gauges .gauge {
+ *      width: 90px;
+ *      height: 90px;
+ *  }
+ *  .cluster-gauges .gauge span {
+ *      width: 72px;
+ *      height: 72px;
+ *      font-size: 1.2rem;
+ *  }
+ *  .cluster-gauges .gauge-wrap small {
+ *      font-size: 0.9rem;
+ *  }
+ *
+ *  index.html already has the container between #stats and
+ *  #node-metrics — verified, nothing to add there.
+ * ================================================================ */

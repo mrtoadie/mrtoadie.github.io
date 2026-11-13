@@ -19,6 +19,7 @@
                     <a href="index.html">/homelab</a>
                     <a href="projects.html">/projects</a>
                     <a href="skills.html" class="active">/skills</a>
+                    <a href="incidents.html">/incidents</a>
                 </nav>
                 <div class="dots">
                     <div class="dot dotleft"></div>
@@ -47,14 +48,11 @@
                     </p>
                 </section>
                 <!-- Infrastructure & Containers -->
-                <h2>
-                    <span style="color: var(--accent)">/infrastructure</span>
-                </h2>
+                <h2><span style="color: var(--accent)">/infrastructure</span></h2>
                 <section>
                     <div class="section-header">
                         <span>kubectl get skills -o wide</span>
                     </div>
-
                     <div class="skill-list">
                         <div class="skill-row">
                             <div class="skill-name">Kubernetes / k3s</div>
@@ -65,7 +63,6 @@
                                 <a href="index.html">↪ /homelab</a>
                             </div>
                         </div>
-
                         <div class="skill-row">
                             <div class="skill-name">Helm</div>
                             <div class="skill-evidence">
@@ -74,7 +71,6 @@
                                 timestamp comparisons included)
                             </div>
                         </div>
-
                         <div class="skill-row">
                             <div class="skill-name">Velero</div>
                             <div class="skill-evidence">
@@ -83,7 +79,14 @@
                                 <a href="projects.html">↪ velero-manager</a>
                             </div>
                         </div>
-
+                        <div class="skill-row">
+                            <div class="skill-name">Ansible</div>
+                            <div class="skill-evidence">
+                                Playbooks for cross-node package
+                                synchronization, fleet fact collection,
+                                Galaxy collection management
+                            </div>
+                        </div>
                         <div class="skill-row">
                             <div class="skill-name">
                                 Docker &amp; Podman
@@ -94,17 +97,6 @@
                                 Podman evaluation on constrained hardware
                             </div>
                         </div>
-
-                        <div class="skill-row">
-                            <div class="skill-name">NFS / Storage</div>
-                            <div class="skill-evidence">
-                                Dynamic PersistentVolumes via
-                                nfs-subdir-external-provisioner, XFS on
-                                USB-SSD, storage trade-off analysis
-                                (local-path vs. NFS)
-                            </div>
-                        </div>
-
                         <div class="skill-row">
                             <div class="skill-name">TLS &amp; Ingress</div>
                             <div class="skill-evidence">
@@ -116,42 +108,23 @@
                     </div>
                 </section>
                 <!-- Development & Automation -->
-                <h2>
-                    <span style="color: var(--accent)">/development</span>
-                </h2>
+                <h2><span style="color: var(--accent)">/development</span></h2>
                 <section>
                     <div class="section-header">
                         <span>#!/bin/bash</span>
                     </div>
-
                     <div class="skill-list">
                         <div class="skill-row">
-                            <div class="skill-name">Go</div>
+                            <div class="skill-name">Go &amp; Bash</div>
                             <div class="skill-evidence">
-                                Interactive CLIs like a Velero backup manager, a certificate checker and an QEMU configuration tool
+                                From one-off scripts to shipped tools: interactive CLIs
+                                (backup manager, cert checker, QEMU configurator) in Go,
+                                orchestrated by production-grade Bash — SSH fleets, jq
+                                pipelines, GitHub API automation, systemd timers. The
+                                pipeline feeding this site's dashboard is Bash-driven
                                 <a href="projects.html">↪ projects</a>
                             </div>
                         </div>
-
-                        <div class="skill-row">
-                            <div class="skill-name">Bash</div>
-                            <div class="skill-evidence">
-                                Production-ish scripts with set -euo
-                                pipefail, SSH orchestration, jq pipelines,
-                                GitHub REST API automation, systemd timers
-                                <a href="index.html">↪ /watcher</a>
-                            </div>
-                        </div>
-
-                        <div class="skill-row">
-                            <div class="skill-name">Ansible</div>
-                            <div class="skill-evidence">
-                                Playbooks for cross-node package
-                                synchronization, fleet fact collection,
-                                Galaxy collection management
-                            </div>
-                        </div>
-
                         <div class="skill-row">
                             <div class="skill-name">
                                 HTML / CSS / JavaScript
@@ -163,7 +136,6 @@
                                 <a href="index.html">↪ /homelab</a>
                             </div>
                         </div>
-
                         <div class="skill-row">
                             <div class="skill-name">Git</div>
                             <div class="skill-evidence">
@@ -172,23 +144,14 @@
                                 git-filter-repo, secret scanning response
                             </div>
                         </div>
-                        <div class="skill-row">
-                            <div class="skill-name">TUI &amp; CLIs</div>
-                            <div class="skill-evidence">
-                                k9s as daily driver for cluster introspection, Freelens for visualization, terminal-first workflows everywhere
-                            </div>
-                        </div>
                     </div>
                 </section>
                 <!-- Operating Systems -->
-                <h2>
-                    <span style="color: var(--accent)">/operating systems</span>
-                </h2>
+                <h2><span style="color: var(--accent)">/operating systems</span></h2>
                 <section>
                     <div class="section-header">
                         <span>uname -a</span>
                     </div>
-
                     <div class="skill-list">
                         <div class="skill-row">
                             <div class="skill-name">Arch Linux</div>
@@ -196,15 +159,13 @@
                                 Daily driver for years — rolling release, kernel pinning after regressions, pacman surgery when needed
                             </div>
                         </div>
-
                         <div class="skill-row">
-                            <div class="skill-name">Raspberry Pi OS / Debian</div>
+                            <div class="skill-name">Raspberry Pi OS</div>
                             <div class="skill-evidence">
                                 All cluster nodes, from /boot overlays to
                                 cgroup memory settings for Kubernetes
                             </div>
                         </div>
-
                         <div class="skill-row">
                             <div class="skill-name">NixOS</div>
                             <div class="skill-evidence">
@@ -216,14 +177,11 @@
                     </div>
                 </section>
                 <!-- Virtualization & On-Prem -->
-                <h2>
-                    <span style="color: var(--accent)">/virtualization &amp; on-prem</span>
-                </h2>
+                <h2><span style="color: var(--accent)">/virtualization &amp; on-prem</span></h2>
                 <section>
                     <div class="section-header">
                         <span>virsh list --all</span>
                     </div>
-
                     <div class="skill-list">
                         <div class="skill-row">
                             <div class="skill-name">KVM / QEMU / libvirt</div>
@@ -233,7 +191,6 @@
                                 try, roll back, no production touched
                             </div>
                         </div>
-
                         <div class="skill-row">
                             <div class="skill-name">Windows Server</div>
                             <div class="skill-evidence">
@@ -242,7 +199,6 @@
                                 world I work in daily
                             </div>
                         </div>
-
                         <div class="skill-row">
                             <div class="skill-name">Ubuntu Server</div>
                             <div class="skill-evidence">
@@ -252,9 +208,7 @@
                     </div>
                 </section>
                 <!-- Professional background -->
-                <h2>
-                    <span style="color: var(--accent)">/day job</span>
-                </h2>
+                <h2><span style="color: var(--accent)">/day job</span></h2>
                 <section>
                     <div class="section-header">
                         <span>whoami --work</span>
@@ -267,62 +221,151 @@
                         underneath it.
                     </p>
                 </section>
-                <!-- Learning in public — incidents as credentials -->
-                <h2>
-                    <span style="color: var(--accent)">/battle scars</span>
-                </h2>
+                <!-- Software -->
+                <h2 id="software"><span style="color: var(--accent)">/software & tools</span></h2>
+                <section>
+                    <div class="section-header">
+                        <span>kubectl get namespace</span>
+                    </div>
+                    <h3 class="category-heading">Network</h3>
+                    <div class="tool-grid">
+                        <div class="tool-card">
+                            <div class="tool-name">Traefik</div>
+                            <div class="tool-desc">
+                                Ingress controller for all internal services
+                                (grafana.local, forgejo.local)
+                            </div>
+                            <div class="tool-reason">
+                                "The default one supplied with k3s — has been running smoothly since day one."
+                            </div>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-name">cert-manager</div>
+                            <div class="tool-desc">
+                                TLS certificates for internal services
+                                (grafana.local, forgejo.local)
+                            </div>
+                            <div class="tool-reason">
+                                "Configured without Helm charts — ClusterIssuers supply the
+                                Traefik ingresses with certificates, so internal cluster
+                                traffic is encrypted as well."
+                            </div>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-name">Unbound</div>
+                            <div class="tool-desc">
+                                Recursive DNS resolver on a Raspberry Pi Zero
+                            </div>
+                            <div class="tool-reason">
+                                "The existing router does not allow custom DNS entries.
+                                Unbound resolves *.local to cluster IPs."
+                            </div>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-name">Caddy</div>
+                            <div class="tool-desc">
+                                Reverse Proxy on a Raspberry Pi Zero (Dynacat exposure)
+                            </div>
+                            <div class="tool-reason">
+                                "For local domains such as watcher.local, Caddy uses self-signed certificates. This is very resource-efficient and perfect for a Pi Zero."
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Monitoring & Alerting -->
+                    <h3 class="category-heading">Monitoring & Alerting</h3>
+                    <div class="tool-grid">
+                        <div class="tool-card">
+                            <div class="tool-name">Prometheus + Grafana</div>
+                            <div class="tool-desc">
+                                Node Exporter, kube-state-metrics, custom
+                                ServiceMonitors
+                            </div>
+                            <div class="tool-reason">
+                                "kube-prometheus-stack deployed via Helm. Custom dashboards for Velero metrics."
+                            </div>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-name">Dynacat</div>
+                            <div class="tool-desc">
+                                Dashboard on Raspberry Pi Zero (Podman)
+                            </div>
+                            <div class="tool-reason">
+                                "A lightweight yet highly customisable dashboard.
+                                Node metrics are transmitted via an agent."
+                            </div>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-name">Watcher Heartbeat</div>
+                            <div class="tool-desc">
+                                Custom heartbeat script on the Pi Zero
+                            </div>
+                            <div class="tool-reason">
+                                "Custom heartbeat script — pushes the watcher's status to GitHub every 15 minutes."
+                            </div>
+                        </div>
+                    </div>
+                    <!-- CI/CD & Version Control -->
+                    <h3 class="category-heading">CI/CD & Version Control</h3>
+                    <div class="tool-grid">
+                        <div class="tool-card">
+                            <div class="tool-name">Forgejo</div>
+                            <div class="tool-desc">
+                                Git Hosting
+                            </div>
+                            <div class="tool-reason">
+                                "Forgejo for local, private repositories and backups for GitHub / Codeberg."
+                            </div>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-name">Ansible</div>
+                            <div class="tool-desc">
+                                Playbooks / Configuration Management
+                            </div>
+                            <div class="tool-reason">
+                                "System updates, synchronising Git repositories, analyses and maintenance."
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Storage & Backups -->
+                    <h3 class="category-heading">Storage & Backups</h3>
+                    <div class="tool-grid">
+                        <div class="tool-card">
+                            <div class="tool-name">Velero + MinIO</div>
+                            <div class="tool-desc">
+                                Kubernetes backup/restore to a local
+                                S3-compatible destination
+                            </div>
+                            <div class="tool-reason">
+                                "Backup of metadata and PVs. Restore tested.
+                                MinIO is running in Docker on a desktop, not in a cluster."
+                            </div>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-name">NFS Subdir Provisioner</div>
+                            <div class="tool-desc">
+                                Dynamic PersistentVolumes via NFS
+                            </div>
+                            <div class="tool-reason">
+                                "Instead of <b>local-path</b>: Data is retained when
+                                the <b>pod</b> is rescheduled. Performance is adequate
+                                for small databases."
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Lessons learned → full stories in the incident log -->
+                <h2><span style="color: var(--accent)">/battle scars</span></h2>
                 <section>
                     <div class="section-header">
                         <span>dmesg | grep -i lesson</span>
+                        <span class="right">5 entries and counting</span>
                     </div>
                     <p class="intro-text">
-                        Things that broke and what they taught me:
+                        Things that broke and what they taught me — etcd on SD cards,
+                        failing node rejoins, a leaked Kubernetes JWT, Helm type traps
+                        and a split-brain repository. The honest versions live here:
+                        <a href="incidents.html">↪ /incident log</a>
                     </p>
-                    <div class="skill-list">
-                        <div class="skill-row">
-                            <div class="skill-name">etcd on SD cards</div>
-                            <div class="skill-evidence">
-                                Continuous writes corrupt consumer flash —
-                                moved cluster data to USB-SSD with XFS
-                            </div>
-                        </div>
-                        <div class="skill-row">
-                            <div class="skill-name">Node rejoins</div>
-                            <div class="skill-evidence">
-                                k3s token mismatches and config drift after
-                                updates — from re-registration to full
-                                reimaging as last resort
-                            </div>
-                        </div>
-                        <div class="skill-row">
-                            <div class="skill-name">Exposed secrets</div>
-                            <div class="skill-evidence">
-                                GitGuardian alert on a Kubernetes JWT —
-                                history rewrite, secret scanning, least-privilege ServiceAccounts since
-                            </div>
-                        </div>
-                        <div class="skill-row">
-                            <div class="skill-name">Git: split-brain repository</div>
-                            <div class="skill-evidence">
-                                Two writers, one repo: the collector pushes every 5 minutes
-                                via API while the desktop checkout went stale — non-fast-forward
-                                rejections, failed rebases on dirty trees, detached HEAD.
-                                Lesson: know which host you are on before you push, and check
-                                git status before blaming the network
-                            </div>
-                        </div>
-                        <div class="skill-row">
-                            <div class="skill-name">Git: silent merge damage</div>
-                            <div class="skill-evidence">
-                                A stash-pop merge left duplicate function declarations in
-                                dashboard.js and conflict markers in style.css — the last
-                                declaration silently wins in JS, so the broken version ran
-                                without a single error. Shipped to prod, found via screenshot.
-                                Lesson: after resolving conflicts, verify the file, not just
-                                the diff
-                            </div>
-                        </div>
-                    </div>
                 </section>
             </main>
             <!-- Footer -->

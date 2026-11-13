@@ -24,6 +24,7 @@
                     <a href="index.html" class="active">/homelab</a>
                     <a href="projects.html">/projects</a>
                     <a href="skills.html">/skills</a>
+                    <a href="incidents.html">/incidents</a>
                 </nav>
                 <span id="feed-badge" class="feed-badge">
                   <span class="dot"></span>LIVE
@@ -34,13 +35,58 @@
                     <div class="dot dotright"></div>
                 </div>
             </header>
+
             <main>
+            <section id="hero" class="hero">
+              <div class="hero-intro">
+                <h1>Cloud Engineer by day,<br>cluster operator by night.</h1>
+                <p>
+                  I'm MrToadie — a Microsoft 365 Cloud Engineer professionally, and at home I
+                  run a four-node Kubernetes (k3s) homelab on Raspberry Pis. Everything on
+                  this page is fed by real data from that cluster. If a node goes down,
+                  you'll see it here before I do.
+                </p>
+              </div>
+
+              <div class="hero-projects" id="projects">
+                <h2>/featured projects</h2>
+                <div class="hero-repo-grid">
+
+                  <a class="hero-repo-card" href="https://github.com/mrtoadie/go-velero-manager" target="_blank" rel="noopener">
+                    <span class="hero-repo-name">go-velero-manager</span>
+                    <span class="hero-repo-desc">Interactive CLI for Velero backup management on k3s — list, create and delete backups and schedules, built with Go and Charm Huh.</span>
+                    <span class="hero-repo-tag">Go · Kubernetes</span>
+                  </a>
+
+                  <a class="hero-repo-card" href="https://github.com/mrtoadie/go-check-cert" target="_blank" rel="noopener">
+                    <span class="hero-repo-name">go-check-cert</span>
+                    <span class="hero-repo-desc">Small Go utility for TLS certificate validation — checks expiry, chain trust and SANs from the command line.</span>
+                    <span class="hero-repo-tag">Go · TLS</span>
+                  </a>
+
+                  <a class="hero-repo-card" href="https://github.com/mrtoadie/kvm-configurator" target="_blank" rel="noopener">
+                    <span class="hero-repo-name">kvm-configurator</span>
+                    <span class="hero-repo-desc">Helper tooling for standing up and configuring KVM virtual machines on Linux hosts.</span>
+                    <span class="hero-repo-tag">Go · KVM</span>
+                  </a>
+
+                </div>
+                <p class="hero-repo-more"><a href="https://github.com/mrtoadie" target="_blank" rel="noopener">↪ See all repositories →</a></p>
+              </div>
+            </section>
                 <h1>/homelab</h1>
                 <div class="subtitle cursor">
                     k3s on Raspberry Pi · self-hosted, self-broken, self-fixed
                 </div>
                 <h2><span style="color: var(--accent)">/k3s cluster</span></h2>
                 <section>
+                    <div class="section-header">
+                        <span>kubectl top nodes</span>
+                    </div>
+                    <div class="cluster-card" id="cluster-overview">
+                        <p class="loading">Cluster data is loading…</p>
+                    </div>
+
                     <div class="section-header">
                         <span>kubectl get nodes -o wide</span>
                         <span class="right" id="refresh-info">auto-refresh: 5 m</span>
@@ -64,7 +110,6 @@
                             <div class="v">—</div>
                         </div>
                     </div>
-
                     <div class="node-grid" id="node-metrics">
                         <p class="loading">Cluster data is loading…</p>
                     </div>
@@ -277,140 +322,6 @@
                             </tr>
                         </tbody>
                     </table>
-                </section>
-                <!-- Software -->
-                <h2 id="software">
-                    <span style="color: var(--accent)">/software & tools</span>
-                </h2>
-                <section>
-                    <div class="section-header">
-                        <span>kubectl get namespace</span>
-                    </div>
-                    <h3 class="category-heading">Network</h3>
-                    <div class="tool-grid">
-                        <div class="tool-card">
-                            <div class="tool-name">Traefik</div>
-                            <div class="tool-desc">
-                                Ingress controller for all internal services
-                                (grafana.local, forgejo.local)
-                            </div>
-                            <div class="tool-reason">
-                                "The default one supplied with k3s — has been running smoothly since day one."
-                            </div>
-                        </div>
-                        <div class="tool-card">
-                            <div class="tool-name">cert-manager</div>
-                            <div class="tool-desc">
-                                TLS certificates for internal services
-                                (grafana.local, forgejo.local)
-                            </div>
-                            <div class="tool-reason">
-                                "Configured without Helm charts — ClusterIssuers supply the
-                                Traefik ingresses with certificates, so internal cluster
-                                traffic is encrypted as well."
-                            </div>
-                        </div>
-                        <div class="tool-card">
-                            <div class="tool-name">Unbound</div>
-                            <div class="tool-desc">
-                                Recursive DNS resolver on a Raspberry Pi Zero
-                            </div>
-                            <div class="tool-reason">
-                                "The existing router does not allow custom DNS entries.
-                                Unbound resolves *.local to cluster IPs."
-                            </div>
-                        </div>
-                        <div class="tool-card">
-                            <div class="tool-name">Caddy</div>
-                            <div class="tool-desc">
-                                Reverse Proxy on a Raspberry Pi Zero (Dynacat exposure)
-                            </div>
-                            <div class="tool-reason">
-                                "For local domains such as watcher.local, Caddy uses self-signed certificates. This is very resource-efficient and perfect for a Pi Zero."
-                            </div>
-                        </div>
-                    </div>
-
-                    <h3 class="category-heading">Monitoring & Alerting</h3>
-                    <div class="tool-grid">
-                        <div class="tool-card">
-                            <div class="tool-name">Prometheus + Grafana</div>
-                            <div class="tool-desc">
-                                Node Exporter, kube-state-metrics, custom
-                                ServiceMonitors
-                            </div>
-                            <div class="tool-reason">
-                                "kube-prometheus-stack deployed via Helm. Custom dashboards for Velero metrics."
-                            </div>
-                        </div>
-                        <div class="tool-card">
-                            <div class="tool-name">Dynacat</div>
-                            <div class="tool-desc">
-                                Dashboard on Raspberry Pi Zero (Podman)
-                            </div>
-                            <div class="tool-reason">
-                                "A lightweight yet highly customisable dashboard.
-                                Node metrics are transmitted via an agent."
-                            </div>
-                        </div>
-                        <div class="tool-card">
-                            <div class="tool-name">Watcher Heartbeat</div>
-                            <div class="tool-desc">
-                                Custom heartbeat script on the Pi Zero
-                            </div>
-                            <div class="tool-reason">
-                                "Custom heartbeat script — pushes the watcher's status to GitHub every 15 minutes."
-                            </div>
-                        </div>
-                    </div>
-
-                    <h3 class="category-heading">CI/CD & Version Control</h3>
-                    <div class="tool-grid">
-                        <div class="tool-card">
-                            <div class="tool-name">Forgejo</div>
-                            <div class="tool-desc">
-                                Git Hosting
-                            </div>
-                            <div class="tool-reason">
-                                "Forgejo for local, private repositories and backups for GitHub / Codeberg."
-                            </div>
-                        </div>
-                        <div class="tool-card">
-                            <div class="tool-name">Ansible</div>
-                            <div class="tool-desc">
-                                Playbooks / Configuration Management
-                            </div>
-                            <div class="tool-reason">
-                                "System updates, synchronising Git repositories, analyses and maintenance."
-                            </div>
-                        </div>
-                    </div>
-
-                    <h3 class="category-heading">Storage & Backups</h3>
-                    <div class="tool-grid">
-                        <div class="tool-card">
-                            <div class="tool-name">Velero + MinIO</div>
-                            <div class="tool-desc">
-                                Kubernetes backup/restore to a local
-                                S3-compatible destination
-                            </div>
-                            <div class="tool-reason">
-                                "Backup of metadata and PVs. Restore tested.
-                                MinIO is running in Docker on a desktop, not in a cluster."
-                            </div>
-                        </div>
-                        <div class="tool-card">
-                            <div class="tool-name">NFS Subdir Provisioner</div>
-                            <div class="tool-desc">
-                                Dynamic PersistentVolumes via NFS
-                            </div>
-                            <div class="tool-reason">
-                                "Instead of <b>local-path</b>: Data is retained when
-                                the <b>pod</b> is rescheduled. Performance is adequate
-                                for small databases."
-                            </div>
-                        </div>
-                    </div>
                 </section>
                 <!-- Contact -->
                 <h2 id="contact"><span style="color: var(--accent)">/contact</span></h2>

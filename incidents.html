@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Incident Log · MrToadie</title>
+        <link rel="stylesheet" href="assets/css/style.css" />
+        <script src="assets/js/easter-eggs.js" defer></script>
+        <link rel="icon" href="assets/favico.png" sizes="48x48" />
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <div class="term-title">
+                    <span>~/incidents</span>
+                    <span class="path">· postmortems</span>
+                </div>
+                <nav class="top">
+                    <a href="index.html">/homelab</a>
+                    <a href="projects.html">/projects</a>
+                    <a href="skills.html">/skills</a>
+                    <a href="incidents.html" class="active">/incidents</a>
+                </nav>
+                <div class="dots">
+                    <div class="dot dotleft"></div>
+                    <div class="dot dotmiddle"></div>
+                    <div class="dot dotright"></div>
+                </div>
+            </header>
+
+            <main>
+                <h1>/incident log</h1>
+                <div class="subtitle cursor">
+                    outages, mistakes and migrations · documented, not forgotten
+                </div>
+
+                <!-- Intro -->
+                <section>
+                    <div class="section-header">
+                        <span>journalctl --since forever</span>
+                        <span class="right">honest, no varnish</span>
+                    </div>
+                    <p class="intro-text">
+                        Things break. That's fine — what matters is writing down what happened,
+                        what fixed it, and what I learned. This is my honest log of operating
+                        a four-node k3s cluster on Raspberry Pis: outages, mistakes and
+                        migrations. Each entry follows the same structure:
+                        what happened &rarr; diagnosis &rarr; fix &rarr; lessons.
+                    </p>
+                </section>
+
+                <!-- Anchor nav -->
+                <section>
+                    <div class="section-header">
+                        <span>grep -n "^##" incidents.md</span>
+                        <span class="right">5 entries · newest learnings at the bottom</span>
+                    </div>
+                    <nav class="anchor-nav">
+                        <a href="#inc-001">001 — A Kubernetes JWT in a public repo</a>
+                        <a href="#inc-002">002 — etcd on borrowed time: SD card to USB-SSD</a>
+                        <a href="#inc-003">003 — Node rejoins fail: tokens, drift, reimaging</a>
+                        <a href="#inc-004">004 — Helm type trap: float64 vs. int</a>
+                        <a href="#inc-005">005 — Split-brain repository: two writers, one repo</a>
+                    </nav>
+                </section>
+
+                <!-- ================================================== -->
+                <!-- Incident 001 -->
+                <!-- ================================================== -->
+                <article class="incident" id="inc-001">
+                    <details class="incident-details">
+                        <summary>
+                            <h2>001 — A Kubernetes JWT in a public repo</h2>
+                            <p class="incident-meta">
+                                <span class="tag">Security</span>
+                                <span class="tag">Kubernetes</span>
+                                <time datetime="2026-10">October 2026</time>
+                                · Status: <span class="status-resolved">resolved</span>
+                                <span class="toggle-hint">details</span>
+                            </p>
+                        </summary>
+                        <div class="incident-body">
+                            <h3>What happened</h3>
+                            <p>
+                                GitGuardian flagged one of my public repositories and told me it had found
+                                a leaked credential — a Kubernetes service account token, a JWT, committed
+                                alongside a manifest or script. Nothing dramatic to look at: just a long
+                                string in a file I had pushed to publish my homelab work. But that string
+                                is exactly the kind of thing automated scanners crawl GitHub for, and in
+                                the worst case it represents a valid identity inside my cluster.
+                            </p>
+                            <h3>Diagnosis</h3>
+                            <p>
+                                First step: figure out whether the token was actually valid, not just
+                                expired or not in a vacuum. I decoded the JWT, checked the issuer and the
+                                bound service account, and reviewed what RBAC rights that account had in
+                                the cluster. The uncomfortable part wasn't that the token existed —
+                                it was realizing how easy it is to accidentally ship it when manifests,
+                                kubeconfigs and shell scripts live side by side in the same repo.
+                            </p>
+                            <h3>Fix</h3>
+                            <ul>
+                                <li>Revoked and rotated the affected credentials and service account tokens.</li>
+                                <li>Removed the secret from the repository history with <code>git-filter-repo</code> — deleting the file alone leaves the token recoverable in old commits.</li>
+                                <li>Added <code>.gitignore</code> rules for kubeconfigs, tokens, CA certificates and other credential-bearing files.</li>
+                                <li>Enabled secret scanning on my repos so the next slip gets caught at commit time instead of by an external bot.</li>
+                                <li>Moved collection jobs to a dedicated ServiceAccount with narrow RBAC in a monitoring namespace — future tokens, even if leaked, have minimal blast radius.</li>
+                            </ul>
+                            <h3>What I learned</h3>
+                            <p>
+                                The lesson wasn't "never publish your cluster configs" — sharing the homelab
+                                is the point of the portfolio. The lesson is that publishing requires a
+                                deliberate boundary: history rewriting as a routine skill, ignore rules as
+                                muscle memory, and least-privilege service accounts so that a mistake is
+                                cheap instead of catastrophic. The scan alert cost me an evening; a live
+                                token in the wild would have cost much more.
+                            </p>
+                        </div>
+                    </details>
+                </article>
+
+                <!-- ================================================== -->
+                <!-- Incident 002 — TODO: trigger event, diagnosis detail,
+                     migration steps. Insert real month/year in <time>,
+                     then remove the surrounding comment markers. -->
+                <!-- ================================================== -->
+                <article class="incident" id="inc-002">
+                    <details class="incident-details">
+                        <summary>
+                            <h2>002 — etcd on borrowed time: SD card to USB-SSD</h2>
+                            <p class="incident-meta">
+                                <span class="tag">Storage</span>
+                                <span class="tag">etcd</span>
+                                <!-- <time datetime="2026-XX">Month 2026</time> · -->
+                                Status: <span class="status-resolved">resolved</span>
+                                <span class="toggle-hint">details</span>
+                            </p>
+                        </summary>
+                        <div class="incident-body">
+                            <h3>What happened</h3>
+                            <p>
+                                The control-plane node (winterfell) kept its cluster state — etcd — on
+                                the boot SD card, because that's how the node was originally set up.
+                                SD cards are built for read-heavy workloads; etcd is the opposite:
+                                continuous small writes, wal files, compaction traffic around the
+                                clock. <!-- TODO: what triggered this — k3s update instability? -->
+                                It became clear this was not a theoretical risk but an eventual certainty.
+                            </p>
+                            <h3>Diagnosis</h3>
+                            <p>
+                                <!-- TODO: what you actually observed — fsync latencies, I/O errors,
+                                     or proactive decision after research. -->
+                                The core realization: consumer flash degrades under sustained write
+                                load, and a corrupted SD card doesn't corrupt gracefully — it takes the
+                                whole cluster state with it. Quorum lives on this one disk.
+                            </p>
+                            <h3>Fix</h3>
+                            <ul>
+                                <li>Moved all cluster and workload data to a USB-SSD formatted with XFS — a filesystem with strong metadata consistency guarantees, a good match for database-style write patterns.</li>
+                                <li>The SD card now hosts the operating system only — no cluster or workload data on it.</li>
+                                <!-- TODO: brief migration steps — data directory move / k3s reconfiguration. -->
+                            </ul>
+                            <h3>What I learned</h3>
+                            <p>
+                                Storage decisions for cluster state are not infrastructure trivia —
+                                they are a bet on how the storage medium fails. Etcd is the last
+                                place you want a medium that wears out silently. Separating OS and
+                                data also paid off later: reimaging a node means pulling the SD card
+                                without touching the cluster data.
+                            </p>
+                        </div>
+                    </details>
+                </article>
+
+                <!-- ================================================== -->
+                <!-- Incident 003 — TODO: real date in <time> -->
+                <!-- ================================================== -->
+                <article class="incident" id="inc-003">
+                    <details class="incident-details">
+                        <summary>
+                            <h2>003 — Node rejoins fail: tokens, drift, reimaging</h2>
+                            <p class="incident-meta">
+                                <span class="tag">k3s</span>
+                                <span class="tag">Operations</span>
+                                <!-- <time datetime="2026-XX">Month 2026</time> · -->
+                                Status: <span class="status-resolved">resolved — occasionally recurring</span>
+                                <span class="toggle-hint">details</span>
+                            </p>
+                        </summary>
+                        <div class="incident-body">
+                            <h3>What happened</h3>
+                            <p>
+                                After updates — or a node that had been offline longer than expected —
+                                workers stopped rejoining the cluster. Same hardware, same network,
+                                same hostname: the node simply refused to register. The cluster ran,
+                                the node was reachable, but <code>kubectl get nodes</code> showed it
+                                as NotReady or missing entirely.
+                            </p>
+                            <h3>Diagnosis</h3>
+                            <p>
+                                The usual suspects, in the order I stopped trusting them: k3s join
+                                token mismatches (tokens rotate server-side, stale copies linger on
+                                nodes), configuration drift between what the node booted with and
+                                what upgrades had left behind, and version skew between the
+                                control-plane and the rejoining worker. Debugging felt circular:
+                                the service runs, the network answers, the registration still fails.
+                            </p>
+                            <h3>Fix</h3>
+                            <ul>
+                                <li>Short path: re-register the node with a fresh join token — works when the token is the only problem.</li>
+                                <li>Medium path: align the k3s version with the control-plane before rejoining, since version skew compounds token issues.</li>
+                                <li>Last resort, taken more than once: full reimage of the node. When configuration drift outweighs the value of the node's local state, rebuilding is cheaper than archaeology.</li>
+                            </ul>
+                            <h3>What I learned</h3>
+                            <p>
+                                Reimaging feels like defeat and is actually strategy. The discipline
+                                that makes it cheap is treating node setup as a repeatable process —
+                                keeping join tokens fresh, versions pinned, and knowing exactly which
+                                state lives on the node vs. in the cluster. A cluster where
+                                rebuilding any member is boring is a healthy cluster.
+                            </p>
+                        </div>
+                    </details>
+                </article>
+
+                <!-- ================================================== -->
+                <!-- Incident 004 — TODO: real date in <time> -->
+                <!-- ================================================== -->
+                <article class="incident" id="inc-004">
+                    <details class="incident-details">
+                        <summary>
+                            <h2>004 — Helm type trap: float64 vs. int</h2>
+                            <p class="incident-meta">
+                                <span class="tag">Helm</span>
+                                <span class="tag">Monitoring</span>
+                                <!-- <time datetime="2026-XX">Month 2026</time> · -->
+                                Status: <span class="status-resolved">resolved</span>
+                                <span class="toggle-hint">details</span>
+                            </p>
+                        </summary>
+                        <div class="incident-body">
+                            <h3>What happened</h3>
+                            <p>
+                                While building custom dashboards for Velero backup age, the Helm
+                                templating kept failing with obscure errors about comparing
+                                timestamps. Numbers arrived from the Kubernetes API, but apparently
+                                not in the type the template expected.
+                            </p>
+                            <h3>Diagnosis</h3>
+                            <p>
+                                Go's JSON decoder unmarshals numbers into <code>float64</code> —
+                                so a Unix timestamp that arrives as a number is suddenly not an
+                                integer, and strict type comparisons in Helm templates refuse to
+                                compare <code>float64</code> against an <code>int</code> literal.
+                                The error message pointed at the comparison, not at the type
+                                mismatch, which is why the first fixes didn't work.
+                            </p>
+                            <h3>Fix</h3>
+                            <ul>
+                                <li>Explicit type conversion at the comparison site instead of hoping the values align.</li>
+                                <li>Compared seconds-as-integers rather than mixing raw API values and literals.</li>
+                            </ul>
+                            <h3>What I learned</h3>
+                            <p>
+                                Type systems follow you everywhere — even into templates you thought
+                                were "just text". When a template error is cryptic, distrust the
+                                values, not the syntax: half of my Helm debugging sessions ended
+                                with a type I didn't expect coming out of the API.
+                            </p>
+                        </div>
+                    </details>
+                </article>
+
+                <!-- ================================================== -->
+                <!-- Incident 005 — TODO: real date in <time>;
+                     verify the stash-pop retelling -->
+                <!-- ================================================== -->
+                <article class="incident" id="inc-005">
+                    <details class="incident-details">
+                        <summary>
+                            <h2>005 — Split-brain repository: two writers, one repo</h2>
+                            <p class="incident-meta">
+                                <span class="tag">Git</span>
+                                <span class="tag">Automation</span>
+                                <!-- <time datetime="2026-XX">Month 2026</time> · -->
+                                Status: <span class="status-resolved">resolved</span>
+                                <span class="toggle-hint">details</span>
+                            </p>
+                        </summary>
+                        <div class="incident-body">
+                            <h3>What happened</h3>
+                            <p>
+                                Two writers, one repository: the collector on the control-plane node
+                                pushes <code>cluster.json</code> every 5 minutes via the GitHub API,
+                                while my desktop checkout continued to believe it was the only one.
+                                Non-fast-forward rejections, failed rebases on dirty trees, a
+                                detached HEAD somewhere along the way — and more than once, me
+                                debugging "the network" when the actual problem was standing on
+                                which host I was pushing from.
+                            </p>
+                            <h3>Diagnosis</h3>
+                            <p>
+                                A repo stops being a simple thing once an automated process writes
+                                to it through the API. The desktop checkout ages by the minute;
+                                every manual push from it is a surprise to git. On top of that, a
+                                stash-pop during cleanup left duplicate function declarations in
+                                <code>dashboard.js</code> and conflict markers in
+                                <code>style.css</code> — and since the last declaration silently
+                                wins in JavaScript, the broken version ran without a single error.
+                                It shipped to production and I only caught it via screenshot.
+                            </p>
+                            <h3>Fix</h3>
+                            <ul>
+                                <li>Treat the Pages repo as a deploy target, not a working tree: collect data via API pull, never edit on the desktop without pulling first.</li>
+                                <li>After any conflict resolution, verify the resulting files themselves — not just that the diff looks plausible. Silent duplicates are the dangerous case.</li>
+                                <li>Know which host you are on before you push — and check <code>git status</code> before blaming the network.</li>
+                            </ul>
+                            <h3>What I learned</h3>
+                            <p>
+                                Automation changed the personality of the repository. What used to
+                                be "my files" is now a pipeline with a human attached, and the
+                                human part has to adapt: pull before push, trust files over diffs,
+                                and accept that the scariest bugs are the ones that don't throw
+                                errors.
+                            </p>
+                        </div>
+                    </details>
+                </article>
+            </main>
+
+            <!-- Footer -->
+            <footer>
+                <p>
+                    © 2026 <a href="https://github.com/mrtoadie" title="MrToadie @ GitHub" aria-label="MrToadie @ GitHub" target="_blank" rel="noopener noreferrer">MrToadie</a> · built with
+                    <span class="footer-icons">
+                        <span class="ic ic-linux" role="img" aria-label="Linux" title="Linux"></span>
+                        <span class="ic ic-music" role="img" aria-label="Music" title="Music"></span>
+                        <span class="ic ic-guitar" role="img" aria-label="Guitar" title="Guitar"></span>
+                        <span class="ic ic-coffee" role="img" aria-label="Coffee" title="Coffee"></span>
+                    </span>
+                </p>
+            </footer>
+        </div>
+
+        <script>
+            // Open the incident targeted by a #anchor (e.g. coming from
+            // the battle-scars teaser on skills.html).
+            if (location.hash) {
+                const target = document.querySelector(
+                    '.incident:target .incident-details'
+                );
+                if (target) target.open = true;
+            }
+        </script>
+    </body>
+</html>
+
+<!--
+  ============================================================
+  BEFORE DEPLOYING — open TODOs:
+  1. Fill real dates: uncomment the <time> lines in inc-002..005
+     and set datetime + visible text. Remove "·" issues: the
+     comment includes the separator, so re-enable carefully.
+  2. inc-002: trigger event, what you observed, migration steps.
+  3. inc-005: verify the stash-pop retelling against memory.
+
+  CSS to add to style.css:
+
+    .incident-details {
+        border: 1px solid var(--border, #30363d);
+        border-radius: 6px;
+        background: var(--surface, #161b22);
+        margin-bottom: 1rem;          <- replaces the old <br><br>
+    }
+    .incident-details summary {
+        cursor: pointer;
+        padding: 1rem 1.25rem;
+        list-style: none;
+    }
+    .incident-details summary::-webkit-details-marker { display: none; }
+    .incident-details summary h2 {
+        display: inline;
+        font-size: 1.15rem;
+        margin: 0;
+    }
+    .incident-details[open] summary {
+        border-bottom: 1px solid var(--border, #30363d);
+    }
+    .incident-body { padding: 0.25rem 1.25rem 1rem; }
+    .toggle-hint {
+        float: right;
+        font-size: 0.8rem;
+        color: var(--text-muted, #8b949e);
+    }
+    .incident-details:not([open]) .toggle-hint::before { content: "▸ "; }
+    .incident-details[open] .toggle-hint::before { content: "▾ "; }
+    .status-resolved  { color: #3fb950; }
+    .status-mitigated { color: #d29922; }
+    .status-open      { color: #f85149; }
+    .incident-meta    { font-size: 0.9rem; color: var(--text-muted, #8b949e); }
+    .anchor-nav       { display: flex; flex-direction: column; gap: 0.4rem; }
+  ============================================================
+-->
