@@ -48,7 +48,6 @@
                         what happened &rarr; diagnosis &rarr; fix &rarr; lessons.
                     </p>
                 </section>
-
                 <!-- Anchor nav -->
                 <section>
                     <div class="section-header">
@@ -63,10 +62,7 @@
                         <a href="#inc-005">005 — Split-brain repository: two writers, one repo</a>
                     </nav>
                 </section>
-
-                <!-- ================================================== -->
                 <!-- Incident 001 -->
-                <!-- ================================================== -->
                 <article class="incident" id="inc-001">
                     <details class="incident-details">
                         <summary>
@@ -74,7 +70,6 @@
                             <p class="incident-meta">
                                 <span class="tag">Security</span>
                                 <span class="tag">Kubernetes</span>
-                                <time datetime="2026-10">October 2026</time>
                                 · Status: <span class="status-resolved">resolved</span>
                                 <span class="toggle-hint">details</span>
                             </p>
@@ -118,12 +113,7 @@
                         </div>
                     </details>
                 </article>
-
-                <!-- ================================================== -->
-                <!-- Incident 002 — TODO: trigger event, diagnosis detail,
-                     migration steps. Insert real month/year in <time>,
-                     then remove the surrounding comment markers. -->
-                <!-- ================================================== -->
+                <!-- Incident 002 -->
                 <article class="incident" id="inc-002">
                     <details class="incident-details">
                         <summary>
@@ -131,7 +121,6 @@
                             <p class="incident-meta">
                                 <span class="tag">Storage</span>
                                 <span class="tag">etcd</span>
-                                <!-- <time datetime="2026-XX">Month 2026</time> · -->
                                 Status: <span class="status-resolved">resolved</span>
                                 <span class="toggle-hint">details</span>
                             </p>
@@ -171,10 +160,7 @@
                         </div>
                     </details>
                 </article>
-
-                <!-- ================================================== -->
-                <!-- Incident 003 — TODO: real date in <time> -->
-                <!-- ================================================== -->
+                <!-- Incident 003 -->
                 <article class="incident" id="inc-003">
                     <details class="incident-details">
                         <summary>
@@ -182,7 +168,6 @@
                             <p class="incident-meta">
                                 <span class="tag">k3s</span>
                                 <span class="tag">Operations</span>
-                                <!-- <time datetime="2026-XX">Month 2026</time> · -->
                                 Status: <span class="status-resolved">resolved — occasionally recurring</span>
                                 <span class="toggle-hint">details</span>
                             </p>
@@ -222,10 +207,7 @@
                         </div>
                     </details>
                 </article>
-
-                <!-- ================================================== -->
-                <!-- Incident 004 — TODO: real date in <time> -->
-                <!-- ================================================== -->
+                <!-- Incident 004 -->
                 <article class="incident" id="inc-004">
                     <details class="incident-details">
                         <summary>
@@ -233,7 +215,6 @@
                             <p class="incident-meta">
                                 <span class="tag">Helm</span>
                                 <span class="tag">Monitoring</span>
-                                <!-- <time datetime="2026-XX">Month 2026</time> · -->
                                 Status: <span class="status-resolved">resolved</span>
                                 <span class="toggle-hint">details</span>
                             </p>
@@ -270,11 +251,7 @@
                         </div>
                     </details>
                 </article>
-
-                <!-- ================================================== -->
-                <!-- Incident 005 — TODO: real date in <time>;
-                     verify the stash-pop retelling -->
-                <!-- ================================================== -->
+                <!-- Incident 005 -->
                 <article class="incident" id="inc-005">
                     <details class="incident-details">
                         <summary>
@@ -282,7 +259,6 @@
                             <p class="incident-meta">
                                 <span class="tag">Git</span>
                                 <span class="tag">Automation</span>
-                                <!-- <time datetime="2026-XX">Month 2026</time> · -->
                                 Status: <span class="status-resolved">resolved</span>
                                 <span class="toggle-hint">details</span>
                             </p>
@@ -327,7 +303,6 @@
                     </details>
                 </article>
             </main>
-
             <!-- Footer -->
             <footer>
                 <p>
@@ -354,50 +329,3 @@
         </script>
     </body>
 </html>
-
-<!--
-  ============================================================
-  BEFORE DEPLOYING — open TODOs:
-  1. Fill real dates: uncomment the <time> lines in inc-002..005
-     and set datetime + visible text. Remove "·" issues: the
-     comment includes the separator, so re-enable carefully.
-  2. inc-002: trigger event, what you observed, migration steps.
-  3. inc-005: verify the stash-pop retelling against memory.
-
-  CSS to add to style.css:
-
-    .incident-details {
-        border: 1px solid var(--border, #30363d);
-        border-radius: 6px;
-        background: var(--surface, #161b22);
-        margin-bottom: 1rem;          <- replaces the old <br><br>
-    }
-    .incident-details summary {
-        cursor: pointer;
-        padding: 1rem 1.25rem;
-        list-style: none;
-    }
-    .incident-details summary::-webkit-details-marker { display: none; }
-    .incident-details summary h2 {
-        display: inline;
-        font-size: 1.15rem;
-        margin: 0;
-    }
-    .incident-details[open] summary {
-        border-bottom: 1px solid var(--border, #30363d);
-    }
-    .incident-body { padding: 0.25rem 1.25rem 1rem; }
-    .toggle-hint {
-        float: right;
-        font-size: 0.8rem;
-        color: var(--text-muted, #8b949e);
-    }
-    .incident-details:not([open]) .toggle-hint::before { content: "▸ "; }
-    .incident-details[open] .toggle-hint::before { content: "▾ "; }
-    .status-resolved  { color: #3fb950; }
-    .status-mitigated { color: #d29922; }
-    .status-open      { color: #f85149; }
-    .incident-meta    { font-size: 0.9rem; color: var(--text-muted, #8b949e); }
-    .anchor-nav       { display: flex; flex-direction: column; gap: 0.4rem; }
-  ============================================================
--->

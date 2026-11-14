@@ -31,7 +31,7 @@
             <main>
                 <h1>/projects</h1>
                 <div class="subtitle cursor">
-                    Open-Source Homelab, Automation &amp;  Codeing Projects
+                    homelab, automation &amp; coding projects
                 </div>
 
                 <section>
@@ -101,7 +101,7 @@
                             <div class="project-desc">
                                 Tool for declarative KVM VMs:
                                 Define CPUs, RAM, disks and networking instead of
-                                typing them in manually with <code>virt-install</code> — reproducible, automated.
+                                typing them in manually with <b>virt-install</b> — reproducible, automated.
                             </div>
                             <div class="project-meta">
                                 <span><i class="ic ic-server" role="img" aria-label="KVM-VMs"></i> KVM-VMs</span>
@@ -124,7 +124,7 @@
                             </div>
                             <div class="project-desc">
                                 Automatic collection of Kubernetes cluster metrics (CPU, RAM, disk,
-                                temperature) and publication as `cluster.json` on GitHub Pages. Node query
+                                temperature) and publication as <b>cluster.json</b> on GitHub Pages. Node query
                                 via SSH, robust error handling for unreachable nodes — a
                                 single offline node does not bring down the entire pipeline.
                             </div>
@@ -175,7 +175,7 @@
                             <div class="project-desc">
                                 Pure HTML/CSS/JS — no database, no stored data.
                                 <a href="https://github.com/mrtoadie/lab/tree/main/homelab/homelab-collector" target="_blank" rel="noopener noreferrer">↪ homelab-collector</a>
-                                pushes fresh cluster data to the repository via the <code>GitHub API</code> every 5 minutes,
+                                pushes fresh cluster data to the repository via the <b>GitHub API</b> every 5 minutes,
                                 and the client renders it directly as a live dashboard.
                             </div>
                             <div class="project-meta">
@@ -188,19 +188,18 @@
                         </div>
 
                         <!-- Placeholder for future projects -->
-                        <div class="project-card muted">
+                        <div class="project-card wide">
                             <div class="project-header">
                                 <div class="project-name">Next Steps</div>
                             </div>
                             <div class="project-desc">
                                 <ul>
-                                    <li>Grafana dashboard templates</li>
-                                    <li>Prometheus alerting rules</li>
-                                    <li><code>NixOS</code> for Raspberry Pis</li>
-                                    <li>Longhorn block storage</li>
+                                    <li><b>Grafana</b> dashboard templates</li>
+                                    <li><b>Prometheus</b> alerting rules</li>
+                                    <li><b>NixOS</b> for Raspberry Pis</li>
+                                    <li><b>Longhorn</b> block storage</li>
                                     <li>second <b>control plane</b></li>
-                                    <li>migrating all local <code>Docker</code> to <code>Podman</code> or to the Cluster</li>
-                                    <li>...</li>
+                                    <li>migrating all local <b>Docker</b> to <b>Podman</b> or to the Cluster</li>
                                 </ul>
                             </div>
                         </div>
@@ -214,11 +213,11 @@
                     </div>
                     <div class="hw-note">
                         <strong>Why use Podman rather than Docker for Dynacat?</strong><br>
-                            <code>Docker</code> comes with a central daemon that runs as root — on a device
+                            <b>Docker</b> comes with a central daemon that runs as root — on a device
                             with 512 MB of RAM, this is a complete waste, and the daemon also presents a
-                            vulnerability. <code>Podman</code> runs daemon-free and rootless: containers start as
+                            vulnerability. <b>Podman</b> runs daemon-free and rootless: containers start as
                             normal systemd user services, saving resources and isolating privileges. On a
-                            Pi Zero, every megabyte counts. There’s still enough headroom to run <code>Caddy</code> and <code>Unbound</code> on the Zero as well.
+                            Pi Zero, every megabyte counts. There’s still enough headroom to run <b>Caddy</b> and <code>Unbound</code> on the Zero as well.
                     </div>
                 </section>
                 <section>
@@ -228,12 +227,12 @@
                     </div>
                     <div class="hw-note">
                         <strong>Why velero-manager?</strong><br>
-                            <code>Velero</code> is powerful, but so is its CLI: creating schedules, distinguishing manual
+                            <b>Velero</b> is powerful, but so is its CLI: creating schedules, distinguishing manual
                             backups from scheduled ones, selecting the correct namespace —
-                            all of this requires <code>YAML</code> or long command-line flags. It is precisely these repetitive tasks that the
+                            all of this requires <b>YAML</b> or long command-line flags. It is precisely these repetitive tasks that the
                             Manager has banished to an interactive TUI: navigating menus instead of reading documentation,
-                            making selections instead of guessing flags. Built in <code>Go with Charm Huh</code> — deliberately chosen over
-                            <code>Bubble Tea</code>, because the dialogues are meant to feel like a native CLI,
+                            making selections instead of guessing flags. Built in <b>Go with Charm Huh</b> — deliberately chosen over
+                            <b>Bubble Tea</b>, because the dialogues are meant to feel like a native CLI,
                             not like an app in the terminal.
                     </div>
                 </section>
@@ -244,9 +243,9 @@
                     </div>
                     <div class="hw-note">
                         <strong>Why does the Collector publish via GitHub?</strong><br>
-                            Because <code>GitHub Pages</code> is the antithesis of a managed server: no
+                            Because <b>GitHub Pages</b> is the antithesis of a managed server: no
                             runtime, no database, nothing that needs patching. The cluster
-                            pushes a single <code>JSON file</code> via the API; the browser retrieves it using
+                            pushes a single <b>JSON file</b> via the API; the browser retrieves it using
                             <b>fetch</b> — static hosting as a live stream. If the cluster goes down, the page switches to demo data and shows why — the demo banner includes a timestamp.
                             The infrastructure that transports the data cannot crash,
                             because it simply does not exist.

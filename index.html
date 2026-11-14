@@ -37,9 +37,13 @@
             </header>
 
             <main>
+            <h1>/homelab</h1>
+            <div class="subtitle cursor">
+                k3s on Raspberry Pi · self-hosted, self-broken, self-fixed
+            </div>
             <section id="hero" class="hero">
               <div class="hero-intro">
-                <h1>Cloud Engineer by day,<br>cluster operator by night.</h1>
+                <h2>Cloud Engineer by day,<br>cluster operator by night.</h2>
                 <p>
                   I'm MrToadie — a Microsoft 365 Cloud Engineer professionally, and at home I
                   run a four-node Kubernetes (k3s) homelab on Raspberry Pis. Everything on
@@ -49,7 +53,7 @@
               </div>
 
               <div class="hero-projects" id="projects">
-                <h2>/featured projects</h2>
+                <h2><span style="color: var(--accent)">/featured projects</span></h2>
                 <div class="hero-repo-grid">
 
                   <a class="hero-repo-card" href="https://github.com/mrtoadie/go-velero-manager" target="_blank" rel="noopener">
@@ -74,10 +78,6 @@
                 <p class="hero-repo-more"><a href="https://github.com/mrtoadie" target="_blank" rel="noopener">↪ See all repositories →</a></p>
               </div>
             </section>
-                <h1>/homelab</h1>
-                <div class="subtitle cursor">
-                    k3s on Raspberry Pi · self-hosted, self-broken, self-fixed
-                </div>
                 <h2><span style="color: var(--accent)">/k3s cluster</span></h2>
                 <section>
                     <div class="section-header">
@@ -86,7 +86,11 @@
                     <div class="cluster-card" id="cluster-overview">
                         <p class="loading">Cluster data is loading…</p>
                     </div>
-
+                    <div class="demo-note" id="demo-note">
+                        Demo data — <code>data/cluster.json</code> was not
+                        accessible. On the live page, the
+                        actual cluster values appear here.
+                    </div>
                     <div class="section-header">
                         <span>kubectl get nodes -o wide</span>
                         <span class="right" id="refresh-info">auto-refresh: 5 m</span>
@@ -112,12 +116,6 @@
                     </div>
                     <div class="node-grid" id="node-metrics">
                         <p class="loading">Cluster data is loading…</p>
-                    </div>
-
-                    <div class="demo-note" id="demo-note">
-                        Demo data — <code>data/cluster.json</code> was not
-                        accessible. On the live page, the
-                        actual cluster values appear here.
                     </div>
                 </section>
                 <!-- Storage -->
