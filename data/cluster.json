@@ -1,15 +1,13 @@
 {
-  "timestamp": "2026-11-14T20:40:21Z",
-  "collected_on": "winterfell",
-  "nodes": [{"name":"winterfell","role":"control-plane","status":"True","version":"v1.36.3+k3s1","age":"137d"},{"name":"worker01","role":"worker","status":"True","version":"v1.36.2+k3s1","age":"117d"},{"name":"worker02","role":"worker","status":"True","version":"v1.36.3+k3s1","age":"83d"},{"name":"worker03","role":"worker","status":"True","version":"v1.36.3+k3s1","age":"85d"}],
-  "resource_usage": {"winterfell":{"cpu_percent":36,"cpu_millicores":1468,"mem_percent":46,"mem_mib":3624,"disk_percent":39,"disk_usb":6,"temp_c":37.5,"load1":1.74,"uptime_s":39944,"pods":18},"worker01":{"cpu_percent":null,"cpu_millicores":null,"mem_percent":null,"mem_mib":null,"disk_percent":49,"disk_usb":null,"temp_c":31.2,"load1":2.20,"uptime_s":58,"pods":3},"worker02":{"cpu_percent":null,"cpu_millicores":null,"mem_percent":null,"mem_mib":null,"disk_percent":49,"disk_usb":null,"temp_c":34.1,"load1":1.82,"uptime_s":57,"pods":3},"worker03":{"cpu_percent":3,"cpu_millicores":153,"mem_percent":45,"mem_mib":842,"disk_percent":51,"disk_usb":null,"temp_c":43.8,"load1":0.80,"uptime_s":39949,"pods":3}},
+  "timestamp": "2026-11-14T20:45:33Z",
+  "collector_error": "Kubernetes API Server (192.168.178.210:6443) unreachable (TCP)",
+  "nodes": [],
+  "resource_usage": {},
   "pods": {
-    "total": 27,
-    "running": 27,
+    "total": 0,
+    "running": 0,
     "pending": 0
   },
-  "namespaces": 11,
-  "deployments": 18,
-  "services": 34,
-  "source": "winterfell-k3s-cluster"
+  "namespaces": null,
+  "deployments": null
 }
