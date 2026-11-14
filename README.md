@@ -86,10 +86,11 @@ mrtoadie.github.io/
 ├── index.html        # homelab dashboard (live cluster data)
 ├── projects.html     # selected projects
 ├── skills.html       # tech stack & experience
+├── incidents.html    # incident log
 ├── data/
 │   ├── cluster.json  # node specs, resource usage, pod counts (pushed by collect.sh)
 │   └── watcher.json  # watcher heartbeat (host, timestamp, uptime)
-└── assets/           # icons, styles, images
+└── assets/           # icons, styles, images, javascript
 ```
 
 ## Related projects

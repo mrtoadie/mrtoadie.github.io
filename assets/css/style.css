@@ -1,4 +1,4 @@
-/* style.css — GitHub-dark terminal theme for mrtoadie.github.io
+/* style.css — GitHub-dark like terminal theme for mrtoadie.github.io
    Consolidated: every rule exactly once, dead blocks removed.
    Theme switch = edit the :root block only.
    Structure: reset → tokens → base → icons → header/nav → typography →
@@ -15,7 +15,6 @@
     margin: 0;
     padding: 0;
 }
-
 /* ---------- Theme tokens ---------- */
 :root {
     --bg: #2e3440;
@@ -150,6 +149,12 @@ a:hover {
 }
 .ic-coffee {
     --i: url("../icons/coffee.svg");
+}
+.ic-bash {
+    --i: url("../icons/bash.svg");
+}
+.ic-go {
+    --i: url("../icons/go.svg");
 }
 
 /* ---------- Terminal header (sticky) ---------- */
@@ -933,7 +938,6 @@ section:last-child {
     padding-top: 0.75rem;
     font-size: 0.85rem;
 }
-
 /* ---------- Skills page ----------
    Two-column rows on desktop (name | evidence), stacked on phones. */
 .intro-text {
@@ -1216,9 +1220,6 @@ footer {
 }
 .incident-meta time {
     color: var(--dim);
-}
-.incident-meta .meta-label {
-    color: var(--text-muted);
 }
 .incident-meta .meta-item {
     margin-left: 0.5rem;
