@@ -1,9 +1,13 @@
 /* style.css — GitHub-dark terminal theme for mrtoadie.github.io
-   Theme switch = edit the :root block only. Structure of this file:
-   reset → tokens → base → icons → header/nav → sections → cards → pages
-   (projects, skills) → components (watcher, photos, storage, lightbox,
-   pipeline, feed badge) → responsive overrides. */
+   Consolidated: every rule exactly once, dead blocks removed.
+   Theme switch = edit the :root block only.
+   Structure: reset → tokens → base → icons → header/nav → typography →
+   stats → cluster overview → gauges → metric bars → node cards →
+   demo note → storage → photos/lightbox → hardware → projects →
+   skills → tools → hero → pipeline → feed badge → footer →
+   incidents → responsive. */
 
+/* ---------- Reset ---------- */
 *,
 *::before,
 *::after {
@@ -34,12 +38,13 @@
     --purple: #a371f7;
     --purple-rgb: 163, 113, 247;
     --border: #30363d;
-    --track: #262c36; /* idle ring of the gauges / dash-pattern fills */
+    --track: #262c36; /* idle ring of gauges / dash-pattern fills */
     --mono:
         ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
         "Liberation Mono", monospace;
 }
 
+/* ---------- Base ---------- */
 body {
     background:
         radial-gradient(
@@ -72,18 +77,16 @@ a:hover {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 14px;
-    /* clip (NOT hidden!): overflow:hidden would create a scroll container
-       and kill position:sticky in the header. clip cuts just the same,
-       keeps the rounded corners, but lets the header stick. */
+    /* clip (NOT hidden!): overflow:hidden would create a scroll
+       container and kill position:sticky in the header. */
     overflow: clip;
     box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.85);
 }
 
 /* ---------- Icons ----------
- *   Local SVG files from assets/icons/, drawn as a CSS mask. Colour comes
- *   from currentColor, size from width/height — like an icon font without
- *   one. Only monochrome icons work here. Pull files with
- *   scripts/fetch-icons.sh. */
+   Local SVGs from assets/icons/ drawn as CSS masks — an icon font
+   without a font. Only the icons actually referenced are listed;
+   re-add others with the same one-line pattern. */
 .ic {
     display: inline-block;
     width: 1em;
@@ -94,7 +97,6 @@ a:hover {
     -webkit-mask: var(--i) center / contain no-repeat;
     mask: var(--i) center / contain no-repeat;
 }
-
 .ic-crown {
     --i: url("../icons/crown.svg");
 }
@@ -110,12 +112,6 @@ a:hover {
 .ic-disk {
     --i: url("../icons/disk.svg");
 }
-.ic-database {
-    --i: url("../icons/database.svg");
-}
-.ic-microchip {
-    --i: url("../icons/microchip.svg");
-}
 .ic-tag {
     --i: url("../icons/tag.svg");
 }
@@ -124,18 +120,6 @@ a:hover {
 }
 .ic-alert {
     --i: url("../icons/alert.svg");
-}
-.ic-linux {
-    --i: url("../icons/linux.svg");
-}
-.ic-music {
-    --i: url("../icons/music.svg");
-}
-.ic-guitar {
-    --i: url("../icons/guitar.svg");
-}
-.ic-coffee {
-    --i: url("../icons/coffee.svg");
 }
 .ic-thermometer {
     --i: url("../icons/thermometer.svg");
@@ -155,17 +139,17 @@ a:hover {
 .ic-raspberry {
     --i: url("../icons/raspberry.svg");
 }
-.ic-raspberrypi {
-    --i: url("../icons/raspberrypi.svg");
+.ic-linux {
+    --i: url("../icons/linux.svg");
 }
-.ic-go {
-    --i: url("../icons/go.svg");
+.ic-music {
+    --i: url("../icons/music.svg");
 }
-.ic-arch {
-    --i: url("../icons/arch.svg");
+.ic-guitar {
+    --i: url("../icons/guitar.svg");
 }
-.ic-bash {
-    --i: url("../icons/bash.svg");
+.ic-coffee {
+    --i: url("../icons/coffee.svg");
 }
 
 /* ---------- Terminal header (sticky) ---------- */
@@ -181,8 +165,6 @@ header {
     background: var(--card-alt);
     border-bottom: 1px solid var(--border);
     border-radius: 14px 14px 0 0;
-    /* sticky within the scrollport; works only because .container uses
-       overflow:clip instead of overflow:hidden */
 }
 
 .term-title {
@@ -220,14 +202,9 @@ main {
     padding: 2.75rem 2rem;
 }
 
-/* ---------- Nav ----------
-   nav.top lives INSIDE the header. Two historical gotchas, kept as comments:
-   1) margin-bottom: 0 — a margin meant for a nav under h1 would float the
-      menu above the title line here, because align-items:center centers
-      the margin box.
-   2) flex-shrink: 0 — without it the header squeezes the nav at medium
-      widths and the links wrap internally. Under 740px the media query
-      gives the nav its own full row instead. */
+/* ---------- Nav (inside the header) ----------
+   flex-shrink: 0 — without it the header squeezes the nav at medium
+   widths. Under 740px the media query gives the nav its own row. */
 nav.top {
     display: flex;
     flex-wrap: wrap;
@@ -257,11 +234,15 @@ nav.top a.active {
     background: rgba(var(--accent-rgb), 0.1);
 }
 
+/* ---------- Typography ---------- */
 h1 {
     font-size: 2.1rem;
     font-weight: 600;
     letter-spacing: -0.02em;
     margin-bottom: 0.5rem;
+}
+h2 span {
+    color: var(--accent); /* section titles: no inline styles needed */
 }
 .subtitle {
     color: var(--accent);
@@ -278,11 +259,6 @@ h1 {
     50% {
         opacity: 0;
     }
-}
-
-/* Section titles use an accented span instead of inline styles in the HTML */
-h2 span {
-    color: var(--accent);
 }
 
 section {
@@ -345,881 +321,9 @@ section:last-child {
     font-weight: 400;
 }
 
-/* ---------- Node cards ---------- */
-.node-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.2rem;
-}
-
-.node-card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    padding: 1.25rem 1.3rem 1.4rem 1.5rem;
-    border: 1px solid var(--border);
-    border-radius: 11px;
-    background: linear-gradient(
-        180deg,
-        rgba(var(--accent-rgb), 0.055),
-        rgba(var(--accent-rgb), 0.012)
-    );
-    overflow: hidden;
-    transition:
-        transform 0.18s ease,
-        border-color 0.18s ease,
-        box-shadow 0.18s ease;
-}
-.node-card::before {
-    content: "";
-    position: absolute;
-    inset: 0 auto 0 0;
-    width: 3px;
-    background: var(--faint);
-    opacity: 0.45;
-}
-.node-card.ready::before {
-    background: var(--green);
-    opacity: 0.9;
-}
-.node-card.notready::before {
-    background: var(--red);
-    opacity: 0.9;
-}
-.node-card:hover {
-    transform: translateY(-3px);
-    border-color: var(--accent);
-    box-shadow: 0 14px 30px -16px rgba(var(--accent-rgb), 0.55);
-}
-
-.node-head {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    margin-bottom: 0.5rem;
-}
-
-.node-role {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--accent);
-}
-.node-card.cp .node-role {
-    color: var(--purple);
-}
-
-/* icon sizing inside the node cards */
-.node-role .ic,
-.node-spec .ic {
-    width: 13px;
-    height: 13px;
-}
-.node-status .ic {
-    width: 12px;
-    height: 12px;
-}
-
-.led {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    flex: none;
-    background: var(--green);
-}
-.node-card.ready .led {
-    animation: pulse-ring 2.2s ease-out infinite;
-}
-.node-card.notready .led {
-    background: var(--red);
-}
-/* ---------- Node card footer (version, pods) ---------- */
-.node-footer {
-    margin-top: 1rem;
-    padding-top: 0.75rem;
-    border-top: 1px solid var(--border);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem 1.25rem;
-}
-/* expanding halo around the ready-LED */
-@keyframes pulse-ring {
-    0% {
-        box-shadow: 0 0 0 0 rgba(var(--green-rgb), 0.55);
-    }
-    70% {
-        box-shadow: 0 0 0 8px rgba(var(--green-rgb), 0);
-    }
-}
-
-.node-name {
-    font-size: 1.45rem;
-    font-weight: 600;
-    letter-spacing: -0.015em;
-    line-height: 1.25;
-    margin-bottom: 0.5rem;
-}
-
-.node-spec {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.98rem;
-    color: var(--dim);
-    margin: 0.2rem 0;
-}
-.node-spec .ic {
-    color: var(--faint);
-}
-
-.node-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    margin-left: auto;
-    padding: 3px 11px;
-    border-radius: 20px;
-    border: 1px solid;
-    font-size: 0.68rem;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    white-space: nowrap;
-}
-.node-status.ready {
-    color: var(--green);
-    border-color: rgba(var(--green-rgb), 0.35);
-    background: rgba(var(--green-rgb), 0.12);
-}
-.node-status.notready {
-    color: var(--red);
-    border-color: rgba(var(--red-rgb), 0.35);
-    background: rgba(var(--red-rgb), 0.12);
-}
-
-/* Temperature warning */
-.node-spec.stat-warn {
-    color: var(--amber);
-}
-.node-spec.stat-warn .ic {
-    color: var(--amber);
-}
-
-/* ---------- Ring gauges ---------- */
-.gauges {
-    display: flex;
-    gap: 1.3rem;
-    margin-top: auto;
-    padding-top: 1.25rem;
-}
-.gauge-wrap {
-    text-align: center;
-}
-.gauge {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    margin-bottom: 0.4rem;
-    background: conic-gradient(
-        var(--ring) calc(var(--pct) * 1%),
-        var(--track) 0
-    );
-}
-.gauge span {
-    grid-area: 1/1;
-    width: 54px;
-    height: 54px;
-    border-radius: 50%;
-    background: var(--surface);
-    display: grid;
-    place-items: center;
-    font-size: 1rem;
-    font-variant-numeric: tabular-nums;
-    color: var(--text);
-}
-.gauge.ok {
-    --ring: var(--green);
-}
-.gauge.warn {
-    --ring: var(--amber);
-}
-.gauge.crit {
-    --ring: var(--red);
-}
-.gauge.na {
-    background: var(--track);
-}
-.gauge.na span {
-    color: var(--faint);
-}
-.gauge-wrap small {
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.09em;
-    color: var(--faint);
-}
-/* ---------- Metric bars (replaced the ring gauges) ---------- */
-.metrics {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    margin-top: auto;
-    padding-top: 1.25rem;
-}
-.metric-top {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.78rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--faint);
-    margin-bottom: 0.25rem;
-}
-.metric-val {
-    color: var(--text);
-    font-variant-numeric: tabular-nums;
-}
-.metric-track {
-    height: 6px;
-    border-radius: 3px;
-    background: var(--track);
-    overflow: hidden;
-}
-.metric-fill {
-    height: 100%;
-    border-radius: 3px;
-    background: var(--green);
-    transition: width 0.6s ease;
-}
-.metric-fill.warn { background: var(--amber); }
-.metric-fill.crit { background: var(--red); }
-.metric-fill.na {
-    width: 100%;
-    background: repeating-linear-gradient(
-        45deg,
-        var(--card-alt),
-        var(--card-alt) 6px,
-        var(--border) 6px,
-        var(--border) 12px
-    );
-}
-/* style.css — GitHub-dark terminal theme for mrtoadie.github.io
-   Theme switch = edit the :root block only. Structure of this file:
-   reset → tokens → base → icons → header/nav → sections → cards → pages
-   (projects, skills) → components (watcher, photos, storage, lightbox,
-   pipeline, feed badge) → responsive overrides. */
-
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-/* ---------- Theme tokens ---------- */
-:root {
-    --bg: #2e3440;
-    --card: #161b22;
-    --card-alt: #21262d;
-    --surface: #1c2128;
-    --text: #e6edf3;
-    --dim: #8b949e;
-    --faint: #6e7681;
-    --blue: #33658a;
-    --accent: #58a6ff;
-    --accent-hover: #79c0ff;
-    --accent-rgb: 88, 166, 255;
-    --green: #7ee787;
-    --green-rgb: 126, 231, 135;
-    --amber: #d29922;
-    --amber-rgb: 210, 153, 34;
-    --red: #f85149;
-    --red-rgb: 248, 81, 73;
-    --purple: #a371f7;
-    --purple-rgb: 163, 113, 247;
-    --border: #30363d;
-    --track: #262c36; /* idle ring of the gauges / dash-pattern fills */
-    --mono:
-        ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-        "Liberation Mono", monospace;
-}
-
-body {
-    background:
-        radial-gradient(
-            1200px 600px at 50% -12%,
-            rgba(var(--accent-rgb), 0.075),
-            transparent 70%
-        ),
-        var(--bg);
-    color: var(--text);
-    font-family: var(--mono);
-    font-size: 17px;
-    line-height: 1.7;
-    padding: 2.5rem 1.5rem 3.5rem;
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-}
-
-a {
-    color: var(--accent);
-    text-decoration: none;
-    transition: color 0.15s ease;
-}
-a:hover {
-    color: var(--accent-hover);
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    /* clip (NOT hidden!): overflow:hidden would create a scroll container
-       and kill position:sticky in the header. clip cuts just the same,
-       keeps the rounded corners, but lets the header stick. */
-    overflow: clip;
-    box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.85);
-}
-
-/* ---------- Icons ----------
- *   Local SVG files from assets/icons/, drawn as a CSS mask. Colour comes
- *   from currentColor, size from width/height — like an icon font without
- *   one. Only monochrome icons work here. Pull files with
- *   scripts/fetch-icons.sh. */
-.ic {
-    display: inline-block;
-    width: 1em;
-    height: 1em;
-    flex: none;
-    vertical-align: -0.125em;
-    background-color: currentColor;
-    -webkit-mask: var(--i) center / contain no-repeat;
-    mask: var(--i) center / contain no-repeat;
-}
-
-.ic-crown {
-    --i: url("../icons/crown.svg");
-}
-.ic-server {
-    --i: url("../icons/server.svg");
-}
-.ic-pods {
-    --i: url("../icons/pods.svg");
-}
-.ic-cpu {
-    --i: url("../icons/cpu.svg");
-}
-.ic-disk {
-    --i: url("../icons/disk.svg");
-}
-.ic-database {
-    --i: url("../icons/database.svg");
-}
-.ic-microchip {
-    --i: url("../icons/microchip.svg");
-}
-.ic-tag {
-    --i: url("../icons/tag.svg");
-}
-.ic-check {
-    --i: url("../icons/check.svg");
-}
-.ic-alert {
-    --i: url("../icons/alert.svg");
-}
-.ic-linux {
-    --i: url("../icons/linux.svg");
-}
-.ic-music {
-    --i: url("../icons/music.svg");
-}
-.ic-guitar {
-    --i: url("../icons/guitar.svg");
-}
-.ic-coffee {
-    --i: url("../icons/coffee.svg");
-}
-.ic-thermometer {
-    --i: url("../icons/thermometer.svg");
-}
-.ic-clock {
-    --i: url("../icons/clock.svg");
-}
-.ic-winterfell {
-    --i: url("../icons/winterfell.svg");
-}
-.ic-nightswatch {
-    --i: url("../icons/nightswatch.svg");
-}
-.ic-nixos {
-    --i: url("../icons/nixos.svg");
-}
-.ic-raspberry {
-    --i: url("../icons/raspberry.svg");
-}
-.ic-raspberrypi {
-    --i: url("../icons/raspberrypi.svg");
-}
-.ic-go {
-    --i: url("../icons/go.svg");
-}
-.ic-arch {
-    --i: url("../icons/arch.svg");
-}
-.ic-bash {
-    --i: url("../icons/bash.svg");
-}
-
-/* ---------- Terminal header (sticky) ---------- */
-header {
-    position: sticky;
-    top: 0;
-    z-index: 100; /* above node cards; below the lightbox (999) */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 1rem 1.5rem;
-    background: var(--card-alt);
-    border-bottom: 1px solid var(--border);
-    border-radius: 14px 14px 0 0;
-    /* sticky within the scrollport; works only because .container uses
-       overflow:clip instead of overflow:hidden */
-}
-
-.term-title {
-    font-size: 1.25rem;
-    color: var(--dim);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex: none;
-}
-.term-title .path {
-    color: var(--faint);
-}
-
-.dots {
-    display: flex;
-    gap: 7px;
-}
-.dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-}
-.dotleft {
-    background: var(--accent);
-}
-.dotmiddle {
-    background: var(--accent-hover);
-}
-.dotright {
-    background: var(--blue);
-}
-
-main {
-    padding: 2.75rem 2rem;
-}
-
-/* ---------- Nav ----------
-   nav.top lives INSIDE the header. Two historical gotchas, kept as comments:
-   1) margin-bottom: 0 — a margin meant for a nav under h1 would float the
-      menu above the title line here, because align-items:center centers
-      the margin box.
-   2) flex-shrink: 0 — without it the header squeezes the nav at medium
-      widths and the links wrap internally. Under 740px the media query
-      gives the nav its own full row instead. */
-nav.top {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    flex-shrink: 0;
-    margin: 0 0 0 auto; /* right-aligned inside the header */
-}
-nav.top a {
-    font-size: 0.85rem;
-    padding: 0.4rem 0.85rem;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    color: var(--dim);
-    background: rgba(255, 255, 255, 0.02);
-    white-space: nowrap;
-    transition:
-        color 0.15s ease,
-        border-color 0.15s ease;
-}
-nav.top a:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-}
-nav.top a.active {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: rgba(var(--accent-rgb), 0.1);
-}
-
-h1 {
-    font-size: 2.1rem;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.5rem;
-}
-.subtitle {
-    color: var(--accent);
-    font-size: 1.15rem;
-    margin-bottom: 2.5rem;
-}
-.cursor::after {
-    content: "▌";
-    animation: blink 1.1s step-end infinite;
-    margin-left: 2px;
-    opacity: 0.75;
-}
-@keyframes blink {
-    50% {
-        opacity: 0;
-    }
-}
-
-/* Section titles use an accented span instead of inline styles in the HTML */
-h2 span {
-    color: var(--accent);
-}
-
-section {
-    margin-bottom: 3rem;
-}
-section:last-child {
-    margin-bottom: 0;
-}
-
-.section-header {
-    display: flex;
-    align-items: center;
-    gap: 0.7rem;
-    font-size: 1.1rem;
-    color: var(--dim);
-    padding-bottom: 0.7rem;
-    margin-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border);
-}
-.section-header::before {
-    content: "$";
-    color: var(--green);
-    font-weight: 600;
-}
-.section-header .right {
-    margin-left: auto;
-    font-size: 0.75rem;
-    color: var(--faint);
-}
-
-/* ---------- Stat tiles ---------- */
-.stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1.75rem;
-}
-.stat {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 1.1rem 1.2rem;
-}
-.stat .k {
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.09em;
-    color: var(--faint);
-    margin-bottom: 0.4rem;
-}
-.stat .v {
-    font-size: 1.7rem;
-    font-weight: 600;
-    line-height: 1.15;
-    font-variant-numeric: tabular-nums;
-}
-.stat .v small {
-    font-size: 0.95rem;
-    color: var(--dim);
-    font-weight: 400;
-}
-
-/* ---------- Node cards ---------- */
-.node-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.2rem;
-}
-
-.node-card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    padding: 1.25rem 1.3rem 1.4rem 1.5rem;
-    border: 1px solid var(--border);
-    border-radius: 11px;
-    background: linear-gradient(
-        180deg,
-        rgba(var(--accent-rgb), 0.055),
-        rgba(var(--accent-rgb), 0.012)
-    );
-    overflow: hidden;
-    transition:
-        transform 0.18s ease,
-        border-color 0.18s ease,
-        box-shadow 0.18s ease;
-}
-.node-card::before {
-    content: "";
-    position: absolute;
-    inset: 0 auto 0 0;
-    width: 3px;
-    background: var(--faint);
-    opacity: 0.45;
-}
-.node-card.ready::before {
-    background: var(--green);
-    opacity: 0.9;
-}
-.node-card.notready::before {
-    background: var(--red);
-    opacity: 0.9;
-}
-.node-card:hover {
-    transform: translateY(-3px);
-    border-color: var(--accent);
-    box-shadow: 0 14px 30px -16px rgba(var(--accent-rgb), 0.55);
-}
-
-.node-head {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    margin-bottom: 0.5rem;
-}
-
-.node-role {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--accent);
-}
-.node-card.cp .node-role {
-    color: var(--purple);
-}
-
-/* icon sizing inside the node cards */
-.node-role .ic,
-.node-spec .ic {
-    width: 13px;
-    height: 13px;
-}
-.node-status .ic {
-    width: 12px;
-    height: 12px;
-}
-
-.led {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    flex: none;
-    background: var(--green);
-}
-.node-card.ready .led {
-    animation: pulse-ring 2.2s ease-out infinite;
-}
-.node-card.notready .led {
-    background: var(--red);
-}
-/* ---------- Node card footer (version, pods) ---------- */
-.node-footer {
-    margin-top: 1rem;
-    padding-top: 0.75rem;
-    border-top: 1px solid var(--border);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem 1.25rem;
-}
-/* expanding halo around the ready-LED */
-@keyframes pulse-ring {
-    0% {
-        box-shadow: 0 0 0 0 rgba(var(--green-rgb), 0.55);
-    }
-    70% {
-        box-shadow: 0 0 0 8px rgba(var(--green-rgb), 0);
-    }
-}
-
-.node-name {
-    font-size: 1.45rem;
-    font-weight: 600;
-    letter-spacing: -0.015em;
-    line-height: 1.25;
-    margin-bottom: 0.5rem;
-}
-
-.node-spec {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.98rem;
-    color: var(--dim);
-    margin: 0.2rem 0;
-}
-.node-spec .ic {
-    color: var(--faint);
-}
-
-.node-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    margin-left: auto;
-    padding: 3px 11px;
-    border-radius: 20px;
-    border: 1px solid;
-    font-size: 0.68rem;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    white-space: nowrap;
-}
-.node-status.ready {
-    color: var(--green);
-    border-color: rgba(var(--green-rgb), 0.35);
-    background: rgba(var(--green-rgb), 0.12);
-}
-.node-status.notready {
-    color: var(--red);
-    border-color: rgba(var(--red-rgb), 0.35);
-    background: rgba(var(--red-rgb), 0.12);
-}
-
-/* Temperature warning */
-.node-spec.stat-warn {
-    color: var(--amber);
-}
-.node-spec.stat-warn .ic {
-    color: var(--amber);
-}
-
-/* ---------- Ring gauges ---------- */
-.gauges {
-    display: flex;
-    gap: 1.3rem;
-    margin-top: auto;
-    padding-top: 1.25rem;
-}
-.gauge-wrap {
-    text-align: center;
-}
-.gauge {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    margin-bottom: 0.4rem;
-    background: conic-gradient(
-        var(--ring) calc(var(--pct) * 1%),
-        var(--track) 0
-    );
-}
-.gauge span {
-    grid-area: 1/1;
-    width: 54px;
-    height: 54px;
-    border-radius: 50%;
-    background: var(--surface);
-    display: grid;
-    place-items: center;
-    font-size: 1rem;
-    font-variant-numeric: tabular-nums;
-    color: var(--text);
-}
-.gauge.ok {
-    --ring: var(--green);
-}
-.gauge.warn {
-    --ring: var(--amber);
-}
-.gauge.crit {
-    --ring: var(--red);
-}
-.gauge.na {
-    background: var(--track);
-}
-.gauge.na span {
-    color: var(--faint);
-}
-.gauge-wrap small {
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.09em;
-    color: var(--faint);
-}
-/* ---------- Metric bars (replaced the ring gauges) ---------- */
-.metrics {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    margin-top: auto;
-    padding-top: 1.25rem;
-}
-.metric-top {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.78rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--faint);
-    margin-bottom: 0.25rem;
-}
-.metric-val {
-    color: var(--text);
-    font-variant-numeric: tabular-nums;
-}
-.metric-track {
-    height: 6px;
-    border-radius: 3px;
-    background: var(--track);
-    overflow: hidden;
-}
-.metric-fill {
-    height: 100%;
-    border-radius: 3px;
-    background: var(--green);
-    transition: width 0.6s ease;
-}
-.metric-fill.warn { background: var(--amber); }
-.metric-fill.crit { background: var(--red); }
-.metric-fill.na {
-    width: 100%;
-    background: repeating-linear-gradient(
-        45deg,
-        var(--card-alt),
-        var(--card-alt) 6px,
-        var(--border) 6px,
-        var(--border) 12px
-    );
-}
-/* ---------- Cluster overview tiles ----------
-   One tile per metric — rhymes with the stats row above. */
+/* ---------- Cluster overview ----------
+   One tile per metric, rhyming with the stats row. Rings here =
+   cluster at a glance; the node cards below carry the bars. */
 .cluster-caption {
     font-size: 0.78rem;
     color: var(--faint);
@@ -1234,7 +338,7 @@ section:last-child {
 .cluster-tile {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 10px;    /* same corners as .stat */
+    border-radius: 10px; /* same corners as .stat */
     padding: 1.5rem 1rem 1.25rem;
     display: flex;
     flex-direction: column;
@@ -1254,7 +358,6 @@ section:last-child {
     font-size: 0.85rem;
     letter-spacing: 0.08em;
 }
-/* ---------- Cluster legend ---------- */
 .cluster-legend {
     display: flex;
     justify-content: center;
@@ -1274,10 +377,277 @@ section:last-child {
     border-radius: 50%;
     display: inline-block;
 }
-.lg-ok   { background: var(--green); }
-.lg-warn { background: var(--amber); }
-.lg-crit { background: var(--red); }
-/* ---------- Misc ---------- */
+.lg-ok {
+    background: var(--green);
+}
+.lg-warn {
+    background: var(--amber);
+}
+.lg-crit {
+    background: var(--red);
+}
+
+/* ---------- Ring gauges (inside the cluster tiles) ----------
+   Percentage comes from --pct, colour from the ok/warn/crit/na
+   classes — same vocabulary as the metric bars below. */
+.gauge-wrap {
+    text-align: center;
+}
+.gauge {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    margin-bottom: 0.4rem;
+    background: conic-gradient(
+        var(--ring) calc(var(--pct) * 1%),
+        var(--track) 0
+    );
+}
+.gauge span {
+    grid-area: 1/1;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: var(--surface);
+    display: grid;
+    place-items: center;
+    font-size: 1rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+}
+.gauge.ok {
+    --ring: var(--green);
+}
+.gauge.warn {
+    --ring: var(--amber);
+}
+.gauge.crit {
+    --ring: var(--red);
+}
+.gauge.na {
+    background: var(--track);
+}
+.gauge.na span {
+    color: var(--faint);
+}
+.gauge-wrap small {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--faint);
+}
+
+/* ---------- Metric bars (node cards) ----------
+   Colour = state (ok/warn/crit/na). Never colour per metric —
+   colour is the vocabulary. Thresholds match ringClass() in JS. */
+.metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: auto;
+    padding-top: 1.25rem;
+}
+.metric-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--faint);
+    margin-bottom: 0.25rem;
+}
+.metric-val {
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+}
+.metric-track {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--track);
+    overflow: hidden;
+}
+.metric-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--green);
+    transition: width 0.6s ease;
+}
+.metric-fill.warn {
+    background: var(--amber);
+}
+.metric-fill.crit {
+    background: var(--red);
+}
+.metric-fill.na {
+    width: 100%;
+    background: repeating-linear-gradient(
+        45deg,
+        var(--card-alt),
+        var(--card-alt) 6px,
+        var(--border) 6px,
+        var(--border) 12px
+    );
+}
+
+/* ---------- Node cards ----------
+   Structure: head (role/status) → name → uptime → bars →
+   footer (version, pods). Specs live in the hardware table. */
+.node-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.2rem;
+}
+.node-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem 1.3rem 1.4rem 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: linear-gradient(
+        180deg,
+        rgba(var(--accent-rgb), 0.055),
+        rgba(var(--accent-rgb), 0.012)
+    );
+    overflow: hidden;
+    transition:
+        transform 0.18s ease,
+        border-color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+.node-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 3px;
+    background: var(--faint);
+    opacity: 0.45;
+}
+.node-card.ready::before {
+    background: var(--green);
+    opacity: 0.9;
+}
+.node-card.notready::before {
+    background: var(--red);
+    opacity: 0.9;
+}
+.node-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow: 0 14px 30px -16px rgba(var(--accent-rgb), 0.55);
+}
+
+.node-head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
+}
+.node-role {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+}
+.node-card.cp .node-role {
+    color: var(--purple);
+}
+.node-role .ic,
+.node-spec .ic {
+    width: 13px;
+    height: 13px;
+}
+.node-status .ic {
+    width: 12px;
+    height: 12px;
+}
+
+.led {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex: none;
+    background: var(--green);
+}
+.node-card.ready .led {
+    animation: pulse-ring 2.2s ease-out infinite;
+}
+.node-card.notready .led {
+    background: var(--red);
+}
+@keyframes pulse-ring {
+    0% {
+        box-shadow: 0 0 0 0 rgba(var(--green-rgb), 0.55);
+    }
+    70% {
+        box-shadow: 0 0 0 8px rgba(var(--green-rgb), 0);
+    }
+}
+
+.node-name {
+    font-size: 1.45rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+}
+
+.node-spec {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.98rem;
+    color: var(--dim);
+    margin: 0.2rem 0;
+}
+.node-spec .ic {
+    color: var(--faint);
+}
+.node-spec.stat-warn,
+.node-spec.stat-warn .ic {
+    color: var(--amber);
+}
+
+.node-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: auto;
+    padding: 3px 11px;
+    border-radius: 20px;
+    border: 1px solid;
+    font-size: 0.68rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.node-status.ready {
+    color: var(--green);
+    border-color: rgba(var(--green-rgb), 0.35);
+    background: rgba(var(--green-rgb), 0.12);
+}
+.node-status.notready {
+    color: var(--red);
+    border-color: rgba(var(--red-rgb), 0.35);
+    background: rgba(var(--red-rgb), 0.12);
+}
+
+.node-footer {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+}
+
+/* ---------- Demo note & loading ---------- */
 .demo-note {
     display: none;
     margin-top: 1.5rem;
@@ -1293,72 +663,156 @@ section:last-child {
     font-size: 0.95rem;
 }
 
-footer {
-    padding: 1.4rem;
-    text-align: center;
-    font-size: 0.8rem;
-    color: var(--faint);
-    border-top: 1px solid var(--border);
+/* ---------- USB-SSD storage card ---------- */
+.storage-card {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--dim);
+    border-radius: 8px;
+    background: var(--card);
+    padding: 1rem 1.25rem;
+    transition: border-color 0.2s ease;
+}
+.storage-card.ok {
+    border-left-color: var(--green);
+}
+.storage-card.warn {
+    border-left-color: var(--amber);
+}
+.storage-card.crit {
+    border-left-color: var(--red);
+}
+.storage-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.625rem;
+}
+.storage-header .label {
+    font-size: 0.8125rem;
+    color: var(--dim);
+    letter-spacing: 0.02em;
+}
+.storage-header .percent {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text);
+}
+.storage-card.ok .storage-header .percent {
+    color: var(--green);
+}
+.storage-card.warn .storage-header .percent {
+    color: var(--amber);
+}
+.storage-card.crit .storage-header .percent {
+    color: var(--red);
+}
+.diskbar {
+    height: 6px;
+    border-radius: 3px;
     background: var(--card-alt);
+    overflow: hidden;
 }
-.footer-icons {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    vertical-align: -0.15em;
-    margin-left: 0.35rem;
+.diskbar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--dim);
+    transition: width 0.6s ease;
 }
-.footer-icons .ic {
-    width: 20px;
-    height: 20px;
+.storage-card.ok .diskbar-fill {
+    background: var(--green);
+}
+.storage-card.warn .diskbar-fill {
+    background: var(--amber);
+}
+.storage-card.crit .diskbar-fill {
+    background: var(--red);
+}
+.diskbar-fill.na {
+    width: 100%;
+    background: repeating-linear-gradient(
+        45deg,
+        var(--card-alt),
+        var(--card-alt) 6px,
+        var(--border) 6px,
+        var(--border) 12px
+    );
+}
+.storage-detail {
+    margin-top: 0.5rem;
+    font-size: 0.6875rem;
     color: var(--faint);
-    transition: color 0.15s ease;
-}
-.footer-icons .ic:hover {
-    color: var(--accent);
 }
 
-/* ---------- Software & tools ---------- */
-.tool-grid {
+/* ---------- Photos & lightbox ---------- */
+.photo-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
     margin-bottom: 2rem;
 }
-.tool-card {
+.photo {
+    margin: 0;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 1.2rem;
+    overflow: hidden;
+    transition: border-color 0.18s ease;
 }
-.tool-name {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--accent);
-    margin-bottom: 0.5rem;
+.photo:hover {
+    border-color: var(--accent);
 }
-.tool-desc {
-    font-size: 0.9rem;
-    color: var(--dim);
-    margin-bottom: 0.75rem;
+.photo img {
+    display: block;
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
 }
-.tool-reason {
-    font-size: 0.85rem;
+.photo figcaption {
+    font-size: 0.78rem;
     color: var(--faint);
+    padding: 0.65rem 0.9rem;
     border-top: 1px solid var(--border);
-    padding-top: 0.75rem;
-    font-style: italic;
-}
-.category-heading {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: var(--text);
-    margin: 2rem 0 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border);
+    line-height: 1.55;
 }
 
-/* ---------- Hardware table ---------- */
+#lightbox {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: rgba(1, 4, 9, 0.85);
+    backdrop-filter: blur(3px);
+    z-index: 999;
+    cursor: zoom-out;
+}
+#lightbox.open {
+    display: flex;
+}
+#lightbox img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    cursor: zoom-in;
+}
+#lightbox button {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 1.4rem;
+    line-height: 1;
+    padding: 0.3rem 0.6rem;
+    cursor: pointer;
+}
+
+/* ---------- Hardware table & notes ---------- */
 .hw-table {
     width: 100%;
     border-collapse: collapse;
@@ -1419,10 +873,6 @@ footer {
 .project-card:hover {
     border-color: var(--accent);
 }
-.project-card.muted {
-    opacity: 0.55;
-    border-style: dashed;
-}
 .project-card ul {
     list-style: none;
     margin: 0;
@@ -1431,6 +881,13 @@ footer {
 .project-card ul li::before {
     content: "$ ";
     color: var(--green);
+}
+.project-card.wide {
+    grid-column: 1 / -1;
+}
+.project-card.wide ul {
+    columns: 2;
+    column-gap: 2rem;
 }
 .project-header {
     display: flex;
@@ -1469,9 +926,7 @@ footer {
 }
 
 /* ---------- Skills page ----------
-   Two-column rows on desktop (name | evidence), stacked on phones.
-   The duplicate flex-based block that lived at the end of the old file
-   has been merged away — this is the surviving design. */
+   Two-column rows on desktop (name | evidence), stacked on phones. */
 .intro-text {
     font-size: 0.95rem;
     color: var(--dim);
@@ -1509,577 +964,7 @@ footer {
     font-size: 0.85rem;
 }
 
-/* ---------- Watcher badge ---------- */
-.watcher-badge {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.6rem;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    color: var(--dim);
-}
-.watcher-badge.online {
-    color: var(--green);
-    border-color: rgba(var(--green-rgb), 0.35);
-    background: rgba(var(--green-rgb), 0.12);
-}
-.watcher-badge.offline {
-    color: var(--red);
-    border-color: rgba(var(--red-rgb), 0.35);
-    background: rgba(var(--red-rgb), 0.12);
-}
-
-/* ---------- Photo gallery ---------- */
-.photo-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-.photo {
-    margin: 0;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-    transition: border-color 0.18s ease;
-}
-.photo:hover {
-    border-color: var(--accent);
-}
-.photo img {
-    display: block;
-    width: 100%;
-    height: 240px;
-    object-fit: cover;
-}
-.photo figcaption {
-    font-size: 0.78rem;
-    color: var(--faint);
-    padding: 0.65rem 0.9rem;
-    border-top: 1px solid var(--border);
-    line-height: 1.55;
-}
-
-/* ---------- USB-SSD storage card ---------- */
-.storage-card {
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--dim);
-    border-radius: 8px;
-    background: var(--card);
-    padding: 1rem 1.25rem;
-    font-family: var(--mono);
-    transition: border-color 0.2s ease;
-}
-.storage-card.ok {
-    border-left-color: var(--green);
-}
-.storage-card.warn {
-    border-left-color: var(--amber);
-}
-.storage-card.crit {
-    border-left-color: var(--red);
-}
-
-.storage-header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 0.625rem;
-}
-.storage-header .label {
-    font-size: 0.8125rem;
-    color: var(--dim);
-    letter-spacing: 0.02em;
-}
-.storage-header .percent {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--text);
-}
-.storage-card.ok .storage-header .percent {
-    color: var(--green);
-}
-.storage-card.warn .storage-header .percent {
-    color: var(--amber);
-}
-.storage-card.crit .storage-header .percent {
-    color: var(--red);
-}
-
-.diskbar {
-    height: 6px;
-    border-radius: 3px;
-    background: var(--card-alt);
-    overflow: hidden;
-}
-.diskbar-fill {
-    height: 100%;
-    border-radius: 3px;
-    background: var(--dim);
-    transition: width 0.6s ease;
-}
-.storage-card.ok .diskbar-fill {
-    background: var(--green);
-}
-.storage-card.warn .diskbar-fill {
-    background: var(--amber);
-}
-.storage-card.crit .diskbar-fill {
-    background: var(--red);
-}
-
-/* Placeholder state while data is missing */
-.diskbar-fill.na {
-    width: 100%;
-    background: repeating-linear-gradient(
-        45deg,
-        var(--card-alt),
-        var(--card-alt) 6px,
-        var(--border) 6px,
-        var(--border) 12px
-    );
-}
-.storage-detail {
-    margin-top: 0.5rem;
-    font-size: 0.6875rem;
-    color: var(--faint);
-}
-
-/* ---------- Lightbox ---------- */
-#lightbox {
-    position: fixed;
-    inset: 0;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    background: rgba(1, 4, 9, 0.85);
-    backdrop-filter: blur(3px);
-    z-index: 999;
-    cursor: zoom-out;
-}
-#lightbox.open {
-    display: flex;
-}
-#lightbox img {
-    max-width: 100%;
-    max-height: 100%;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    cursor: zoom-in;
-}
-#lightbox button {
-    position: absolute;
-    top: 1rem;
-    right: 1.25rem;
-    background: none;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text);
-    font-size: 1.4rem;
-    line-height: 1;
-    padding: 0.3rem 0.6rem;
-    cursor: pointer;
-}
-
-/* ---------- Data flow / pipeline diagram ---------- */
-.pipeline-diagram {
-    margin-top: 1.25rem;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 0.75rem;
-    overflow-x: auto; /* sequence diagrams get narrow on phones */
-}
-.pipeline-diagram pre.mermaid {
-    margin: 0;
-    display: flex;
-    justify-content: center;
-}
-.pipeline-diagram svg {
-    max-width: 100%;
-    height: auto;
-}
-
-/* hide the raw text while mermaid renders */
-pre.mermaid:not([data-processed]) {
-    visibility: hidden;
-}
-
-/* ---------- LIVE / DEMO badge ---------- */
-.feed-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    padding: 3px 10px;
-    border-radius: 999px;
-    border: 1px solid #30363d;
-}
-.feed-badge .dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-}
-.feed-badge.live {
-    color: #3fb950;
-    border-color: rgba(63, 185, 80, 0.4);
-}
-.feed-badge.live .dot {
-    background: #3fb950;
-    animation: pulse-dot 2s infinite;
-}
-.feed-badge.demo {
-    color: #d29922;
-    border-color: rgba(210, 153, 34, 0.4);
-}
-.feed-badge.demo .dot {
-    background: #d29922;
-}
-/* blinking badge dot — deliberately NOT the same keyframe as the LED halo */
-@keyframes pulse-dot {
-    0%,
-    100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.35;
-    }
-}
-/* ---- Hero section ---- */
-.hero {
-    padding: 0 0 0;
-    margin: 0;
-}
-.hero-intro h1 {
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
-    line-height: 1.2;
-    margin: 0 0 0.75rem;
-    color: var(--text, #e6edf3);
-}
-.hero-intro p {
-    max-width: 42rem;
-    margin: 0 0 1.5rem;
-    color: var(--text-muted, #8b949e);
-    font-size: 1.05rem;
-    line-height: 1.6;
-}
-
-/* Buttons — all three now fully styled */
-.hero-cta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin: 0 0 3rem;
-}
-.hero-btn {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.55rem 1.15rem;
-    border-radius: 6px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    text-decoration: none;
-    border: 1px solid transparent;
-    transition:
-        background 0.15s ease,
-        border-color 0.15s ease;
-}
-.hero-btn-primary {
-    background: var(--accent, #58a6ff);
-    color: var(--bg, #0d1117);
-}
-.hero-btn-primary:hover {
-    filter: brightness(1.1);
-}
-.hero-btn-ghost {
-    border-color: var(--border, #30363d);
-    color: var(--accent, #58a6ff);
-    background: transparent;
-}
-.hero-btn-ghost:hover {
-    border-color: var(--accent, #58a6ff);
-    background: rgba(88, 166, 255, 0.08);
-}
-
-/* Featured repo cards */
-.hero-projects {
-    margin-bottom: 1.5rem; /* keeps distance to the next section */
-}
-.hero-projects h2 {
-    font-size: 1.4rem;
-    margin: 0 0 1rem;
-    color: var(--accent, #58a6ff);
-}
-.hero-repo-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1rem;
-}
-.hero-repo-card {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 1rem 1.25rem;
-    background: var(--surface, #161b22);
-    border: 1px solid var(--border, #30363d);
-    border-radius: 6px;
-    text-decoration: none;
-}
-.hero-repo-card:hover {
-    border-color: var(--accent, #58a6ff);
-    text-decoration: none;
-}
-.hero-repo-name {
-    font-weight: 700;
-    color: var(--accent, #58a6ff);
-}
-.hero-repo-desc {
-    color: var(--text, #e6edf3);
-    font-size: 0.92rem;
-    line-height: 1.5;
-}
-.hero-repo-tag {
-    font-size: 0.8rem;
-    color: var(--text-muted, #8b949e);
-    margin-top: auto;
-}
-.hero-repo-more {
-    margin-top: 1rem;
-}
-.hero-repo-more a {
-    color: var(--accent, #58a6ff);
-}
-
-.incident-details {
-    border: 1px solid var(--border, #30363d);
-    border-radius: 6px;
-    background: var(--surface, #161b22);
-    margin-bottom: 1rem;          <- replaces the old <br><br>
-}
-.incident-details summary {
-    cursor: pointer;
-    padding: 1rem 1.25rem;
-    list-style: none;
-}
-.incident-details summary::-webkit-details-marker { display: none; }
-.incident-details summary h2 {
-    display: inline;
-    font-size: 1.15rem;
-    margin: 0;
-}
-.incident-details[open] summary {
-    border-bottom: 1px solid var(--border, #30363d);
-}
-.incident-body { padding: 0.25rem 1.25rem 1rem; }
-.toggle-hint {
-    float: right;
-    font-size: 0.8rem;
-    color: var(--text-muted, #8b949e);
-}
-.incident-details:not([open]) .toggle-hint::before { content: "▸ "; }
-.incident-details[open] .toggle-hint::before { content: "▾ "; }
-.status-resolved  { color: #3fb950; }
-.status-mitigated { color: #d29922; }
-.status-open      { color: #f85149; }
-.incident-meta    { font-size: 0.9rem; color: var(--text-muted, #8b949e); }
-.anchor-nav       { display: flex; flex-direction: column; gap: 0.4rem; }
-/* ---------- Responsive ----------
-   Desktop keeps the defaults, phones get compact overrides below. */
-@media (max-width: 740px) {
-    body {
-        padding: 1rem 0.75rem 2rem;
-        font-size: 15px;
-    }
-    .container {
-        border-radius: 10px;
-    }
-    main {
-        padding: 1.75rem 1rem;
-    }
-    h1 {
-        font-size: 1.65rem;
-    }
-    .subtitle {
-        font-size: 0.92rem;
-        margin-bottom: 1.75rem;
-    }
-
-    /* header wraps: title + dots stay in row 1, nav drops to its own
-       full-width row below them, links become equal-width tabs */
-    header {
-        flex-wrap: wrap;
-        gap: 0.75rem 0.6rem;
-        padding: 0.8rem 1rem;
-    }
-    header nav.top {
-        order: 1; /* sorted behind title + dots */
-        flex-basis: 100%; /* full width → own row */
-        margin-left: 0; /* cancels the desktop right-alignment */
-        gap: 0.45rem;
-    }
-    header nav.top a {
-        flex: 1; /* equal-width tab buttons */
-        text-align: center;
-        padding: 0.35rem 0.6rem;
-        font-size: 0.78rem;
-    }
-    .term-title {
-        font-size: 0.78rem;
-    }
-
-    .section-header {
-        flex-wrap: wrap;
-    }
-    .stats {
-        gap: 0.75rem;
-    }
-    .stat {
-        padding: 0.9rem 1rem;
-    }
-    .stat .v {
-        font-size: 1.45rem;
-    }
-
-    /* ---------- Cluster overview card ---------- */
-    .cluster-card {
-        margin: 1.5rem 0;
-    }
-    .cluster-card-inner {
-        border: 1px solid var(--accent, #58a6ff);
-        border-radius: 6px;
-        background: var(--card, #161b22);
-        padding: 1rem 1.25rem;
-    }
-    .cluster-head {
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        flex-wrap: wrap;
-        gap: 0.25rem 1rem;
-        padding-bottom: 0.75rem;
-        margin-bottom: 1rem;
-        border-bottom: 1px solid var(--border, #30363d);
-    }
-    .cluster-head .label {
-        color: var(--accent, #58a6ff);
-        font-weight: 600;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        font-size: 0.85rem;
-    }
-
-    /* One node card per row on phones */
-    .node-grid {
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));
-    }
-    .node-card {
-        padding: 1rem 1rem 1.1rem 1.2rem;
-    }
-    .node-card:hover {
-        transform: none;
-    }
-    .node-name {
-        font-size: 1.15rem;
-    }
-    .gauges {
-        gap: 1rem;
-        padding-top: 1rem;
-    }
-    .gauge {
-        width: 58px;
-        height: 58px;
-    }
-    .gauge span {
-        width: 44px;
-        height: 44px;
-        font-size: 0.7rem;
-    }
-
-    /* Cards/grids and photos stack full-width on phones */
-    .tool-grid,
-    .project-grid,
-    .photo-grid {
-        grid-template-columns: 1fr;
-    }
-
-    /* Skill rows stack: name on top, evidence below */
-    .skill-row {
-        grid-template-columns: 1fr;
-    }
-
-    /* Hardware table scrolls sideways instead of overflowing the layout */
-    .hw-table {
-        display: block;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-}
-
-/* Extra-small phones: shrink gauges a bit more so three still fit */
-@media (max-width: 400px) {
-    .gauges {
-        gap: 0.7rem;
-    }
-    .gauge {
-        width: 52px;
-        height: 52px;
-    }
-    .gauge span {
-        width: 40px;
-        height: 40px;
-        font-size: 0.62rem;
-    }
-    .stat .v {
-        font-size: 1.3rem;
-    }
-}
-
-/* ---------- Misc ---------- */
-.demo-note {
-    display: none;
-    margin-top: 1.5rem;
-    font-size: 0.78rem;
-    color: var(--amber);
-    background: rgba(var(--amber-rgb), 0.08);
-    border: 1px solid rgba(var(--amber-rgb), 0.3);
-    border-radius: 8px;
-    padding: 0.7rem 0.95rem;
-}
-.loading {
-    color: var(--faint);
-    font-size: 0.95rem;
-}
-
-footer {
-    padding: 1.4rem;
-    text-align: center;
-    font-size: 0.8rem;
-    color: var(--faint);
-    border-top: 1px solid var(--border);
-    background: var(--card-alt);
-}
-.footer-icons {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    vertical-align: -0.15em;
-    margin-left: 0.35rem;
-}
-.footer-icons .ic {
-    width: 20px;
-    height: 20px;
-    color: var(--faint);
-    transition: color 0.15s ease;
-}
-.footer-icons .ic:hover {
-    color: var(--accent);
-}
-
-/* ---------- Software & tools ---------- */
+/* ---------- Software & tools (skills page) ---------- */
 .tool-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -2119,347 +1004,63 @@ footer {
     border-bottom: 1px solid var(--border);
 }
 
-/* ---------- Hardware table ---------- */
-.hw-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 2rem;
-    font-size: 0.9rem;
+/* ---------- Hero (index) ---------- */
+.hero {
+    margin: 0; /* neutralises section's 3rem before /k3s cluster */
 }
-.hw-table th,
-.hw-table td {
-    padding: 0.75rem 1rem;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
+.hero-intro h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    line-height: 1.2;
+    margin: 0 0 0.75rem;
 }
-.hw-table th {
-    background: var(--surface);
-    font-weight: 600;
+.hero-intro p {
+    max-width: 42rem;
+    margin: 0 0 1.5rem;
+    color: var(--dim);
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+.hero-projects {
+    margin-bottom: 1.5rem;
+}
+.hero-projects h2 {
+    font-size: 1.4rem;
+    margin: 0 0 1rem;
     color: var(--accent);
 }
-.hw-table tr:hover {
-    background: rgba(var(--accent-rgb), 0.05);
+.hero-repo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
 }
-
-.hw-note {
-    background: rgba(var(--accent-rgb), 0.05);
-    border-left: 3px solid var(--accent);
+.hero-repo-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
     padding: 1rem 1.25rem;
-    margin: 1.5rem 0;
-    font-size: 0.9rem;
-    color: var(--dim);
-}
-.hw-note strong {
-    color: var(--text);
-}
-
-.tag {
-    display: inline-block;
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
     background: var(--surface);
-    font-size: 0.7rem;
-    color: var(--dim);
-    border: 1px solid var(--border);
-    margin-right: 0.4rem;
-}
-
-/* ---------- Projects page ---------- */
-.project-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1rem;
-}
-.project-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1.2rem;
-    transition: border-color 0.18s ease;
-}
-.project-card:hover {
-    border-color: var(--accent);
-}
-.project-card.muted {
-    opacity: 0.55;
-    border-style: dashed;
-}
-.project-card ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-.project-card ul li::before {
-    content: "$ ";
-    color: var(--green);
-}
-.project-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-    margin-bottom: 0.6rem;
-}
-.project-name {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--accent);
-}
-.project-tags {
-    display: flex;
-    gap: 0.3rem;
-    flex-wrap: wrap;
-}
-.project-desc {
-    font-size: 0.88rem;
-    color: var(--dim);
-    margin-bottom: 0.9rem;
-}
-.project-meta {
-    display: flex;
-    gap: 1.2rem;
-    font-size: 0.75rem;
-    color: var(--faint);
-    margin-bottom: 0.75rem;
-}
-.project-links {
-    border-top: 1px solid var(--border);
-    padding-top: 0.75rem;
-    font-size: 0.85rem;
-}
-
-/* ---------- Skills page ----------
-   Two-column rows on desktop (name | evidence), stacked on phones.
-   The duplicate flex-based block that lived at the end of the old file
-   has been merged away — this is the surviving design. */
-.intro-text {
-    font-size: 0.95rem;
-    color: var(--dim);
-    line-height: 1.75;
-    max-width: 75ch;
-    margin-bottom: 1rem;
-}
-.skill-list {
-    display: grid;
-    gap: 0.75rem;
-}
-.skill-row {
-    display: grid;
-    grid-template-columns: minmax(180px, 240px) 1fr;
-    gap: 0.5rem 1.25rem;
-    padding: 0.9rem 1.1rem;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--accent);
-    border-radius: 8px;
-}
-.skill-name {
-    font-weight: 600;
-    color: var(--accent);
-    margin-bottom: 0.3rem;
-}
-.skill-evidence {
-    font-size: 0.9rem;
-    color: var(--dim);
-    line-height: 1.65;
-}
-.skill-evidence a {
-    margin-left: 0.4rem;
-    white-space: nowrap;
-    font-size: 0.85rem;
-}
-
-/* ---------- Watcher badge ---------- */
-.watcher-badge {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.6rem;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    color: var(--dim);
-}
-.watcher-badge.online {
-    color: var(--green);
-    border-color: rgba(var(--green-rgb), 0.35);
-    background: rgba(var(--green-rgb), 0.12);
-}
-.watcher-badge.offline {
-    color: var(--red);
-    border-color: rgba(var(--red-rgb), 0.35);
-    background: rgba(var(--red-rgb), 0.12);
-}
-
-/* ---------- Photo gallery ---------- */
-.photo-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-.photo {
-    margin: 0;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-    transition: border-color 0.18s ease;
-}
-.photo:hover {
-    border-color: var(--accent);
-}
-.photo img {
-    display: block;
-    width: 100%;
-    height: 240px;
-    object-fit: cover;
-}
-.photo figcaption {
-    font-size: 0.78rem;
-    color: var(--faint);
-    padding: 0.65rem 0.9rem;
-    border-top: 1px solid var(--border);
-    line-height: 1.55;
-}
-/* Cluster overview: gauges scaled up for the wide card */
-.cluster-gauges {
-    margin-top: 0.75rem;
-    padding-top: 0;
-    justify-content: space-evenly;
-    gap: 1rem;
-}
-.cluster-gauges .gauge {
-    width: 90px;
-    height: 90px;
-}
-.cluster-gauges .gauge span {
-    width: 72px;
-    height: 72px;
-    font-size: 1.2rem;
-}
-.cluster-gauges .gauge-wrap small {
-    font-size: 0.9rem;
-}
-/* ---------- USB-SSD storage card ---------- */
-.storage-card {
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--dim);
-    border-radius: 8px;
-    background: var(--card);
-    padding: 1rem 1.25rem;
-    font-family: var(--mono);
-    transition: border-color 0.2s ease;
-}
-.storage-card.ok {
-    border-left-color: var(--green);
-}
-.storage-card.warn {
-    border-left-color: var(--amber);
-}
-.storage-card.crit {
-    border-left-color: var(--red);
-}
-
-.storage-header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 0.625rem;
-}
-.storage-header .label {
-    font-size: 0.8125rem;
-    color: var(--dim);
-    letter-spacing: 0.02em;
-}
-.storage-header .percent {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--text);
-}
-.storage-card.ok .storage-header .percent {
-    color: var(--green);
-}
-.storage-card.warn .storage-header .percent {
-    color: var(--amber);
-}
-.storage-card.crit .storage-header .percent {
-    color: var(--red);
-}
-
-.diskbar {
-    height: 6px;
-    border-radius: 3px;
-    background: var(--card-alt);
-    overflow: hidden;
-}
-.diskbar-fill {
-    height: 100%;
-    border-radius: 3px;
-    background: var(--dim);
-    transition: width 0.6s ease;
-}
-.storage-card.ok .diskbar-fill {
-    background: var(--green);
-}
-.storage-card.warn .diskbar-fill {
-    background: var(--amber);
-}
-.storage-card.crit .diskbar-fill {
-    background: var(--red);
-}
-
-/* Placeholder state while data is missing */
-.diskbar-fill.na {
-    width: 100%;
-    background: repeating-linear-gradient(
-        45deg,
-        var(--card-alt),
-        var(--card-alt) 6px,
-        var(--border) 6px,
-        var(--border) 12px
-    );
-}
-.storage-detail {
-    margin-top: 0.5rem;
-    font-size: 0.6875rem;
-    color: var(--faint);
-}
-
-/* ---------- Lightbox ---------- */
-#lightbox {
-    position: fixed;
-    inset: 0;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    background: rgba(1, 4, 9, 0.85);
-    backdrop-filter: blur(3px);
-    z-index: 999;
-    cursor: zoom-out;
-}
-#lightbox.open {
-    display: flex;
-}
-#lightbox img {
-    max-width: 100%;
-    max-height: 100%;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    cursor: zoom-in;
-}
-#lightbox button {
-    position: absolute;
-    top: 1rem;
-    right: 1.25rem;
-    background: none;
     border: 1px solid var(--border);
     border-radius: 6px;
+}
+.hero-repo-card:hover {
+    border-color: var(--accent);
+}
+.hero-repo-name {
+    font-weight: 700;
+    color: var(--accent);
+}
+.hero-repo-desc {
     color: var(--text);
-    font-size: 1.4rem;
-    line-height: 1;
-    padding: 0.3rem 0.6rem;
-    cursor: pointer;
+    font-size: 0.92rem;
+    line-height: 1.5;
+}
+.hero-repo-tag {
+    font-size: 0.8rem;
+    color: var(--dim);
+    margin-top: auto;
+}
+.hero-repo-more {
+    margin-top: 1rem;
 }
 
 /* ---------- Data flow / pipeline diagram ---------- */
@@ -2480,7 +1081,6 @@ footer {
     max-width: 100%;
     height: auto;
 }
-
 /* hide the raw text while mermaid renders */
 pre.mermaid:not([data-processed]) {
     visibility: hidden;
@@ -2496,7 +1096,7 @@ pre.mermaid:not([data-processed]) {
     letter-spacing: 0.08em;
     padding: 3px 10px;
     border-radius: 999px;
-    border: 1px solid #30363d;
+    border: 1px solid var(--border);
 }
 .feed-badge .dot {
     width: 7px;
@@ -2512,13 +1112,12 @@ pre.mermaid:not([data-processed]) {
     animation: pulse-dot 2s infinite;
 }
 .feed-badge.demo {
-    color: #d29922;
-    border-color: rgba(210, 153, 34, 0.4);
+    color: var(--amber);
+    border-color: rgba(var(--amber-rgb), 0.4);
 }
 .feed-badge.demo .dot {
-    background: #d29922;
+    background: var(--amber);
 }
-/* blinking badge dot — deliberately NOT the same keyframe as the LED halo */
 @keyframes pulse-dot {
     0%,
     100% {
@@ -2528,146 +1127,142 @@ pre.mermaid:not([data-processed]) {
         opacity: 0.35;
     }
 }
-/* ---- Hero section ---- */
-.hero {
-    padding: 0 0 0;
-    margin: 0;
-}
-.hero-intro h1 {
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
-    line-height: 1.2;
-    margin: 0 0 0.75rem;
-    color: var(--text, #e6edf3);
-}
-.hero-intro p {
-    max-width: 42rem;
-    margin: 0 0 1.5rem;
-    color: var(--text-muted, #8b949e);
-    font-size: 1.05rem;
-    line-height: 1.6;
-}
 
-/* Buttons — all three now fully styled */
-.hero-cta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin: 0 0 3rem;
+/* ---------- Footer ---------- */
+footer {
+    padding: 1.4rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--faint);
+    border-top: 1px solid var(--border);
+    background: var(--card-alt);
 }
-.hero-btn {
+.footer-icons {
     display: inline-flex;
     align-items: center;
-    padding: 0.55rem 1.15rem;
-    border-radius: 6px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    text-decoration: none;
-    border: 1px solid transparent;
-    transition:
-        background 0.15s ease,
-        border-color 0.15s ease;
+    gap: 0.6rem;
+    vertical-align: -0.15em;
+    margin-left: 0.35rem;
 }
-.hero-btn-primary {
-    background: var(--accent, #58a6ff);
-    color: var(--bg, #0d1117);
+.footer-icons .ic {
+    width: 20px;
+    height: 20px;
+    color: var(--faint);
+    transition: color 0.15s ease;
 }
-.hero-btn-primary:hover {
-    filter: brightness(1.1);
-}
-.hero-btn-ghost {
-    border-color: var(--border, #30363d);
-    color: var(--accent, #58a6ff);
-    background: transparent;
-}
-.hero-btn-ghost:hover {
-    border-color: var(--accent, #58a6ff);
-    background: rgba(88, 166, 255, 0.08);
+.footer-icons .ic:hover {
+    color: var(--accent);
 }
 
-/* Featured repo cards */
-.hero-projects {
-    margin-bottom: 1.5rem; /* keeps distance to the next section */
-}
-.hero-projects h2 {
-    font-size: 1.4rem;
-    margin: 0 0 1rem;
-    color: var(--accent, #58a6ff);
-}
-.hero-repo-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1rem;
-}
-.hero-repo-card {
+/* ---------- Incident log ----------
+   One consolidated block. Spacing note: .incident carries the
+   1rem gap (the old <br><br> replacement) — .incident-details
+   needs no extra margin, margins collapse anyway. */
+.anchor-nav {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    padding: 1rem 1.25rem;
-    background: var(--surface, #161b22);
-    border: 1px solid var(--border, #30363d);
-    border-radius: 6px;
-    text-decoration: none;
-}
-.hero-repo-card:hover {
-    border-color: var(--accent, #58a6ff);
-    text-decoration: none;
-}
-.hero-repo-name {
-    font-weight: 700;
-    color: var(--accent, #58a6ff);
-}
-.hero-repo-desc {
-    color: var(--text, #e6edf3);
+    gap: 0.4rem;
+    margin-bottom: 2rem;
     font-size: 0.92rem;
-    line-height: 1.5;
 }
-.hero-repo-tag {
-    font-size: 0.8rem;
-    color: var(--text-muted, #8b949e);
-    margin-top: auto;
+.anchor-nav a {
+    color: var(--accent);
 }
-.hero-repo-more {
-    margin-top: 1rem;
-}
-.hero-repo-more a {
-    color: var(--accent, #58a6ff);
+.anchor-nav a:hover {
+    text-decoration: underline;
 }
 
-.incident-details {
-    border: 1px solid var(--border, #30363d);
-    border-radius: 6px;
-    background: var(--surface, #161b22);
+.incident {
     margin-bottom: 1rem;
+}
+.incident-details {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
 }
 .incident-details summary {
     cursor: pointer;
     padding: 1rem 1.25rem;
     list-style: none;
 }
-.incident-details summary::-webkit-details-marker { display: none; }
+.incident-details summary::-webkit-details-marker {
+    display: none;
+}
 .incident-details summary h2 {
     display: inline;
     font-size: 1.15rem;
     margin: 0;
 }
 .incident-details[open] summary {
-    border-bottom: 1px solid var(--border, #30363d);
+    border-bottom: 1px solid var(--border);
 }
-.incident-body { padding: 0.25rem 1.25rem 1rem; }
+
+.incident-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    color: var(--dim);
+}
+.incident-meta time {
+    color: var(--dim);
+}
+/* margin-left:auto pushes it right — float would be ignored here,
+   because .incident-meta is a flex container */
 .toggle-hint {
-    float: right;
+    margin-left: auto;
     font-size: 0.8rem;
-    color: var(--text-muted, #8b949e);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--dim);
 }
-.incident-details:not([open]) .toggle-hint::before { content: "▸ "; }
-.incident-details[open] .toggle-hint::before { content: "▾ "; }
-.status-resolved  { color: #3fb950; }
-.status-mitigated { color: #d29922; }
-.status-open      { color: #f85149; }
-.incident-meta    { font-size: 0.9rem; color: var(--text-muted, #8b949e); }
-.anchor-nav       { display: flex; flex-direction: column; gap: 0.4rem; }
+.incident-details:not([open]) .toggle-hint::before {
+    content: "▸ ";
+}
+.incident-details[open] .toggle-hint::before {
+    content: "▾ ";
+}
+
+.incident-body {
+    padding: 0.25rem 1.25rem 1rem;
+}
+.incident-body h3 {
+    font-size: 0.95rem;
+    color: var(--accent);
+    margin: 1.1rem 0 0.4rem;
+}
+.incident-body h3:first-child {
+    margin-top: 0;
+}
+.incident-body p {
+    font-size: 0.9rem;
+    color: var(--dim);
+    line-height: 1.65;
+    margin: 0 0 0.6rem;
+}
+.incident-body ul {
+    margin: 0 0 0.6rem;
+    padding-left: 1.2rem;
+}
+.incident-body li {
+    font-size: 0.9rem;
+    color: var(--dim);
+    line-height: 1.6;
+}
+
+.status-resolved {
+    color: var(--green);
+}
+.status-mitigated {
+    color: var(--amber);
+}
+.status-open {
+    color: var(--red);
+}
+
 /* ---------- Responsive ----------
-   Desktop keeps the defaults, phones get compact overrides below. */
+   Desktop keeps the defaults, phones get compact overrides. */
 @media (max-width: 740px) {
     body {
         padding: 1rem 0.75rem 2rem;
@@ -2695,13 +1290,13 @@ pre.mermaid:not([data-processed]) {
         padding: 0.8rem 1rem;
     }
     header nav.top {
-        order: 1; /* sorted behind title + dots */
-        flex-basis: 100%; /* full width → own row */
-        margin-left: 0; /* cancels the desktop right-alignment */
+        order: 1;
+        flex-basis: 100%;
+        margin-left: 0;
         gap: 0.45rem;
     }
     header nav.top a {
-        flex: 1; /* equal-width tab buttons */
+        flex: 1;
         text-align: center;
         padding: 0.35rem 0.6rem;
         font-size: 0.78rem;
@@ -2722,6 +1317,7 @@ pre.mermaid:not([data-processed]) {
     .stat .v {
         font-size: 1.45rem;
     }
+
     /* One node card per row on phones */
     .node-grid {
         grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));
@@ -2735,38 +1331,7 @@ pre.mermaid:not([data-processed]) {
     .node-name {
         font-size: 1.15rem;
     }
-    .gauges {
-        gap: 1rem;
-        padding-top: 1rem;
-    }
-    .gauge {
-        width: 58px;
-        height: 58px;
-    }
-    .gauge span {
-        width: 44px;
-        height: 44px;
-        font-size: 0.7rem;
-    }
 
-    /* Cards/grids and photos stack full-width on phones */
-    .tool-grid,
-    .project-grid,
-    .photo-grid {
-        grid-template-columns: 1fr;
-    }
-
-    /* Skill rows stack: name on top, evidence below */
-    .skill-row {
-        grid-template-columns: 1fr;
-    }
-
-    /* Hardware table scrolls sideways instead of overflowing the layout */
-    .hw-table {
-        display: block;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
     /* Cluster tiles: keep three in a row on phones */
     .cluster-grid {
         grid-template-columns: repeat(3, 1fr);
@@ -2784,22 +1349,32 @@ pre.mermaid:not([data-processed]) {
         height: 50px;
         font-size: 0.95rem;
     }
+
+    /* Cards/grids and photos stack full-width on phones */
+    .tool-grid,
+    .project-grid,
+    .photo-grid {
+        grid-template-columns: 1fr;
+    }
+    .project-card.wide ul {
+        columns: 1;
+    }
+
+    /* Skill rows stack: name on top, evidence below */
+    .skill-row {
+        grid-template-columns: 1fr;
+    }
+
+    /* Hardware table scrolls sideways instead of overflowing */
+    .hw-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
 }
 
-/* Extra-small phones: shrink gauges a bit more so three still fit */
+/* Extra-small phones */
 @media (max-width: 400px) {
-    .gauges {
-        gap: 0.7rem;
-    }
-    .gauge {
-        width: 52px;
-        height: 52px;
-    }
-    .gauge span {
-        width: 40px;
-        height: 40px;
-        font-size: 0.62rem;
-    }
     .stat .v {
         font-size: 1.3rem;
     }
