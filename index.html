@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="MrToadie — Cloud Engineer by day, four-node k3s homelab on Raspberry Pis by night. Live cluster data, honest incident log, Go and Bash automation." />
         <title>Homelab · MrToadie</title>
         <link rel="stylesheet" href="assets/css/style.css" />
         <script src="assets/js/lightbox.js" defer></script>
@@ -10,7 +11,25 @@
         <link rel="icon" href="assets/favico.png" sizes="48x48" />
         <script type="module">
             import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-            mermaid.initialize({ startOnLoad: true });
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: 'base',
+                themeVariables: {
+                    background: 'transparent',
+                    actorBkg: '#161b22',
+                    actorBorder: '#58a6ff',
+                    actorTextColor: '#e6edf3',
+                    signalColor: '#e6edf3',
+                    signalTextColor: '#e6edf3',
+                    activationBkgColor: '#21262d',
+                    activationBorderColor: '#58a6ff',
+                    sequenceNumberColor: '#0d1117',
+                    loopTextColor: '#8b949e',
+                    noteBkgColor: '#21262d',
+                    noteTextColor: '#e6edf3',
+                    noteBorderColor: '#30363d'
+                }
+            });
         </script>
     </head>
     <body>
@@ -53,7 +72,7 @@
               </div>
 
               <div class="hero-projects" id="projects">
-                <h2><span style="color: var(--accent)">/featured projects</span></h2>
+                <h2><span>/featured projects</span></h2>
                 <div class="hero-repo-grid">
 
                   <a class="hero-repo-card" href="https://github.com/mrtoadie/go-velero-manager" target="_blank" rel="noopener">
@@ -75,21 +94,21 @@
                   </a>
 
                 </div>
-                <p class="hero-repo-more"><a href="https://github.com/mrtoadie" target="_blank" rel="noopener">↪ See all repositories →</a></p>
+                <p class="hero-repo-more"><a href="https://github.com/mrtoadie" target="_blank" rel="noopener">→ See all repositories →</a></p>
               </div>
             </section>
-                <h2><span style="color: var(--accent)">/k3s cluster</span></h2>
+                <h2><span>/k3s cluster</span></h2>
                 <section>
                     <div class="section-header">
                         <span>kubectl top nodes</span>
-                    </div>
-                    <div class="cluster-card" id="cluster-overview">
-                        <p class="loading">Cluster data is loading…</p>
                     </div>
                     <div class="demo-note" id="demo-note">
                         Demo data — <code>data/cluster.json</code> was not
                         accessible. On the live page, the
                         actual cluster values appear here.
+                    </div>
+                    <div id="cluster-overview">
+                        <p class="loading">Cluster data is loading…</p>
                     </div>
                     <div class="section-header">
                         <span>kubectl get nodes -o wide</span>
@@ -119,16 +138,16 @@
                     </div>
                 </section>
                 <!-- Storage -->
-                <h2><span style="color: var(--accent)">/storage</span></h2>
+                <h2><span>/storage</span></h2>
                 <section>
                     <div class="section-header">
-                        <span>df -h /mnt/clusterdata</span>
+                        <span>df -h /media/toadie/clusterdata</span>
                         <span class="right">XFS · USB-NVMe</span>
                     </div>
                     <div class="storage-card" id="usb-storage-card"></div>
                 </section>
                 <!-- Where does the data come from? -->
-                <h2><span style="color: var(--accent)">/data flow</span></h2>
+                <h2><span>/data flow</span></h2>
                 <section>
                     <div class="section-header">
                         <span>curl -s data/cluster.json | jq '.timestamp'</span>
@@ -137,59 +156,39 @@
 
                     <div class="hw-note">
                         <strong>Where does the dashboard get its data?</strong>
-                        No server, no database — this is a static site. A collector on the
-                        control-plane node queries the cluster via kubectl (nodes, pods,
-                        deployments) and polls each node's host metrics (disk, temperature,
-                        load) over SSH — then pushes a single JSON file to this repository
+                        No server, no database — this is a static site. A collector on the control-plane node queries the cluster via kubectl
+                        (nodes, pods, deployments and resource usage via kubectl top) and polls each node's host stats (disk, temperature, load, uptime) over SSH — then pushes a single JSON file to this repository
                         through the GitHub API, every 5 minutes. Your browser fetches it and
                         renders the cards above. If the cluster goes down, the external watcher flags the feed and the page switches to bundled demo data — the banner tells you why and for how long.
-                        <a href="projects.html">↪ More about the pipeline</a>
+                        <a href="projects.html">→ More about the pipeline</a>
                     </div>
 
                     <!-- Mermaid sequence diagram: the collection pipeline -->
                     <div class="pipeline-diagram">
-                        <pre class="mermaid">
-                ---
-                config:
-                  theme: base
-                  themeVariables:
-                    background: 'transparent'
-                    actorBkg: '#161b22'
-                    actorBorder: '#58a6ff'
-                    actorTextColor: '#e6edf3'
-                    signalColor: '#e6edf3'
-                    signalTextColor: '#e6edf3'
-                    activationBkgColor: '#21262d'
-                    activationBorderColor: '#58a6ff'
-                    sequenceNumberColor: '#0d1117'
-                    loopTextColor: '#8b949e'
-                    noteBkgColor: '#21262d'
-                    noteTextColor: '#e6edf3'
-                    noteBorderColor: '#30363d'
-                ---
-                sequenceDiagram
-                    autonumber
-                    participant W as control plane<br>(collector)
-                    participant N as nodes
-                    participant GH as GitHub API
-                    participant B as browser
+                    <pre class="mermaid">
+                    sequenceDiagram
+                        autonumber
+                        participant W as control plane<br>(collector)
+                        participant N as nodes
+                        participant GH as GitHub API
+                        participant B as browser
 
-                    loop every 5 minutes
-                        W->>W: kubectl - nodes, pods, deployments
-                        W->>N: SSH - disk, temp, load, uptime
-                        N-->>W: host metrics
-                        W->>W: build cluster.json
-                        W->>GH: PUT data/cluster.json
-                    end
+                        loop every 5 minutes
+                            W->>W: kubectl - nodes, pods, top
+                            W->>N: SSH - disk, temp, load, uptime
+                            N-->>W: host metrics
+                            W->>W: build cluster.json
+                            W->>GH: PUT data/cluster.json
+                        end
 
-                    GH-->>B: static file via GitHub Pages
-                    B->>B: fetch + render dashboard
-                    Note over W,B: If the cluster dies,<br>the external watcher flags the feed,<br>the page switches to demo data
-                        </pre>
+                        GH-->>B: static file via GitHub Pages
+                        B->>B: fetch + render dashboard
+                        Note over W,B: If the cluster dies,<br>the watcher flags the feed,<br>the page switches to demo data
+                    </pre>
                     </div>
                 </section>
                 <!-- Watcher -->
-                <h2><span style="color: var(--accent)">/watcher</span></h2>
+                <h2><span>/watcher</span></h2>
                 <section>
                     <div class="section-header">
                         <span>systemctl status watcher-heartbeat.timer</span>
@@ -198,7 +197,7 @@
                     <div id="watcher-card"></div>
                 </section>
                 <!-- Setup -->
-                <h2 id="setup"><span style="color: var(--accent)">/setup</span></h2>
+                <h2 id="setup"><span>/setup</span></h2>
                 <section>
                     <div class="section-header">
                         <span>ls -la /rack</span>
@@ -231,7 +230,7 @@
                     </div>
                 </section>
                 <!-- Hardware -->
-                <h2><span style="color: var(--accent)">/hardware</span></h2>
+                <h2><span>/hardware</span></h2>
                 <section>
                     <div class="section-header">
                         <span>cat inventory.json | jq</span>
@@ -262,7 +261,7 @@
                                 <td>control-plane</td>
                                 <td data-age="winterfell">–</td>
                                 <td>
-                                    <span class="tag">etcd on USB-NVMe</span>
+                                    <span class="tag">etcd on USB-SSD (NVMe)</span>
                                     <span class="tag">XFS</span>
                                 </td>
                             </tr>
@@ -322,7 +321,7 @@
                     </table>
                 </section>
                 <!-- Contact -->
-                <h2 id="contact"><span style="color: var(--accent)">/contact</span></h2>
+                <h2 id="contact"><span>/contact</span></h2>
                 <section>
                     <div class="section-header">
                         <span>whois toadie | grep -i contact</span>
@@ -331,9 +330,9 @@
                     <div class="hw-note">
                         <strong>Want to get in touch?</strong><br>
                         No contact form, no newsletter — the fastest route is GitHub:
-                        <a href="https://github.com/mrtoadie" target="_blank" rel="noopener noreferrer">↪ my profile</a>.
+                        <a href="https://github.com/mrtoadie" target="_blank" rel="noopener noreferrer">→ my profile</a>.
                         Feedback, questions or idle chatter about k3s on Raspberry Pis:
-                        <a href="https://github.com/mrtoadie/mrtoadie.github.io/discussions" target="_blank" rel="noopener noreferrer">↪ Discussions</a> on this site's repo —
+                        <a href="https://github.com/mrtoadie/mrtoadie.github.io/discussions" target="_blank" rel="noopener noreferrer">→ Discussions</a> on this site's repo —
                         or just open an issue if something looks broken.
                     </div>
                 </section>

@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="MrToadie — Cloud Engineer by day, four-node k3s homelab on Raspberry Pis by night. Live cluster data, honest incident log, Go and Bash automation." />
         <title>Incident Log · MrToadie</title>
         <link rel="stylesheet" href="assets/css/style.css" />
         <script src="assets/js/easter-eggs.js" defer></script>
@@ -70,7 +71,8 @@
                             <p class="incident-meta">
                                 <span class="tag">Security</span>
                                 <span class="tag">Kubernetes</span>
-                                · Status: <span class="status-resolved">resolved</span>
+                                <span class="meta-item"><span class="meta-label">Time:</span> <time datetime="2026-09">09/2026</time></span>
+                                <span class="meta-item"><span class="meta-label">Status:</span> <span class="status-resolved">resolved</span></span>
                                 <span class="toggle-hint">details</span>
                             </p>
                         </summary>
@@ -87,7 +89,7 @@
                             <h3>Diagnosis</h3>
                             <p>
                                 First step: figure out whether the token was actually valid, not just
-                                expired or not in a vacuum. I decoded the JWT, checked the issuer and the
+                                expired. I decoded the JWT, checked the issuer and the
                                 bound service account, and reviewed what RBAC rights that account had in
                                 the cluster. The uncomfortable part wasn't that the token existed —
                                 it was realizing how easy it is to accidentally ship it when manifests,
@@ -121,7 +123,8 @@
                             <p class="incident-meta">
                                 <span class="tag">Storage</span>
                                 <span class="tag">etcd</span>
-                                Status: <span class="status-resolved">resolved</span>
+                                <span class="meta-item"><span class="meta-label">Time:</span> <time datetime="2026-07">07/2026</time></span>
+                                <span class="meta-item"><span class="meta-label">Status:</span> <span class="status-resolved">resolved</span></span>
                                 <span class="toggle-hint">details</span>
                             </p>
                         </summary>
@@ -132,22 +135,23 @@
                                 the boot SD card, because that's how the node was originally set up.
                                 SD cards are built for read-heavy workloads; etcd is the opposite:
                                 continuous small writes, wal files, compaction traffic around the
-                                clock. <!-- TODO: what triggered this — k3s update instability? -->
+                                clock.
                                 It became clear this was not a theoretical risk but an eventual certainty.
                             </p>
                             <h3>Diagnosis</h3>
                             <p>
-                                <!-- TODO: what you actually observed — fsync latencies, I/O errors,
-                                     or proactive decision after research. -->
                                 The core realization: consumer flash degrades under sustained write
                                 load, and a corrupted SD card doesn't corrupt gracefully — it takes the
                                 whole cluster state with it. Quorum lives on this one disk.
                             </p>
                             <h3>Fix</h3>
                             <ul>
-                                <li>Moved all cluster and workload data to a USB-SSD formatted with XFS — a filesystem with strong metadata consistency guarantees, a good match for database-style write patterns.</li>
-                                <li>The SD card now hosts the operating system only — no cluster or workload data on it.</li>
-                                <!-- TODO: brief migration steps — data directory move / k3s reconfiguration. -->
+                                <li>Stopped k3s on winterfell, rsynced the entire data directory
+                                    (<code>/var/lib/rancher/k3s</code>) from the SD card to the USB-SSD.</li>
+                                <li>Mounted the XFS-formatted SSD via <code>/etc/fstab</code> at the original
+                                    data-directory path — k3s needed zero configuration change.</li>
+                                <li>Verified etcd quorum and all nodes rejoining before wiping the old
+                                    SD card copy.</li>
                             </ul>
                             <h3>What I learned</h3>
                             <p>
@@ -168,7 +172,8 @@
                             <p class="incident-meta">
                                 <span class="tag">k3s</span>
                                 <span class="tag">Operations</span>
-                                Status: <span class="status-resolved">resolved — occasionally recurring</span>
+                                <span class="meta-item"><span class="meta-label">Time:</span> <time datetime="2026-08">08/2026</time></span>
+                                <span class="meta-item"><span class="meta-label">Status:</span> <span class="status-mitigated">mitigated — occasionally recurring</span></span>
                                 <span class="toggle-hint">details</span>
                             </p>
                         </summary>
@@ -215,7 +220,8 @@
                             <p class="incident-meta">
                                 <span class="tag">Helm</span>
                                 <span class="tag">Monitoring</span>
-                                Status: <span class="status-resolved">resolved</span>
+                                <span class="meta-item"><span class="meta-label">Time:</span> <time datetime="2026-06">06/2026</time></span>
+                                <span class="meta-item"><span class="meta-label">Status:</span> <span class="status-resolved">resolved</span></span>
                                 <span class="toggle-hint">details</span>
                             </p>
                         </summary>
@@ -259,7 +265,8 @@
                             <p class="incident-meta">
                                 <span class="tag">Git</span>
                                 <span class="tag">Automation</span>
-                                Status: <span class="status-resolved">resolved</span>
+                                <span class="meta-item"><span class="meta-label">Time:</span> <time datetime="2026-10">10/2026</time></span>
+                                <span class="meta-item"><span class="meta-label">Status:</span> <span class="status-resolved">resolved</span></span>
                                 <span class="toggle-hint">details</span>
                             </p>
                         </summary>
@@ -316,16 +323,5 @@
                 </p>
             </footer>
         </div>
-
-        <script>
-            // Open the incident targeted by a #anchor (e.g. coming from
-            // the battle-scars teaser on skills.html).
-            if (location.hash) {
-                const target = document.querySelector(
-                    '.incident:target .incident-details'
-                );
-                if (target) target.open = true;
-            }
-        </script>
     </body>
 </html>

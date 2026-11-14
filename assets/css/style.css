@@ -260,7 +260,13 @@ h2 span {
         opacity: 0;
     }
 }
-
+code {
+    font-weight: 600;
+    color: var(--accent);
+    background: rgba(88, 166, 255, 0.08);
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+}
 section {
     margin-bottom: 3rem;
 }
@@ -796,7 +802,7 @@ section:last-child {
     max-height: 100%;
     border-radius: 8px;
     border: 1px solid var(--border);
-    cursor: zoom-in;
+    cursor: zoom-out;
 }
 #lightbox button {
     position: absolute;
@@ -872,6 +878,9 @@ section:last-child {
 }
 .project-card:hover {
     border-color: var(--accent);
+}
+.project-card.featured {
+    border-left: 3px solid var(--accent);
 }
 .project-card ul {
     list-style: none;
@@ -1207,6 +1216,14 @@ footer {
 }
 .incident-meta time {
     color: var(--dim);
+}
+.incident-meta .meta-label {
+    color: var(--text-muted);
+}
+.incident-meta .meta-item {
+    margin-left: 0.5rem;
+    padding-left: 0.75rem;
+    border-left: 1px solid var(--border); /* feine Trennlinien statt Auge-raten */
 }
 /* margin-left:auto pushes it right — float would be ignored here,
    because .incident-meta is a flex container */

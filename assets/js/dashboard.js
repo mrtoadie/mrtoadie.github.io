@@ -1,7 +1,6 @@
 (function () {
   "use strict";
-
-  /* ================================================================
+  /*
    *  dashboard.js — live renderer for the homelab cluster page
    *
    *  Fetches data/cluster.json (published by collect.sh on the
@@ -19,16 +18,9 @@
    *        storage, watcher, hardware ages)
    *    5.  Render & load
    *    6.  Bootstrap & polling
-   *
-   *  Everything lives in one IIFE on purpose: an earlier version had
-   *  load() declared twice (inside and outside the closure) and the
-   *  outer copy could not see SOURCE / REFRESH_MS. One scope, no trap.
-   * ================================================================ */
+   */
 
-  /* ================================================================
-   *  1. Constants & configuration
-   * ================================================================ */
-
+  /* 1. Constants & configuration */
   var SOURCE = "data/cluster.json";
   var WATCHER_SOURCE = "data/watcher.json";
   var REFRESH_MS = 5 * 60 * 1000; // poll interval
@@ -42,24 +34,20 @@
      {
        timestamp: "2026-10-24T08:12:00Z",
        nodes: [{ name, role, status, version, age }],
-       resource_usage: { "winterfell": {
+       resource_usage: { "<node>": {
          cpu_percent, cpu_millicores,
          mem_percent, mem_mib,
          disk_percent,        <- rootfs, feeds the DISK bar
-         disk_usb,            <- USB-SSD mount, feeds the storage card
+         disk_usb,            <- winterfell's USB-SSD mount, feeds the storage card
          temp_c, load1, uptime_s, pods
        }},
        pods: { total, running, pending },
        namespaces, deployments, services,
        collector_error  <- set when collect.sh could not reach the API
      }
-     The watcher feed (data/watcher.json) carries host, timestamp,
-     cpu_percent, mem_percent, disk_percent, temp_c, load1, uptime_s. */
+     The watcher feed (data/watcher.json) carries host, timestamp, uptime_s. */
 
-  /* ================================================================
-   *  2. Helpers
-   * ================================================================ */
-
+  /* 2. Helpers */
   /* HTML-escape anything that came from a JSON feed. */
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
@@ -96,7 +84,7 @@
     return "";
   }
 
-  /* Seconds -> compact string: "3 d 4 h" / "14 h 36 m" / "42 Min." */
+  /* Seconds -> compact string: "3 d 4 h" / "14 h 36 m" / "42 m" */
   function fmtUptime(sec) {
     if (sec === null || sec < 0) return null;
     var d = Math.floor(sec / 86400);
@@ -104,10 +92,10 @@
     var m = Math.floor((sec % 3600) / 60);
     if (d > 0) return d + " d " + h + " h";
     if (h > 0) return h + " h " + m + " m";
-    return m + " Min.";
+    return m + " m";
   }
 
-  /* Timestamp -> "just now" / "5 m" / "3 h" / German date. */
+  /* Timestamp -> "just now" / "5 m" / "3 h" / short date. */
   function ago(iso) {
     var d = new Date(iso);
     if (isNaN(d.getTime())) return "–";
@@ -115,7 +103,7 @@
     if (s < 60) return "just now";
     if (s < 3600) return Math.floor(s / 60) + " m";
     if (s < 86400) return Math.floor(s / 3600) + " h";
-    return d.toLocaleDateString("de-DE");
+    return d.toLocaleDateString("en-GB");
   }
 
   /* Mask-icon span; decorative, hence aria-hidden. */
@@ -135,10 +123,7 @@
     );
   }
 
-  /* ================================================================
-   *  3. Demo data (used when the live feed is unusable)
-   * ================================================================ */
-
+  /* 3. Demo data (used when the live feed is unusable) */
   var DEMO = {
     timestamp: new Date().toISOString(),
     nodes: [
@@ -211,9 +196,7 @@
     services: 9,
   };
 
-  /* ================================================================
-   *  4. Renderers
-   * ================================================================ */
+  /* 4. Renderers */
 
   /* -------- LIVE / DEMO DATA badge in the top bar --------
      feedNote (optional) goes into the title attribute, so hovering
@@ -226,7 +209,6 @@
       '<span class="dot"></span>' + (isDemo ? "DEMO DATA" : "LIVE");
     el.title = feedNote || "";
   }
-
   /* -------- Gauge ring (cluster overview only) --------
      The overview shows the state of the WHOLE cluster at a glance,
      the node cards below carry the precise per-node values — hence
@@ -252,7 +234,6 @@
       "</div>"
     );
   }
-
   /* -------- Metric bar (node cards) --------
      Colour = state (ok / warn / crit / na), consistent across
      every card. Never colour per metric — colour is the vocabulary. */
@@ -324,7 +305,6 @@
   /* -------- Cluster overview: one tile per metric, matching the
      stats row above. Rings = cluster at a glance, bars = per-node
      precision in the cards below. */
-  /* -------- Cluster overview: tiles + legend -------- */
   function clusterCard(t, readyCount, totalCount) {
     var caption =
       "Cluster Overview — average across " +
@@ -455,7 +435,7 @@
         ? "No data in the feed"
         : Math.round(percent) +
           "% in use" +
-          (isFallback ? " (Rootfs-Fallback)" : "");
+          (isFallback ? " (rootfs fallback)" : "");
 
     el.innerHTML =
       '<div class="storage-header">' +
@@ -482,7 +462,7 @@
     var uptime = fmtUptime(num(w.uptime_s));
     var load = num(w.load1);
 
-    var specHtml = specLine("tag", "nights watch");
+    var specHtml = specLine("tag", "Night's Watch");
     WATCHER_SPECS.forEach(function (s) {
       specHtml += specLine("tag", s);
     });
@@ -502,7 +482,7 @@
     }
     specHtml += online
       ? specLine("check", "Heartbeat " + ago(w.timestamp))
-      : specLine("alert", "Letzter Heartbeat " + ago(w.timestamp));
+      : specLine("alert", "Last heartbeat " + ago(w.timestamp));
 
     return (
       '<article class="node-card ' +
@@ -596,7 +576,7 @@
               return nodeCard(n, usage);
             })
             .join("")
-        : '<p class="loading">Keine Node-Daten im Feed.</p>';
+        : '<p class="loading">No node data in the feed.</p>';
     }
 
     var info = document.getElementById("refresh-info");
@@ -670,62 +650,3 @@
   setInterval(load, REFRESH_MS);
   setInterval(loadWatcherStatus, REFRESH_MS);
 })();
-
-/* ================================================================
- *  REMINDER — style.css needs these blocks IN THE MAIN SCOPE
- *  (not inside a media query):
- *
- *  .cluster-card {
- *      margin: 1.5rem 0;
- *  }
- *  .cluster-card-inner {
- *      border: 1px solid var(--accent);
- *      border-radius: 6px;
- *      background: var(--card);
- *      padding: 1rem 1.25rem;
- *  }
- *  .cluster-head {
- *      display: flex;
- *      justify-content: space-between;
- *      align-items: baseline;
- *      flex-wrap: wrap;
- *      gap: 0.25rem 1rem;
- *      padding-bottom: 0.75rem;
- *      margin-bottom: 1rem;
- *      border-bottom: 1px solid var(--border);
- *  }
- *  .cluster-head .label {
- *      color: var(--accent);
- *      font-weight: 600;
- *      letter-spacing: 0.04em;
- *      text-transform: uppercase;
- *      font-size: 0.85rem;
- *  }
- *  .cluster-caption {
- *      font-size: 0.78rem;
- *      color: var(--faint);
- *  }
- *
- *  Cluster gauges scaled up for the wide card (desktop):
- *  .cluster-gauges {
- *      margin-top: 0.75rem;
- *      padding-top: 0;
- *      justify-content: space-evenly;
- *      gap: 1rem;
- *  }
- *  .cluster-gauges .gauge {
- *      width: 90px;
- *      height: 90px;
- *  }
- *  .cluster-gauges .gauge span {
- *      width: 72px;
- *      height: 72px;
- *      font-size: 1.2rem;
- *  }
- *  .cluster-gauges .gauge-wrap small {
- *      font-size: 0.9rem;
- *  }
- *
- *  index.html already has the container between #stats and
- *  #node-metrics — verified, nothing to add there.
- * ================================================================ */

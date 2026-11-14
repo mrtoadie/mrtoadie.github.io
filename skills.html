@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="MrToadie — Cloud Engineer by day, four-node k3s homelab on Raspberry Pis by night. Live cluster data, honest incident log, Go and Bash automation." />
         <title>Skills · MrToadie</title>
         <link rel="stylesheet" href="assets/css/style.css" />
         <script src="assets/js/easter-eggs.js" defer></script>
@@ -48,7 +49,7 @@
                     </p>
                 </section>
                 <!-- Infrastructure & Containers -->
-                <h2><span style="color: var(--accent)">/infrastructure</span></h2>
+                <h2><span>/infrastructure</span></h2>
                 <section>
                     <div class="section-header">
                         <span>kubectl get skills -o wide</span>
@@ -60,7 +61,7 @@
                                 4-node production-style cluster on Raspberry
                                 Pi: workloads, ingress, RBAC, ServiceAccounts,
                                 Pod Security Standards, PDBs, Node Affinity
-                                <a href="index.html">↪ /homelab</a>
+                                <a href="index.html">→ /homelab</a>
                             </div>
                         </div>
                         <div class="skill-row">
@@ -76,7 +77,7 @@
                             <div class="skill-evidence">
                                 Backup schedules, retention policies, tested
                                 restores, MinIO as S3 target
-                                <a href="projects.html">↪ velero-manager</a>
+                                <a href="projects.html">→ velero-manager</a>
                             </div>
                         </div>
                         <div class="skill-row">
@@ -108,7 +109,7 @@
                     </div>
                 </section>
                 <!-- Development & Automation -->
-                <h2><span style="color: var(--accent)">/development</span></h2>
+                <h2><span>/development</span></h2>
                 <section>
                     <div class="section-header">
                         <span>#!/bin/bash</span>
@@ -122,7 +123,7 @@
                                 orchestrated by production-grade Bash — SSH fleets, jq
                                 pipelines, GitHub API automation, systemd timers. The
                                 pipeline feeding this site's dashboard is Bash-driven
-                                <a href="projects.html">↪ projects</a>
+                                <a href="projects.html">→ projects</a>
                             </div>
                         </div>
                         <div class="skill-row">
@@ -133,7 +134,7 @@
                                 This site: zero frameworks, vanilla JS,
                                 responsive dark theme, live GitHub Pages
                                 dashboard fed by API-pushed JSON
-                                <a href="index.html">↪ /homelab</a>
+                                <a href="index.html">→ /homelab</a>
                             </div>
                         </div>
                         <div class="skill-row">
@@ -147,7 +148,7 @@
                     </div>
                 </section>
                 <!-- Operating Systems -->
-                <h2><span style="color: var(--accent)">/operating systems</span></h2>
+                <h2><span>/operating systems</span></h2>
                 <section>
                     <div class="section-header">
                         <span>uname -a</span>
@@ -177,7 +178,7 @@
                     </div>
                 </section>
                 <!-- Virtualization & On-Prem -->
-                <h2><span style="color: var(--accent)">/virtualization &amp; on-prem</span></h2>
+                <h2><span>/virtualization &amp; on-prem</span></h2>
                 <section>
                     <div class="section-header">
                         <span>virsh list --all</span>
@@ -202,13 +203,13 @@
                         <div class="skill-row">
                             <div class="skill-name">Ubuntu Server</div>
                             <div class="skill-evidence">
-                                Classic bare-metal Linux servers running NFS shares, backups, and monitoring (Zabbix)
+                                Classic bare-metal Linux servers running NFS shares, backups and monitoring (Zabbix) — in a previous on-prem role, looking after the company's IT infrastructure.
                             </div>
                         </div>
                     </div>
                 </section>
                 <!-- Professional background -->
-                <h2><span style="color: var(--accent)">/day job</span></h2>
+                <h2><span>/day job</span></h2>
                 <section>
                     <div class="section-header">
                         <span>whoami --work</span>
@@ -222,7 +223,7 @@
                     </p>
                 </section>
                 <!-- Software -->
-                <h2 id="software"><span style="color: var(--accent)">/software & tools</span></h2>
+                <h2 id="software"><span>/software & tools</span></h2>
                 <section>
                     <div class="section-header">
                         <span>kubectl get namespace</span>
@@ -297,10 +298,10 @@
                         <div class="tool-card">
                             <div class="tool-name">Watcher Heartbeat</div>
                             <div class="tool-desc">
-                                Custom heartbeat script on the Pi Zero
+                                Lightweight liveness signal from the Pi Zero
                             </div>
                             <div class="tool-reason">
-                                "Custom heartbeat script — pushes the watcher's status to GitHub every 15 minutes."
+                                "Custom heartbeat script — pushes an uptime heartbeat to GitHub every 15 minutes."
                             </div>
                         </div>
                     </div>
@@ -346,15 +347,15 @@
                                 Dynamic PersistentVolumes via NFS
                             </div>
                             <div class="tool-reason">
-                                "Instead of <b>local-path</b>: Data is retained when
-                                the <b>pod</b> is rescheduled. Performance is adequate
+                                "Instead of <code>local-path</code>: Data is retained when
+                                the <code>pod</code> is rescheduled. Performance is adequate
                                 for small databases."
                             </div>
                         </div>
                     </div>
                 </section>
                 <!-- Lessons learned → full stories in the incident log -->
-                <h2><span style="color: var(--accent)">/battle scars</span></h2>
+                <h2><span>/battle scars</span></h2>
                 <section>
                     <div class="section-header">
                         <span>dmesg | grep -i lesson</span>
@@ -364,7 +365,7 @@
                         Things that broke and what they taught me — etcd on SD cards,
                         failing node rejoins, a leaked Kubernetes JWT, Helm type traps
                         and a split-brain repository. The honest versions live here:
-                        <a href="incidents.html">↪ /incident log</a>
+                        <a href="incidents.html">→ /incident log</a>
                     </p>
                 </section>
             </main>
