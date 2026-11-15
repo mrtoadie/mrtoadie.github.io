@@ -16,6 +16,7 @@
                 theme: 'base',
                 themeVariables: {
                     background: 'transparent',
+                    // --- sequence diagram ---
                     actorBkg: '#161b22',
                     actorBorder: '#58a6ff',
                     actorTextColor: '#e6edf3',
@@ -27,7 +28,18 @@
                     loopTextColor: '#8b949e',
                     noteBkgColor: '#21262d',
                     noteTextColor: '#e6edf3',
-                    noteBorderColor: '#30363d'
+                    noteBorderColor: '#30363d',
+                    // --- flowchart ---
+                    primaryColor: '#161b22',        // node fill (wie actorBkg)
+                    primaryBorderColor: '#58a6ff',  // node border (wie actorBorder)
+                    primaryTextColor: '#e6edf3',
+                    lineColor: '#58a6ff',           // pfeile
+                    edgeLabelBackground: '#0d1117',
+                    clusterBkg: '#21262d',
+                    clusterBorder: '#30363d',
+                    tertiaryColor: '#21262d',
+                    tertiaryBorderColor: '#30363d',
+                    tertiaryTextColor: '#e6edf3'
                 }
             });
         </script>
@@ -217,6 +229,37 @@
                                 Cluster architecture diagram
                             </figcaption>
                         </figure>
+                    </div>
+                    <div class="pipeline-diagram">
+                        <pre class="mermaid">
+                        flowchart TD
+                            CP[["Control Plane"]]
+
+                            subgraph WL["Workloads"]
+                                direction LR
+                                W1(Velero)
+                                W2(Forgejo)
+                                W3(Prometheus)
+                                W4(Grafana)
+                            end
+
+                            subgraph WN["Worker Nodes"]
+                                direction LR
+                                N1[worker01]
+                                N2[worker02]
+                                N3[worker03]
+                            end
+
+                            subgraph ST["USB-Storage"]
+                                direction LR
+                                S1([NFS Subdir Provisioner])
+                                S2([Persistent Volumes])
+                            end
+
+                            CP -->|schedules| WL
+                            CP -->|runs pods on| WN
+                            CP -->|mounts| ST
+                        </pre>
                     </div>
                     <!-- Notes -->
                     <div class="hw-note">
