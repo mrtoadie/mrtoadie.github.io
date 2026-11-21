@@ -56,7 +56,7 @@
                                 Production-readiness audit as a single static binary:
                                 seven checks — from TLS certificate expiry via <code>crypto/x509</code> to
                                 age-normalized crashloop detection — plus a weighted readiness score
-                                with visible per-check weights. No <code>client-go</code>, no shell-outs.
+                                with visible per-check weights.
                             </div>
                             <div class="project-meta">
                                 <span><i class="ic ic-cpu" role="img" aria-label="Multi-arch releases"></i> amd64 + arm64 releases</span>
@@ -237,8 +237,7 @@
                             architecture: checks produce typed <code>Result</code> data, rendering happens separately
                             (colored terminal or Markdown from the same source), and certificates are parsed with
                             <code>crypto/x509</code> instead of shelling out. The API client is hand-rolled over
-                            <code>net/http</code> with a minimal kubeconfig loader — one external dependency instead of
-                            the <code>client-go</code> tree. Releases for <code>amd64</code> and <code>arm64</code> are built
+                            <code>net/http</code> with a minimal kubeconfig loader. Releases for <code>amd64</code> and <code>arm64</code> are built
                             automatically by <code>GitHub Actions</code> on every tag — the arm64 binary runs natively
                             on the Raspberry Pi nodes.
                     </div>
