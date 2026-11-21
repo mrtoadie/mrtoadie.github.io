@@ -42,6 +42,30 @@
                     </div>
 
                     <div class="project-grid">
+                        <!-- Featured: go-clustercheck -->
+                        <div class="project-card featured">
+                            <div class="project-header">
+                                <div class="project-name">go-clustercheck</div>
+                                <div class="project-tags">
+                                    <span class="tag">Go</span>
+                                    <span class="tag">Kubernetes</span>
+                                    <span class="tag">CI/CD</span>
+                                </div>
+                            </div>
+                            <div class="project-desc">
+                                Production-readiness audit as a single static binary:
+                                seven checks — from TLS certificate expiry via <code>crypto/x509</code> to
+                                age-normalized crashloop detection — plus a weighted readiness score
+                                with visible per-check weights. No <code>client-go</code>, no shell-outs.
+                            </div>
+                            <div class="project-meta">
+                                <span><i class="ic ic-cpu" role="img" aria-label="Multi-arch releases"></i> amd64 + arm64 releases</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/mrtoadie/go-clustercheck" title="go-clustercheck @ GitHub" aria-label="go-clustercheck @ GitHub" target="_blank" rel="noopener noreferrer">→ GitHub</a>
+                            </div>
+                        </div>
+
                         <!-- Featured: Velero -->
                         <div class="project-card featured">
                             <div class="project-header">
@@ -87,8 +111,8 @@
                             </div>
                         </div>
 
-                        <!-- Featured: kvm-configurator -->
-                        <div class="project-card featured">
+                        <!-- kvm-configurator -->
+                        <div class="project-card">
                             <div class="project-header">
                                 <div class="project-name">kvm-configurator</div>
                                 <div class="project-tags">
@@ -191,7 +215,6 @@
                                     <li><code>Grafana</code> dashboard templates</li>
                                     <li><code>Prometheus</code> alerting rules</li>
                                     <li><code>NixOS</code> for Raspberry Pis</li>
-                                    <li><code>Longhorn</code> block storage</li>
                                     <li>second <code>control-plane</code></li>
                                     <li>migrating all local <code>Docker</code> to <code>Podman</code> or to the Cluster</li>
                                 </ul>
@@ -200,6 +223,26 @@
                     </div>
                 </section>
                 <!-- Why? Section -->
+                <section>
+                    <div class="section-header">
+                        <span>git diff 900-lines-of-bash..go</span>
+                        <span class="right">Go · Refactoring</span>
+                    </div>
+                    <div class="hw-note">
+                        <strong>Why was go-clustercheck rewritten from Bash?</strong><br>
+                            The original was a 900-line script driving <code>kubectl</code>, <code>jq</code>, <code>awk</code> and
+                            <code>openssl</code> through a dozen pipelines per run — every check was glued to its
+                            output format, a broken field selector silently reported “healthy”, and saving a
+                            report meant stripping ANSI escape codes with <code>sed</code>. The rewrite flipped the
+                            architecture: checks produce typed <code>Result</code> data, rendering happens separately
+                            (colored terminal or Markdown from the same source), and certificates are parsed with
+                            <code>crypto/x509</code> instead of shelling out. The API client is hand-rolled over
+                            <code>net/http</code> with a minimal kubeconfig loader — one external dependency instead of
+                            the <code>client-go</code> tree. Releases for <code>amd64</code> and <code>arm64</code> are built
+                            automatically by <code>GitHub Actions</code> on every tag — the arm64 binary runs natively
+                            on the Raspberry Pi nodes.
+                    </div>
+                </section>
                 <section>
                     <div class="section-header">
                         <span>podman info | grep -i why</span>
