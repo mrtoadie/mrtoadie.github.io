@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-11-23T16:09:39Z",
+  "timestamp": "2026-11-23T16:10:11Z",
   "collected_on": "winterfell",
   "nodes": [{"name":"winterfell","role":"control-plane","status":"True","version":"v1.36.3+k3s1","age":"146d"},{"name":"worker01","role":"worker","status":"True","version":"v1.36.2+k3s1","age":"125d"},{"name":"worker02","role":"worker","status":"True","version":"v1.36.3+k3s1","age":"92d"},{"name":"worker03","role":"worker","status":"True","version":"v1.36.3+k3s1","age":"93d"}],
-  "resource_usage": {"winterfell":{"cpu_percent":null,"cpu_millicores":null,"mem_percent":null,"mem_mib":null,"disk_percent":39,"disk_usb":7,"temp_c":34.1,"load1":1.27,"uptime_s":40,"pods":16},"worker01":{"cpu_percent":null,"cpu_millicores":null,"mem_percent":null,"mem_mib":null,"disk_percent":50,"disk_usb":null,"temp_c":28.2,"load1":1.10,"uptime_s":38,"pods":4},"worker02":{"cpu_percent":null,"cpu_millicores":null,"mem_percent":null,"mem_mib":null,"disk_percent":49,"disk_usb":null,"temp_c":29.7,"load1":1.44,"uptime_s":36,"pods":3},"worker03":{"cpu_percent":null,"cpu_millicores":null,"mem_percent":null,"mem_mib":null,"disk_percent":57,"disk_usb":null,"temp_c":32.1,"load1":2.08,"uptime_s":44,"pods":5}},
+  "resource_usage": {"winterfell":{"cpu_percent":97,"cpu_millicores":3896,"mem_percent":39,"mem_mib":3118,"disk_percent":39,"disk_usb":7,"temp_c":38.0,"load1":6.76,"uptime_s":73,"pods":16},"worker01":{"cpu_percent":null,"cpu_millicores":null,"mem_percent":null,"mem_mib":null,"disk_percent":50,"disk_usb":null,"temp_c":31.6,"load1":0.69,"uptime_s":71,"pods":4},"worker02":{"cpu_percent":null,"cpu_millicores":null,"mem_percent":null,"mem_mib":null,"disk_percent":49,"disk_usb":null,"temp_c":33.1,"load1":0.95,"uptime_s":69,"pods":3},"worker03":{"cpu_percent":null,"cpu_millicores":null,"mem_percent":null,"mem_mib":null,"disk_percent":57,"disk_usb":null,"temp_c":37.0,"load1":1.16,"uptime_s":78,"pods":5}},
   "pods": {
     "total": 28,
-    "running": 28,
-    "pending": 0
+    "running": 27,
+    "pending": 1
   },
   "namespaces": 10,
   "deployments": 16,
