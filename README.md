@@ -6,6 +6,10 @@
 
 A personal portfolio and **live homelab dashboard**, served as a fully static site on GitHub Pages — no backend, no database, no framework. Real cluster metrics from a 4-node k3s cluster are collected on-site, pushed to this repository, and rendered client-side.
 
+![k3s](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/mrtoadie/mrtoadie.github.io/main/data/badge.json&style=for-the-badge&logo=k3s)
+![pods](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/mrtoadie/mrtoadie.github.io/main/data/badge-pods.json&style=for-the-badge&logo=kubernetes&labelColor=10263e)
+![telemetry](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/mrtoadie/mrtoadie.github.io/main/data/badge-telemetry.json&style=for-the-badge&logo=raspberrypi&labelColor=0d2f18)
+
 **→ [View the live site](https://mrtoadie.github.io)**
 
 ---
