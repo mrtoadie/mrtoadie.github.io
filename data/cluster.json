@@ -1,93 +1,13 @@
 {
-  "timestamp": "2026-11-26T22:45:24Z",
-  "collected_on": "winterfell",
-  "nodes": [
-    {
-      "name": "winterfell",
-      "role": "control-plane",
-      "status": "True",
-      "version": "v1.36.3+k3s1",
-      "age": "149d"
-    },
-    {
-      "name": "worker01",
-      "role": "worker",
-      "status": "True",
-      "version": "v1.36.2+k3s1",
-      "age": "129d"
-    },
-    {
-      "name": "worker02",
-      "role": "worker",
-      "status": "True",
-      "version": "v1.36.3+k3s1",
-      "age": "95d"
-    },
-    {
-      "name": "worker03",
-      "role": "worker",
-      "status": "Unknown",
-      "version": "v1.36.3+k3s1",
-      "age": "97d"
-    }
-  ],
-  "resource_usage": {
-    "winterfell": {
-      "cpu_percent": 9,
-      "cpu_millicores": 373,
-      "mem_percent": 64,
-      "mem_mib": 5050,
-      "disk_percent": 39,
-      "disk_usb": 7,
-      "temp_c": 36.511,
-      "load1": 0.71,
-      "uptime_s": 18082,
-      "pods": 16
-    },
-    "worker01": {
-      "cpu_percent": 1,
-      "cpu_millicores": 76,
-      "mem_percent": 43,
-      "mem_mib": 393,
-      "disk_percent": 51,
-      "disk_usb": null,
-      "temp_c": 47.225,
-      "load1": 0.00,
-      "uptime_s": 18090,
-      "pods": 3
-    },
-    "worker02": {
-      "cpu_percent": 1,
-      "cpu_millicores": 70,
-      "mem_percent": 44,
-      "mem_mib": 405,
-      "disk_percent": 50,
-      "disk_usb": null,
-      "temp_c": 55.504,
-      "load1": 0.08,
-      "uptime_s": 18089,
-      "pods": 2
-    },
-    "worker03": {
-      "cpu_percent": null,
-      "cpu_millicores": null,
-      "mem_percent": null,
-      "mem_mib": null,
-      "disk_percent": null,
-      "disk_usb": null,
-      "temp_c": null,
-      "load1": null,
-      "uptime_s": null,
-      "pods": 3
-    }
-  },
+  "timestamp": "2026-11-26T23:00:13Z",
+  "collector_error": "Kubernetes API Server (192.168.178.210:6443) unreachable (TCP)",
+  "nodes": [],
+  "resource_usage": {},
   "pods": {
-    "total": 4,
-    "running": 24,
+    "total": 0,
+    "running": 0,
     "pending": 0
   },
-  "namespaces": 10,
-  "deployments": 16,
-  "services": 26,
-  "source": "winterfell-k3s-cluster"
+  "namespaces": null,
+  "deployments": null
 }
