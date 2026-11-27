@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-11-27T18:10:17Z",
+  "timestamp": "2026-11-27T18:15:14Z",
   "collected_on": "winterfell",
   "nodes": [
     {
@@ -33,39 +33,39 @@
   ],
   "resource_usage": {
     "winterfell": {
-      "cpu_percent": 12,
-      "cpu_millicores": 507,
-      "mem_percent": 59,
-      "mem_mib": 4647,
+      "cpu_percent": 7,
+      "cpu_millicores": 315,
+      "mem_percent": 61,
+      "mem_mib": 4791,
       "disk_percent": 39,
       "disk_usb": 7,
-      "temp_c": 36.511,
-      "load1": 0.21,
-      "uptime_s": 1187,
+      "temp_c": 37.972,
+      "load1": 0.23,
+      "uptime_s": 1483,
       "pods": 16
     },
     "worker01": {
-      "cpu_percent": 1,
-      "cpu_millicores": 71,
+      "cpu_percent": 2,
+      "cpu_millicores": 100,
       "mem_percent": 39,
-      "mem_mib": 355,
+      "mem_mib": 357,
       "disk_percent": 51,
       "disk_usb": null,
-      "temp_c": 45.764,
-      "load1": 0.04,
-      "uptime_s": 1187,
+      "temp_c": 46.738,
+      "load1": 0.41,
+      "uptime_s": 1483,
       "pods": 3
     },
     "worker02": {
       "cpu_percent": 1,
-      "cpu_millicores": 70,
+      "cpu_millicores": 73,
       "mem_percent": 34,
-      "mem_mib": 315,
+      "mem_mib": 316,
       "disk_percent": 50,
       "disk_usb": null,
-      "temp_c": 52.582,
-      "load1": 0.05,
-      "uptime_s": 1187,
+      "temp_c": 53.069,
+      "load1": 0.20,
+      "uptime_s": 1483,
       "pods": 2
     },
     "worker03": {
@@ -75,9 +75,9 @@
       "mem_mib": 760,
       "disk_percent": 58,
       "disk_usb": null,
-      "temp_c": 53.556,
-      "load1": 0.06,
-      "uptime_s": 1194,
+      "temp_c": 57.452,
+      "load1": 0.17,
+      "uptime_s": 1490,
       "pods": 2
     }
   },
