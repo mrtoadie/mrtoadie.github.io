@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
   "label": "k3s",
-  "message": "3/4 nodes online",
-  "color": "yellow"
+  "message": "4/4 nodes online",
+  "color": "green"
 }
