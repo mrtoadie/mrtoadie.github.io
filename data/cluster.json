@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-11-27T17:51:11Z",
+  "timestamp": "2026-11-27T17:55:07Z",
   "collected_on": "winterfell",
   "nodes": [
     {
@@ -26,64 +26,64 @@
     {
       "name": "worker03",
       "role": "worker",
-      "status": "Unknown",
+      "status": "True",
       "version": "v1.36.3+k3s1",
       "age": "97d"
     }
   ],
   "resource_usage": {
     "winterfell": {
-      "cpu_percent": null,
-      "cpu_millicores": null,
-      "mem_percent": null,
-      "mem_mib": null,
+      "cpu_percent": 10,
+      "cpu_millicores": 415,
+      "mem_percent": 59,
+      "mem_mib": 4670,
       "disk_percent": 39,
       "disk_usb": 7,
-      "temp_c": 36.998,
-      "load1": 1.50,
-      "uptime_s": 41,
+      "temp_c": 35.537,
+      "load1": 2.04,
+      "uptime_s": 277,
       "pods": 16
     },
     "worker01": {
-      "cpu_percent": null,
-      "cpu_millicores": null,
-      "mem_percent": null,
-      "mem_mib": null,
+      "cpu_percent": 2,
+      "cpu_millicores": 99,
+      "mem_percent": 59,
+      "mem_mib": 542,
       "disk_percent": 50,
       "disk_usb": null,
-      "temp_c": 32.615,
-      "load1": 1.25,
-      "uptime_s": 41,
+      "temp_c": 38.459,
+      "load1": 0.14,
+      "uptime_s": 277,
       "pods": 3
     },
     "worker02": {
-      "cpu_percent": null,
-      "cpu_millicores": null,
-      "mem_percent": null,
-      "mem_mib": null,
+      "cpu_percent": 2,
+      "cpu_millicores": 85,
+      "mem_percent": 37,
+      "mem_mib": 342,
       "disk_percent": 49,
       "disk_usb": null,
-      "temp_c": 32.615,
-      "load1": 1.05,
-      "uptime_s": 41,
+      "temp_c": 39.433,
+      "load1": 0.09,
+      "uptime_s": 276,
       "pods": 2
     },
     "worker03": {
-      "cpu_percent": null,
-      "cpu_millicores": null,
-      "mem_percent": null,
-      "mem_mib": null,
+      "cpu_percent": 1,
+      "cpu_millicores": 70,
+      "mem_percent": 42,
+      "mem_mib": 793,
       "disk_percent": 57,
       "disk_usb": null,
-      "temp_c": 34.563,
-      "load1": 1.25,
-      "uptime_s": 48,
-      "pods": 3
+      "temp_c": 42.355,
+      "load1": 0.07,
+      "uptime_s": 284,
+      "pods": 2
     }
   },
   "pods": {
     "total": 4,
-    "running": 24,
+    "running": 23,
     "pending": 0
   },
   "namespaces": 10,
